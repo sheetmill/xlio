@@ -1,0 +1,72 @@
+# suite: package (capture.package_probe); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-12; method: open with alerts off, read A1 (111 unless the case changes it), the number of sheets, the widths of A and B, the heights of rows 1 and 2, and A1's font size
+case	outcome	A1	sheets	width A	height 1	width B	height 2	font size
+control	opened	111.0	1	8.0	15.0	8.0	15.0	11
+doctype	refused	-50
+bzip2	refused	-50
+lzma	refused	-50
+duplicate_name	refused	-50
+size_smaller	refused	-50
+size_larger	refused	-50
+size_prefix	refused	-50
+width_nan	opened	111.0	1	0.0	15.0	8.0	15.0	11
+width_NaN	opened	111.0	1	0.0	15.0	8.0	15.0	11
+width_inf	opened	111.0	1	0.0	15.0	8.0	15.0	11
+width_INF	opened	111.0	1	0.0	15.0	8.0	15.0	11
+width_negative	opened	111.0	1	1.0921E+4	15.0	8.0	15.0	11
+width_1e308	opened	111.0	1	0.0	15.0	8.0	15.0	11
+height_nan	opened	111.0	1	8.0	15.0	8.0	15.0	11
+height_NaN	opened	111.0	1	8.0	15.0	8.0	15.0	11
+height_inf	opened	111.0	1	8.0	15.0	8.0	15.0	11
+height_INF	opened	111.0	1	8.0	15.0	8.0	15.0	11
+height_negative	opened	111.0	1	8.0	1.0	8.0	15.0	11
+height_1e308	opened	111.0	1	8.0	0.0	8.0	15.0	11
+font_size_1e308	refused	-50
+font_size_nan	refused	-50
+font_size_negative	opened	111.0	1	8.0	4.0	8.0	4.0	1
+default_width_nan	opened	111.0	1	8.0	15.0	8.0	15.0	11
+default_width_negative	refused	-50
+default_height_nan	refused	-50
+default_height_negative	opened	111.0	1	8.0	15.0	8.0	15.0	11
+width_256	opened	111.0	1	255.17	15.0	8.0	15.0	11
+width_1e4	opened	111.0	1	9999.17	15.0	8.0	15.0	11
+width_10922	opened	111.0	1	1.092117E+4	15.0	8.0	15.0	11
+width_1e6	opened	111.0	1	6036.5	15.0	8.0	15.0	11
+width_1e9	opened	111.0	1	0.09	15.0	8.0	15.0	11
+width_99999999999	opened	111.0	1	0.09	15.0	8.0	15.0	11
+width_1e30	opened	111.0	1	0.09	15.0	8.0	15.0	11
+width_minus_0.5	opened	111.0	1	1.09215E+4	15.0	8.0	15.0	11
+width_minus_2	opened	111.0	1	1.092E+4	15.0	8.0	15.0	11
+width_minus_100	opened	111.0	1	1.0822E+4	15.0	8.0	15.0	11
+width_minus_inf	opened	111.0	1	0.0	15.0	8.0	15.0	11
+height_410	opened	111.0	1	8.0	409.5	8.0	15.0	11
+height_1e4	opened	111.0	1	8.0	169.5	8.0	15.0	11
+height_1e6	opened	111.0	1	8.0	409.5	8.0	15.0	11
+height_1e9	opened	111.0	1	8.0	409.5	8.0	15.0	11
+height_1e30	opened	111.0	1	8.0	409.5	8.0	15.0	11
+height_minus_0.5	opened	111.0	1	8.0	0.5	8.0	15.0	11
+height_minus_100	opened	111.0	1	8.0	100.0	8.0	15.0	11
+height_minus_inf	opened	111.0	1	8.0	15.0	8.0	15.0	11
+font_size_inf	refused	-50
+font_size_0	refused	-50
+font_size_0.5	refused	-50
+font_size_410	refused	-50
+font_size_1e6	refused	-50
+font_size_1e30	refused	-50
+font_size_minus_0.5	refused	-50
+default_width_inf	opened	111.0	1	8.0	15.0	8.0	15.0	11
+default_width_300	refused	-50
+default_width_1e30	refused	-50
+default_width_1e308	opened	111.0	1	0.0	15.0	0.0	15.0	11
+default_width_99999999999	refused	-50
+base_width_300	refused	-50
+base_width_99999999999	opened	111.0	1	8.0	15.0	8.0	15.0	11
+base_width_minus_1	opened	111.0	1	8.0	15.0	8.0	15.0	11
+default_height_inf	refused	-50
+default_height_1e308	opened	111.0	1	8.0	15.0	8.0	15.0	11
+custom_default_height_nan	refused	-50
+custom_default_height_negative	opened	111.0	1	8.0	1.0	8.0	1.0	11
+custom_default_height_1e308	opened	111.0	1	8.0	15.0	8.0	0.0	11
+custom_default_height_20	opened	111.0	1	8.0	20.0	8.0	20.0	11
+control_again	opened	111.0	1	8.0	15.0	8.0	15.0	11

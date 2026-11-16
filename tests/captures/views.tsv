@@ -1,0 +1,46 @@
+# suite: views (capture); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-12; method: openpyxl's two-sheet workbook with one view, workbook or order change in the XML, opened with alerts off and saved as a copy
+# elements as Excel's copy writes them, matches joined with |; refused = error -50 (Excel would repair the file)
+case	outcome	error	sheetView	selection	cols	activeTab	sheets	extra
+control	opened		<sheetView tabSelected="1" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeCell C3 (control)	opened		<sheetView tabSelected="1" workbookViewId="0">	<selection activeCell="C3" sqref="B2:D4"/>	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeCell lowercase	opened		<sheetView tabSelected="1" workbookViewId="0">	<selection activeCell="C3" sqref="B2:D4"/>	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeCell absolute	opened		<sheetView tabSelected="1" workbookViewId="0">	<selection activeCell="C3" sqref="B2:D4"/>	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeCell range	opened		<sheetView tabSelected="1" workbookViewId="0">	<selection activeCell="B2" sqref="B2:D4"/>	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeCell list	opened		<sheetView tabSelected="1" workbookViewId="0">	<selection activeCell="B2" sqref="B2:D4"/>	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeCell R1C1	opened		<sheetView tabSelected="1" workbookViewId="0">	<selection activeCell="B2" sqref="B2:D4"/>	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeCell row 0	opened		<sheetView tabSelected="1" workbookViewId="0">	<selection activeCell="B2" sqref="B2:D4"/>	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeCell row past the grid	opened		<sheetView tabSelected="1" workbookViewId="0">	<selection activeCell="B2" sqref="B2:D4"/>	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeCell column past the grid	opened		<sheetView tabSelected="1" workbookViewId="0">	<selection activeCell="B2" sqref="B2:D4"/>	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeCell empty	opened		<sheetView tabSelected="1" workbookViewId="0">	<selection activeCell="B2" sqref="B2:D4"/>	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeCell not a reference	opened		<sheetView tabSelected="1" workbookViewId="0">	<selection activeCell="B2" sqref="B2:D4"/>	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeCell sheet-qualified	opened		<sheetView tabSelected="1" workbookViewId="0">	<selection activeCell="B2" sqref="B2:D4"/>	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeCell space before	opened		<sheetView tabSelected="1" workbookViewId="0">	<selection activeCell="B2" sqref="B2:D4"/>	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeCell absent, sqref B2:D4	opened		<sheetView tabSelected="1" workbookViewId="0">	<selection activeCell="B2" sqref="B2:D4"/>	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeCell E5 outside sqref B2:D4	opened		<sheetView tabSelected="1" workbookViewId="0">	<selection activeCell="B2" sqref="B2:D4"/>	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeCell C3, sqref absent	opened		<sheetView tabSelected="1" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeCell C3, sqref list	opened		<sheetView tabSelected="1" workbookViewId="0">	<selection activeCell="C3" sqref="A1 C3:D4"/>	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+selection for an absent pane	refused	-50						
+selection for an absent pane topRight	refused	-50						
+zoomScale 5	opened		<sheetView tabSelected="1" zoomScale="5" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+zoomScale 9	opened		<sheetView tabSelected="1" zoomScale="9" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+zoomScale 401	opened		<sheetView tabSelected="1" zoomScale="401" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+zoomScale 1000	opened		<sheetView tabSelected="1" zoomScale="1000" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+zoomScale 0	opened		<sheetView tabSelected="1" zoomScale="0" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+zoomScale -50	opened		<sheetView tabSelected="1" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+zoomScale abc	opened		<sheetView tabSelected="1" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+zoomScale 100.5	opened		<sheetView tabSelected="1" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeTab 1	opened		<sheetView workbookViewId="0"/>	-	-	1	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeTab 2	opened		<sheetView tabSelected="1" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeTab 5	opened		<sheetView tabSelected="1" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeTab -1	opened		<sheetView tabSelected="1" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+activeTab x	opened		<sheetView tabSelected="1" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+Sheet2 state 'hidden'	opened		<sheetView tabSelected="1" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" state="hidden" r:id="rId2"/>	
+Sheet2 state 'Hidden'	opened		<sheetView tabSelected="1" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+Sheet2 state 'bogus'	opened		<sheetView tabSelected="1" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+Sheet2 state ''	opened		<sheetView tabSelected="1" workbookViewId="0"/>	-	-	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+sheetViews after sheetData	refused	-50						
+cols before sheetData (control)	opened		<sheetView tabSelected="1" workbookViewId="0"/>	-	<cols><col min="2" max="2" width="30" customWidth="1"/></cols>	-	<sheet name="Sheet" sheetId="1" r:id="rId1"/>|<sheet name="Sheet2" sheetId="2" r:id="rId2"/>	
+cols after sheetData	refused	-50						
+sheetPr after sheetData	refused	-50						

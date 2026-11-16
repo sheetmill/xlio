@@ -1,0 +1,62 @@
+# suite: errors (capture); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-12; method: openpyxl's workbook with A1 rewritten (and rich-value parts added) in the XML, opened with alerts off and saved as a copy
+# cells as type:value from Excel's copy; a rich value as its structure type and keys; refused = error -50 (Excel would repair the file)
+case	outcome	error	A1	A1 vm	A1 rich value	B1 =A1	C1 =ERROR.TYPE(A1)	D1 =ISERROR(A1)	E1 =VALUETOTEXT(A1)
+control	opened		n:1	-	-	n:1	e:#N/A	b:0	str:1
+plain #NULL!	opened		e:#NULL!	-	-	e:#NULL!	n:1	b:1	str:#NULL!
+plain #DIV/0!	opened		e:#DIV/0!	-	-	e:#DIV/0!	n:2	b:1	str:#DIV/0!
+plain #VALUE!	opened		e:#VALUE!	-	-	e:#VALUE!	n:3	b:1	str:#VALUE!
+plain #REF!	opened		e:#REF!	-	-	e:#REF!	n:4	b:1	str:#REF!
+plain #NAME?	opened		e:#NAME?	-	-	e:#NAME?	n:5	b:1	str:#NAME?
+plain #NUM!	opened		e:#NUM!	-	-	e:#NUM!	n:6	b:1	str:#NUM!
+plain #N/A	opened		e:#N/A	-	-	e:#N/A	n:7	b:1	str:#N/A
+plain #GETTING_DATA	opened		e:#N/A	-	-	e:#N/A	n:8	b:1	str:#GETTING_DATA
+plain #SPILL!	refused	-50							
+plain #CALC!	refused	-50							
+plain #FIELD!	refused	-50							
+plain #BLOCKED!	refused	-50							
+plain #CONNECT!	refused	-50							
+plain #BUSY!	opened		e:#BUSY!	-	-	e:#BUSY!	n:0	b:1	str:#BUSY!
+plain #EXTERNAL!	refused	-50							
+plain #UNKNOWN!	refused	-50							
+plain #PYTHON!	refused	-50							
+plain #TIMEOUT!	refused	-50							
+plain #UNHEARD!	refused	-50							
+plain #field!	refused	-50							
+rich 0	opened		e:#VALUE!	1	_error errorType=0 subType=0	e:#VALUE!	n:1	b:1	str:#VALUE!
+rich 1	opened		e:#VALUE!	1	_error errorType=1 subType=0	e:#VALUE!	n:1	b:1	str:#VALUE!
+rich 2	opened		e:#VALUE!	1	_error errorType=2 subType=0	e:#VALUE!	n:3	b:1	str:#VALUE!
+rich 3	opened		e:#REF!	1	_error errorType=#REF! subType=3	e:#REF!	n:4	b:1	str:#REF!
+rich 4	opened		e:#NAME?	1	_error errorType=#NAME? subType=4	e:#NAME?	n:5	b:1	str:#NAME?
+rich 5	opened		e:#VALUE!	1	_error errorType=5 subType=0	e:#VALUE!	n:1	b:1	str:#VALUE!
+rich 6	opened		e:#N/A	1	_error errorType=#N/A subType=6	e:#N/A	n:7	b:1	str:#N/A
+rich 7	refused	-50							
+rich 8	opened		e:#VALUE!	1	_error errorType=8 subType=0	e:#VALUE!	n:9	b:1	str:#SPILL!
+rich 9	opened		e:#VALUE!	1	_error errorType=9 subType=0	e:#VALUE!	n:10	b:1	str:#CONNECT!
+rich 10	opened		e:#VALUE!	1	_error errorType=10 subType=0	e:#VALUE!	n:11	b:1	str:#BLOCKED!
+rich 11	opened		e:#VALUE!	1	_error errorType=11 subType=0	e:#VALUE!	n:12	b:1	str:#UNKNOWN!
+rich 12	opened		e:#VALUE!	1	_error errorType=12 subType=0	e:#VALUE!	n:13	b:1	str:#FIELD!
+rich 13	opened		e:#VALUE!	1	_error errorType=13 subType=0	e:#VALUE!	n:14	b:1	str:#CALC!
+rich 14	opened		n:0	-	-	n:0	n:15	b:1	str:#CALC!
+rich 15	opened		e:#VALUE!	1	_error errorType=15 subType=0	e:#VALUE!	n:16	b:1	str:#BUSY!
+rich 16	opened		e:#VALUE!	1	_error errorType=16 subType=0	e:#VALUE!	n:17	b:1	str:#VALUE!
+rich 17	refused	-50							
+rich 18	opened		e:#VALUE!	1	_error errorType=18 subType=0	e:#VALUE!	n:19	b:1	str:#UNKNOWN!
+rich 19	opened		e:#VALUE!	1	_error errorType=19 subType=0	e:#VALUE!	n:20	b:1	str:#TIMEOUT!
+rich 20	opened		e:#VALUE!	1	_error errorType=20 subType=0	e:#VALUE!	n:1	b:1	str:#VALUE!
+cached plain #SPILL!	refused	-50							
+cached plain #CALC!	refused	-50							
+cached plain #FIELD!	refused	-50							
+cached plain #BLOCKED!	refused	-50							
+cached plain #CONNECT!	refused	-50							
+cached plain #BUSY!	opened		e:#DIV/0!	-	-	e:#DIV/0!	n:2	b:1	str:#DIV/0!
+cached plain #EXTERNAL!	refused	-50							
+cached plain #UNKNOWN!	refused	-50							
+cached plain #PYTHON!	refused	-50							
+cached plain #TIMEOUT!	refused	-50							
+cached plain #GETTING_DATA	opened		e:#DIV/0!	-	-	e:#DIV/0!	n:2	b:1	str:#DIV/0!
+formula 1/0	opened		e:#DIV/0!	-	-	e:#DIV/0!	n:2	b:1	str:#DIV/0!
+formula FIELDVALUE of a number	opened		e:#VALUE!	1	_error errorType=12 field=Population subType=0	e:#VALUE!	n:13	b:1	str:#FIELD!
+formula FILTER with no match	opened		e:#VALUE!	1	_error errorType=13 subType=3	e:#VALUE!	n:14	b:1	str:#CALC!
+formula ERROR.TYPE of FIELDVALUE	opened		n:13	-	-	n:13	e:#N/A	b:0	str:13

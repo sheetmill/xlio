@@ -1,0 +1,8 @@
+# suite: theme_bound (capture.theme_probe); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-13; method: the attributes control with the default font's color set to theme n, opened with alerts off and saved as a copy; 11, 12 and 98 first, then bisected
+# refused = error -50; font 0 as Excel's copy writes it
+case	outcome	error	font 0
+theme 11	opened		<fonts count="2" x14ac:knownFonts="1"><font><sz val="11"/><color theme="11"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font>
+theme 12	refused	-50	
+theme 98	refused	-50	

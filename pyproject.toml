@@ -1,0 +1,110 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "xlio"
+dynamic = ["version"]
+description = "Internal xlsx reader and writer of the sheetmill project, extracted from xlrecalc; not intended for direct use."
+readme = "README.md"
+license = "MIT AND LicenseRef-Ecma-Text-Copyright-Policy"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Ethan Post" }]
+requires-python = ">=3.11"
+dependencies = []
+keywords = ["excel", "xlsx", "xlsm", "spreadsheet", "reader", "writer", "ooxml"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Office/Business :: Financial :: Spreadsheet",
+  "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://github.com/sheetmill/xlio"
+Documentation = "https://xlio.readthedocs.io"
+Source = "https://github.com/sheetmill/xlio"
+Changelog = "https://github.com/sheetmill/xlio/blob/main/CHANGELOG.md"
+Issues = "https://github.com/sheetmill/xlio/issues"
+
+[dependency-groups]
+dev = [
+  "pytest>=8",
+  "ruff>=0.8",
+  "mypy>=1.13",
+  # Tests compare the reader with what openpyxl and XlsxWriter write; tests that need them
+  # skip without them.
+  "openpyxl>=3.1",
+  "xlsxwriter>=3.3.1",
+]
+docs = [
+  "furo>=2025.12.19",
+  "myst-parser>=5.1.0",
+  "sphinx>=9.0.4",
+  "sphinx-autodoc-typehints>=3.6.1",
+]
+
+[tool.hatch.version]
+path = "src/xlio/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/xlio"]
+
+[tool.hatch.build.targets.sdist]
+# Source, tests, the documentation sources and the project documents. Never build output.
+include = [
+  "src/xlio",
+  "tests",
+  "capture",
+  "docs",
+  "README.md",
+  "CHANGELOG.md",
+  "CAPTURING.md",
+  "CONTRIBUTING.md",
+  "LICENSE",
+  "NOTICE",
+  "pagefind.yml",
+]
+exclude = ["capture/build", "docs/_build", "**/__pycache__"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests", "capture"]
+extend-exclude = ["*.md"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "A", "C4", "SIM", "RUF", "D", "ANN", "PT", "N", "PERF"]
+ignore = ["D105", "D107", "D203", "D213", "ANN401"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D", "ANN", "S101"]
+"capture/**" = ["D", "ANN", "PERF401"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unreachable = true
+packages = ["xlio"]
+mypy_path = "src"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra --strict-markers"
+markers = [
+    "slow: costly cases, with cheap equivalents in the default run; run with --tier slow",
+]

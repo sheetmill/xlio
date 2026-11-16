@@ -1,0 +1,291 @@
+# suite: text (capture.text_probe); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-13; method: a .csv file opened with alerts off (File > Open's defaults) and saved as a workbook copy
+# one line per cell of the copy's first sheet: type:value as the XML has it (a shared string resolved, a formula as =text -> cached), and the cell's number format; \n, \r, \t escaped
+case	outcome	sheet	cell	value	format
+convert	opened	xlio_text_0	font	Aptos Narrow 12	
+convert	opened	xlio_text_0	A1	n:1	builtin 0
+convert	opened	xlio_text_0	A2	n:1.5	builtin 0
+convert	opened	xlio_text_0	A3	n:-1	builtin 0
+convert	opened	xlio_text_0	A4	n:1000	builtin 11
+convert	opened	xlio_text_0	A5	n:1000	builtin 11
+convert	opened	xlio_text_0	A6	n:300000	builtin 11
+convert	opened	xlio_text_0	A7	s:1D5	builtin 0
+convert	opened	xlio_text_0	A8	n:12	builtin 0
+convert	opened	xlio_text_0	A9	n:123	builtin 0
+convert	opened	xlio_text_0	A10	n:1234	builtin 0
+convert	opened	xlio_text_0	A11	n:1234	builtin 3
+convert	opened	xlio_text_0	A12	n:1234.5	builtin 4
+convert	opened	xlio_text_0	A13	s:1,23	builtin 0
+convert	opened	xlio_text_0	A14	s:1 000	builtin 0
+convert	opened	xlio_text_0	A15	n:5	"$"#,##0_);[Red]\("$"#,##0\)
+convert	opened	xlio_text_0	A16	n:1234.5	"$"#,##0.00_);[Red]\("$"#,##0.00\)
+convert	opened	xlio_text_0	A17	n:-5	"$"#,##0_);[Red]\("$"#,##0\)
+convert	opened	xlio_text_0	A18	n:-5	builtin 0
+convert	opened	xlio_text_0	A19	s:5-	builtin 0
+convert	opened	xlio_text_0	A20	s:-5-	builtin 0
+convert	opened	xlio_text_0	A21	n:0.05	builtin 9
+convert	opened	xlio_text_0	A22	n:0.5	builtin 9
+convert	opened	xlio_text_0	A23	n:1.4999999999999999E-2	builtin 10
+convert	opened	xlio_text_0	A24	n:0.05	builtin 9
+convert	opened	xlio_text_0	A25	n:5	builtin 0
+convert	opened	xlio_text_0	A26	n:5	builtin 0
+convert	opened	xlio_text_0	A27	n:5	builtin 0
+convert	opened	xlio_text_0	A28	n:0.5	builtin 0
+convert	opened	xlio_text_0	A29	n:5	builtin 0
+convert	opened	xlio_text_0	A30	n:-0.5	builtin 0
+convert	opened	xlio_text_0	A31	n:46024	builtin 16
+convert	opened	xlio_text_0	A32	n:1.5	builtin 12
+convert	opened	xlio_text_0	A33	n:0.5	builtin 12
+convert	opened	xlio_text_0	A34	s:0x10	builtin 0
+convert	opened	xlio_text_0	A35	s:1e400	builtin 11
+convert	opened	xlio_text_0	A36	s:1e-400	builtin 11
+convert	opened	xlio_text_0	A37	s:4.9e-324	builtin 11
+convert	opened	xlio_text_0	A38	n:1.2345678901234499E+17	builtin 0
+convert	opened	xlio_text_0	A39	n:1.23456789012345E+21	builtin 0
+convert	opened	xlio_text_0	A40	n:0.123456789012345	builtin 0
+convert	opened	xlio_text_0	A41	n:0	builtin 0
+convert	opened	xlio_text_0	A42	s:inf	builtin 0
+convert	opened	xlio_text_0	A43	s:nan	builtin 0
+convert	opened	xlio_text_0	A44	s:NaN	builtin 0
+convert	opened	xlio_text_0	A45	s:‚Ç¨5	builtin 0
+convert	opened	xlio_text_0	A46	s:¬£5	builtin 0
+convert	opened	xlio_text_0	A47	s:5 USD	builtin 0
+convert	opened	xlio_text_0	A48	s:5‚Ç¨	builtin 0
+convert	opened	xlio_text_0	A49	s:1.234,5	builtin 0
+convert	opened	xlio_text_0	A50	n:46024	builtin 14
+convert	opened	xlio_text_0	A51	n:46024	builtin 14
+convert	opened	xlio_text_0	A52	n:46024	builtin 14
+convert	opened	xlio_text_0	A53	s:2026-01-02T03:04:05	builtin 0
+convert	opened	xlio_text_0	A54	n:46024.127835648149	builtin 22
+convert	opened	xlio_text_0	A55	n:46024	builtin 16
+convert	opened	xlio_text_0	A56	n:46024	builtin 16
+convert	opened	xlio_text_0	A57	n:46024	builtin 15
+convert	opened	xlio_text_0	A58	n:46024	builtin 15
+convert	opened	xlio_text_0	A59	n:46023	builtin 17
+convert	opened	xlio_text_0	A60	s:13/1/2026	builtin 0
+convert	opened	xlio_text_0	A61	n:46035	builtin 14
+convert	opened	xlio_text_0	A62	n:46024	builtin 14
+convert	opened	xlio_text_0	A63	n:46024	builtin 16
+convert	opened	xlio_text_0	A64	n:46024	builtin 16
+convert	opened	xlio_text_0	A65	n:37623	builtin 14
+convert	opened	xlio_text_0	A66	n:0.52083333333333337	builtin 20
+convert	opened	xlio_text_0	A67	n:0.52135416666666667	builtin 21
+convert	opened	xlio_text_0	A68	n:0.52083333333333337	builtin 18
+convert	opened	xlio_text_0	A69	n:0.52135995370370369	builtin 47
+convert	opened	xlio_text_0	A70	n:1.0416666666666667	builtin 46
+convert	opened	xlio_text_0	A71	n:46024.520833333336	builtin 22
+convert	opened	xlio_text_0	A72	s:2/29/2025	builtin 0
+convert	opened	xlio_text_0	A73	n:45351	builtin 14
+convert	opened	xlio_text_0	A74	n:1	builtin 14
+convert	opened	xlio_text_0	A75	s:12/31/1899	builtin 0
+convert	opened	xlio_text_0	A76	s:1/1/10000	builtin 0
+convert	opened	xlio_text_0	A77	s:555-1234	builtin 0
+convert	opened	xlio_text_0	A78	s:123-45-6789	builtin 0
+convert	opened	xlio_text_0	A79	b:1	builtin 0
+convert	opened	xlio_text_0	A80	b:1	builtin 0
+convert	opened	xlio_text_0	A81	b:0	builtin 0
+convert	opened	xlio_text_0	A82	s:yes	builtin 0
+convert	opened	xlio_text_0	A83	e:#N/A	builtin 0
+convert	opened	xlio_text_0	A84	e:#DIV/0!	builtin 0
+convert	opened	xlio_text_0	A85	e:#VALUE!	builtin 0
+convert	opened	xlio_text_0	A86	e:#N/A	builtin 0
+convert	opened	xlio_text_0	A87	n:=1+1 -> 2	builtin 0
+convert	opened	xlio_text_0	A88	n:=A1 -> 1	builtin 0
+convert	opened	xlio_text_0	A89	n:=SUM(1,2) -> 3	builtin 0
+convert	opened	xlio_text_0	A90	n:=1+1 -> 2	builtin 0
+convert	opened	xlio_text_0	A91	n:=-1+1 -> 0	builtin 0
+convert	opened	xlio_text_0	A92	n:=SUM(1) -> 1	builtin 0
+convert	opened	xlio_text_0	A93	s:'=1	builtin 0
+convert	opened	xlio_text_0	A94	s:=	builtin 0
+convert	opened	xlio_text_0	A95	s:==1	builtin 0
+convert	opened	xlio_text_0	A96	s:abc	builtin 0
+convert	opened	xlio_text_0	A97	s:'abc	builtin 0
+convert	opened	xlio_text_0	A98	s:'123	builtin 0
+convert	opened	xlio_text_0	A100	s:  spaces  	builtin 0
+convert	opened	xlio_text_0	A101	s:a\nb	builtin 0
+convert	opened	xlio_text_0	A102	s:a"b	builtin 0
+convert	opened	xlio_text_0	A103	s:\t5	builtin 0
+convert unquoted	opened	xlio_text_1	font	Aptos Narrow 12	
+convert unquoted	opened	xlio_text_1	A1	n:1	builtin 0
+convert unquoted	opened	xlio_text_1	A2	n:1.5	builtin 0
+convert unquoted	opened	xlio_text_1	A3	n:-1	builtin 0
+convert unquoted	opened	xlio_text_1	A4	n:1000	builtin 11
+convert unquoted	opened	xlio_text_1	A5	n:1000	builtin 11
+convert unquoted	opened	xlio_text_1	A6	n:300000	builtin 11
+convert unquoted	opened	xlio_text_1	A7	s:1D5	builtin 0
+convert unquoted	opened	xlio_text_1	A8	n:12	builtin 0
+convert unquoted	opened	xlio_text_1	A9	n:123	builtin 0
+convert unquoted	opened	xlio_text_1	A10	n:1234	builtin 0
+convert unquoted	opened	xlio_text_1	A11	s:1 000	builtin 0
+convert unquoted	opened	xlio_text_1	A12	n:5	"$"#,##0_);[Red]\("$"#,##0\)
+convert unquoted	opened	xlio_text_1	A13	n:-5	"$"#,##0_);[Red]\("$"#,##0\)
+convert unquoted	opened	xlio_text_1	A14	n:-5	builtin 0
+convert unquoted	opened	xlio_text_1	A15	s:5-	builtin 0
+convert unquoted	opened	xlio_text_1	A16	s:-5-	builtin 0
+convert unquoted	opened	xlio_text_1	A17	n:0.05	builtin 9
+convert unquoted	opened	xlio_text_1	A18	n:0.5	builtin 9
+convert unquoted	opened	xlio_text_1	A19	n:1.4999999999999999E-2	builtin 10
+convert unquoted	opened	xlio_text_1	A20	n:0.05	builtin 9
+convert unquoted	opened	xlio_text_1	A21	n:5	builtin 0
+convert unquoted	opened	xlio_text_1	A22	n:0.5	builtin 0
+convert unquoted	opened	xlio_text_1	A23	n:5	builtin 0
+convert unquoted	opened	xlio_text_1	A24	n:-0.5	builtin 0
+convert unquoted	opened	xlio_text_1	A25	n:46024	builtin 16
+convert unquoted	opened	xlio_text_1	A26	n:1.5	builtin 12
+convert unquoted	opened	xlio_text_1	A27	n:0.5	builtin 12
+convert unquoted	opened	xlio_text_1	A28	s:0x10	builtin 0
+convert unquoted	opened	xlio_text_1	A29	s:1e400	builtin 11
+convert unquoted	opened	xlio_text_1	A30	s:1e-400	builtin 11
+convert unquoted	opened	xlio_text_1	A31	s:4.9e-324	builtin 11
+convert unquoted	opened	xlio_text_1	A32	n:1.2345678901234499E+17	builtin 0
+convert unquoted	opened	xlio_text_1	A33	n:1.23456789012345E+21	builtin 0
+convert unquoted	opened	xlio_text_1	A34	n:0.123456789012345	builtin 0
+convert unquoted	opened	xlio_text_1	A35	n:0	builtin 0
+convert unquoted	opened	xlio_text_1	A36	s:inf	builtin 0
+convert unquoted	opened	xlio_text_1	A37	s:nan	builtin 0
+convert unquoted	opened	xlio_text_1	A38	s:NaN	builtin 0
+convert unquoted	opened	xlio_text_1	A39	s:‚Ç¨5	builtin 0
+convert unquoted	opened	xlio_text_1	A40	s:¬£5	builtin 0
+convert unquoted	opened	xlio_text_1	A41	s:5 USD	builtin 0
+convert unquoted	opened	xlio_text_1	A42	s:5‚Ç¨	builtin 0
+convert unquoted	opened	xlio_text_1	A43	n:46024	builtin 14
+convert unquoted	opened	xlio_text_1	A44	n:46024	builtin 14
+convert unquoted	opened	xlio_text_1	A45	n:46024	builtin 14
+convert unquoted	opened	xlio_text_1	A46	s:2026-01-02T03:04:05	builtin 0
+convert unquoted	opened	xlio_text_1	A47	n:46024.127835648149	builtin 22
+convert unquoted	opened	xlio_text_1	A48	n:46024	builtin 16
+convert unquoted	opened	xlio_text_1	A49	n:46024	builtin 16
+convert unquoted	opened	xlio_text_1	A50	n:46024	builtin 15
+convert unquoted	opened	xlio_text_1	A51	n:46023	builtin 17
+convert unquoted	opened	xlio_text_1	A52	s:13/1/2026	builtin 0
+convert unquoted	opened	xlio_text_1	A53	n:46035	builtin 14
+convert unquoted	opened	xlio_text_1	A54	n:46024	builtin 14
+convert unquoted	opened	xlio_text_1	A55	n:46024	builtin 16
+convert unquoted	opened	xlio_text_1	A56	n:46024	builtin 16
+convert unquoted	opened	xlio_text_1	A57	n:37623	builtin 14
+convert unquoted	opened	xlio_text_1	A58	n:0.52083333333333337	builtin 20
+convert unquoted	opened	xlio_text_1	A59	n:0.52135416666666667	builtin 21
+convert unquoted	opened	xlio_text_1	A60	n:0.52083333333333337	builtin 18
+convert unquoted	opened	xlio_text_1	A61	n:0.52135995370370369	builtin 47
+convert unquoted	opened	xlio_text_1	A62	n:1.0416666666666667	builtin 46
+convert unquoted	opened	xlio_text_1	A63	n:46024.520833333336	builtin 22
+convert unquoted	opened	xlio_text_1	A64	s:2/29/2025	builtin 0
+convert unquoted	opened	xlio_text_1	A65	n:45351	builtin 14
+convert unquoted	opened	xlio_text_1	A66	n:1	builtin 14
+convert unquoted	opened	xlio_text_1	A67	s:12/31/1899	builtin 0
+convert unquoted	opened	xlio_text_1	A68	s:1/1/10000	builtin 0
+convert unquoted	opened	xlio_text_1	A69	s:555-1234	builtin 0
+convert unquoted	opened	xlio_text_1	A70	s:123-45-6789	builtin 0
+convert unquoted	opened	xlio_text_1	A71	b:1	builtin 0
+convert unquoted	opened	xlio_text_1	A72	b:1	builtin 0
+convert unquoted	opened	xlio_text_1	A73	b:0	builtin 0
+convert unquoted	opened	xlio_text_1	A74	s:yes	builtin 0
+convert unquoted	opened	xlio_text_1	A75	e:#N/A	builtin 0
+convert unquoted	opened	xlio_text_1	A76	e:#DIV/0!	builtin 0
+convert unquoted	opened	xlio_text_1	A77	e:#VALUE!	builtin 0
+convert unquoted	opened	xlio_text_1	A78	e:#N/A	builtin 0
+convert unquoted	opened	xlio_text_1	A79	n:=1+1 -> 2	builtin 0
+convert unquoted	opened	xlio_text_1	A80	n:=A1 -> 1	builtin 0
+convert unquoted	opened	xlio_text_1	A81	n:=1+1 -> 2	builtin 0
+convert unquoted	opened	xlio_text_1	A82	n:=-1+1 -> 0	builtin 0
+convert unquoted	opened	xlio_text_1	A83	n:=SUM(1) -> 1	builtin 0
+convert unquoted	opened	xlio_text_1	A84	s:'=1	builtin 0
+convert unquoted	opened	xlio_text_1	A85	s:=	builtin 0
+convert unquoted	opened	xlio_text_1	A86	s:==1	builtin 0
+convert unquoted	opened	xlio_text_1	A87	s:abc	builtin 0
+convert unquoted	opened	xlio_text_1	A88	s:'abc	builtin 0
+convert unquoted	opened	xlio_text_1	A89	s:'123	builtin 0
+encoding utf-8	opened	xlio_text_2	font	Aptos Narrow 12	
+encoding utf-8	opened	xlio_text_2	A1	s:caf√©	builtin 0
+encoding utf-8	opened	xlio_text_2	A2	s:na√Øve	builtin 0
+encoding utf-8	opened	xlio_text_2	A3	s:‚Ç¨	builtin 0
+encoding utf-8	opened	xlio_text_2	A4	s:Êó•Êú¨	builtin 0
+encoding utf-8	opened	xlio_text_2	A5	s:√ún√Øc√∂d√©	builtin 0
+encoding utf-8 with BOM	opened	xlio_text_3	font	Aptos Narrow 12	
+encoding utf-8 with BOM	opened	xlio_text_3	A1	s:café	builtin 0
+encoding utf-8 with BOM	opened	xlio_text_3	A2	s:naïve	builtin 0
+encoding utf-8 with BOM	opened	xlio_text_3	A3	s:€	builtin 0
+encoding utf-8 with BOM	opened	xlio_text_3	A4	s:日本	builtin 0
+encoding utf-8 with BOM	opened	xlio_text_3	A5	s:Ünïcödé	builtin 0
+encoding utf-16-le with BOM	opened	xlio_text_4	font	Aptos Narrow 12	
+encoding utf-16-le with BOM	opened	xlio_text_4	A1	s:café	builtin 0
+encoding utf-16-le with BOM	opened	xlio_text_4	A2	s:naïve	builtin 0
+encoding utf-16-le with BOM	opened	xlio_text_4	A3	s:€	builtin 0
+encoding utf-16-le with BOM	opened	xlio_text_4	A4	s:日本	builtin 0
+encoding utf-16-le with BOM	opened	xlio_text_4	A5	s:Ünïcödé	builtin 0
+encoding utf-16-be with BOM	opened	xlio_text_5	font	Aptos Narrow 12	
+encoding utf-16-be with BOM	opened	xlio_text_5	A1	s:˛ˇ"cafÈ"	builtin 0
+encoding utf-16-be with BOM	opened	xlio_text_5	A2	s:naÔve	builtin 0
+encoding utf-16-be with BOM	opened	xlio_text_5	A3	s: ¨	builtin 0
+encoding utf-16-be with BOM	opened	xlio_text_5	A4	s:eÂg,	builtin 0
+encoding utf-16-be with BOM	opened	xlio_text_5	A5	s:‹nÔcˆdÈ	builtin 0
+encoding cp1252	opened	xlio_text_6	font	Aptos Narrow 12	
+encoding cp1252	opened	xlio_text_6	A1	s:cafÈ	builtin 0
+encoding cp1252	opened	xlio_text_6	A2	s:naÔve	builtin 0
+encoding cp1252	opened	xlio_text_6	A3	s:Ä	builtin 0
+encoding cp1252	opened	xlio_text_6	A4	s:??	builtin 0
+encoding cp1252	opened	xlio_text_6	A5	s:‹nÔcˆdÈ	builtin 0
+structure crlf	opened	xlio_text_7	font	Aptos Narrow 12	
+structure crlf	opened	xlio_text_7	A1	s:a	builtin 0
+structure crlf	opened	xlio_text_7	B1	s:b	builtin 0
+structure crlf	opened	xlio_text_7	A2	s:c	builtin 0
+structure crlf	opened	xlio_text_7	B2	s:d	builtin 0
+structure lf	opened	xlio_text_8	font	Aptos Narrow 12	
+structure lf	opened	xlio_text_8	A1	s:a	builtin 0
+structure lf	opened	xlio_text_8	B1	s:b	builtin 0
+structure lf	opened	xlio_text_8	A2	s:c	builtin 0
+structure lf	opened	xlio_text_8	B2	s:d	builtin 0
+structure cr	opened	xlio_text_9	font	Aptos Narrow 12	
+structure cr	opened	xlio_text_9	A1	s:a	builtin 0
+structure cr	opened	xlio_text_9	B1	s:b	builtin 0
+structure cr	opened	xlio_text_9	A2	s:c	builtin 0
+structure cr	opened	xlio_text_9	B2	s:d	builtin 0
+structure no final newline	opened	xlio_text_10	font	Aptos Narrow 12	
+structure no final newline	opened	xlio_text_10	A1	s:a	builtin 0
+structure no final newline	opened	xlio_text_10	B1	s:b	builtin 0
+structure no final newline	opened	xlio_text_10	A2	s:c	builtin 0
+structure no final newline	opened	xlio_text_10	B2	s:d	builtin 0
+structure ragged rows	opened	xlio_text_11	font	Aptos Narrow 12	
+structure ragged rows	opened	xlio_text_11	A1	s:a	builtin 0
+structure ragged rows	opened	xlio_text_11	A2	s:b	builtin 0
+structure ragged rows	opened	xlio_text_11	B2	s:c	builtin 0
+structure ragged rows	opened	xlio_text_11	C2	s:d	builtin 0
+structure ragged rows	opened	xlio_text_11	A3	s:e	builtin 0
+structure ragged rows	opened	xlio_text_11	B3	s:f	builtin 0
+structure trailing empty lines	opened	xlio_text_12	font	Aptos Narrow 12	
+structure trailing empty lines	opened	xlio_text_12	A1	s:a	builtin 0
+structure trailing empty lines	opened	xlio_text_12	B1	s:b	builtin 0
+structure trailing delimiters	opened	xlio_text_13	font	Aptos Narrow 12	
+structure trailing delimiters	opened	xlio_text_13	A1	s:a	builtin 0
+structure trailing delimiters	opened	xlio_text_13	B1	s:b	builtin 0
+structure trailing delimiters	opened	xlio_text_13	A2	s:c	builtin 0
+structure empty fields	opened	xlio_text_14	font	Aptos Narrow 12	
+structure empty fields	opened	xlio_text_14	B1	s:a	builtin 0
+structure empty fields	opened	xlio_text_14	D1	s:b	builtin 0
+structure quoted delimiter and newline	opened	xlio_text_15	font	Aptos Narrow 12	
+structure quoted delimiter and newline	opened	xlio_text_15	A1	s:a,b	builtin 0
+structure quoted delimiter and newline	opened	xlio_text_15	B1	s:c\nd	builtin 0
+structure doubled quote	opened	xlio_text_16	font	Aptos Narrow 12	
+structure doubled quote	opened	xlio_text_16	A1	s:a"b	builtin 0
+structure doubled quote	opened	xlio_text_16	B1	s:c	builtin 0
+structure quote inside a field	opened	xlio_text_17	font	Aptos Narrow 12	
+structure quote inside a field	opened	xlio_text_17	A1	s:a"b	builtin 0
+structure quote inside a field	opened	xlio_text_17	B1	s:c	builtin 0
+structure quote then text	opened	xlio_text_18	font	Aptos Narrow 12	
+structure quote then text	opened	xlio_text_18	A1	s:ab	builtin 0
+structure quote then text	opened	xlio_text_18	B1	s:c	builtin 0
+structure unterminated quote	opened	xlio_text_19	font	Aptos Narrow 12	
+structure unterminated quote	opened	xlio_text_19	A1	s:abc,d\ne,f\n	builtin 0
+structure semicolons	opened	xlio_text_20	font	Aptos Narrow 12	
+structure semicolons	opened	xlio_text_20	A1	s:a;b;c	builtin 0
+structure semicolons	opened	xlio_text_20	A2	s:1;2;3	builtin 0
+structure tabs	opened	xlio_text_21	font	Aptos Narrow 12	
+structure tabs	opened	xlio_text_21	A1	s:a\tb\tc	builtin 0
+structure tabs	opened	xlio_text_21	A2	s:1\t2\t3	builtin 0
+structure spaces around a quoted field	opened	xlio_text_22	font	Aptos Narrow 12	
+structure spaces around a quoted field	opened	xlio_text_22	A1	s: "a" 	builtin 0
+structure spaces around a quoted field	opened	xlio_text_22	B1	s:b	builtin 0
+structure leading blank line	opened	xlio_text_23	font	Aptos Narrow 12	
+structure leading blank line	opened	xlio_text_23	A2	s:a	builtin 0
+structure leading blank line	opened	xlio_text_23	B2	s:b	builtin 0

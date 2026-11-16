@@ -1,0 +1,14 @@
+# suite: text_launch_none (capture.text_probe); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-13; method: a .csv file opened through Launch Services (open -a), as a person opens it, Excel's notice of default conversions answered 'none' by the person (none: not shown), then saved as a workbook copy through AppleScript
+# one line per cell of the copy's first sheet: type:value as the XML has it (a shared string resolved, a formula as =text -> cached), and the cell's number format; \n, \r, \t escaped
+case	outcome	sheet	cell	value	format
+encoding utf-8	opened	xlio_text_2	font	Aptos Narrow 12	
+encoding utf-8	opened	xlio_text_2	A1	s:caf√©	builtin 0
+encoding utf-8	opened	xlio_text_2	A2	s:na√Øve	builtin 0
+encoding utf-8	opened	xlio_text_2	A3	s:‚Ç¨	builtin 0
+encoding utf-8	opened	xlio_text_2	A4	s:Êó•Êú¨	builtin 0
+encoding utf-8	opened	xlio_text_2	A5	s:√ún√Øc√∂d√©	builtin 0
+structure quoted delimiter and newline	opened	xlio_text_15	font	Aptos Narrow 12	
+structure quoted delimiter and newline	opened	xlio_text_15	A1	s:a,b	builtin 0
+structure quoted delimiter and newline	opened	xlio_text_15	B1	s:c\nd	builtin 0
