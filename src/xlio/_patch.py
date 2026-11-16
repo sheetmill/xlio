@@ -109,7 +109,7 @@ def patch(
             formula's master cell while its dependents remain.
         full_calc_on_load: Ask Excel to recalculate every formula when it opens the file
             (``calcPr fullCalcOnLoad``), since changed values leave dependent cached results
-            stale. ``False`` leaves the setting as it was.
+            stale. ``False`` removes a request the file holds, as Excel's own saves do.
         drop_calc_chain: Remove the calculation chain, which Excel needs when a formula cell
             was removed or replaced by a constant.
         limits: What reading the source may cost.

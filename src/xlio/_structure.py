@@ -33,7 +33,9 @@ from xlio._types import (
     flag,
     integer,
     local,
+    outline_level,
     ranges,
+    sheet_outline_level,
     unsigned,
 )
 
@@ -442,8 +444,8 @@ class SheetFormat:
             flag(get("zeroHeight"), False),
             flag(get("thickTop"), False),
             flag(get("thickBottom"), False),
-            unsigned(get("outlineLevelRow"), 0),
-            unsigned(get("outlineLevelCol"), 0),
+            sheet_outline_level(get("outlineLevelRow"), "outlineLevelRow"),
+            sheet_outline_level(get("outlineLevelCol"), "outlineLevelCol"),
             width_text,
             height_text,
             element,
@@ -527,7 +529,7 @@ def row_format(attrs: Mapping[str, str]) -> RowFormat:
         flag(attrs.get("hidden"), False),
         unsigned(s, 0) if s is not None else None,
         flag(attrs.get("customFormat"), False),
-        unsigned(attrs.get("outlineLevel"), 0),
+        outline_level(attrs.get("outlineLevel")),
         flag(attrs.get("collapsed"), False),
         flag(attrs.get("thickTop"), False),
         flag(attrs.get("thickBot"), False),
@@ -584,6 +586,8 @@ class Structure:
     row_breaks: tuple[PageBreak, ...] = ()
     column_breaks: tuple[PageBreak, ...] = ()
     page_setup: PageSetup = field(default_factory=PageSetup)
+    root: str = ""
+    """The root element's name, ``{namespace}local``."""
 
 
 def _rel_id(element: ET.Element) -> str | None:
@@ -618,13 +622,16 @@ def read_structure(
     in_data = seen_data = False
     after: list[int] = []  # indexes in children of the records written after <sheetData>
     row = 0
+    root = ""
 
     def clark(name: str) -> str:
         return "{" + name if "}" in name else name
 
     def start(name: str, attrs: dict[str, str]) -> None:
-        nonlocal builder, level, in_data, seen_data, row
+        nonlocal builder, level, in_data, seen_data, row, root
         level += 1
+        if level == 1:
+            root = clark(name)
         if in_data:
             if level == 3 and name.rpartition("}")[2] == "row":
                 r = attrs.get("r")
@@ -675,7 +682,7 @@ def read_structure(
         pass
     except xml.parsers.expat.ExpatError as exc:
         raise PackageError(f"{part}: {exc}") from exc
-    return _records(children, rows, targets, frozenset(after))
+    return _records(children, rows, targets, frozenset(after), root)
 
 
 _HEAD = frozenset({"sheetPr", "dimension", "sheetViews", "sheetFormatPr", "cols"})
@@ -686,6 +693,7 @@ def _records(
     rows: dict[int, RowFormat],
     targets: Mapping[str, str | None],
     after: frozenset[int] = frozenset(),
+    root: str = "",
 ) -> Structure:
     properties = SheetProperties()
     dimension = None
@@ -745,7 +753,7 @@ def _records(
                         flag(col.get("bestFit"), False),
                         flag(col.get("customWidth"), False),
                         flag(col.get("phonetic"), False),
-                        unsigned(col.get("outlineLevel"), 0),
+                        outline_level(col.get("outlineLevel")),
                         flag(col.get("collapsed"), False),
                         width_text,
                         col,
@@ -819,4 +827,5 @@ def _records(
             printing.get("printOptions"),
             printing.get("headerFooter"),
         ),
+        root,
     )

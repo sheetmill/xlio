@@ -67,9 +67,6 @@ stripped of paths and people.
 `package` and `value_forms` gave the same results under Office 2021 (Excel 16.114.3) and
 Microsoft 365 (Excel 16.115, Current Channel).
 
-The `outline` capture serves no code in this release: it records how Excel reads outline
-levels, for the next minor release.
-
 The `text` and `text_launch_*` captures serve no code in this release: they record how Excel
 opens CSV files, for the text formats (CSV, TSV, fixed width) planned for the next minor
 release.

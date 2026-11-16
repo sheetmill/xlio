@@ -61,6 +61,7 @@ _T_ATTR = re.compile(rb"""\s+t\s*=\s*(?:"[^"]*"|'[^']*')""")
 _VM_ATTR = re.compile(rb"""\s+vm\s*=\s*(?:"[^"]*"|'[^']*')""")
 _ESCAPED = re.compile(r"_(?=x[0-9A-Fa-f]{4}_)|[\x00-\x08\x0b-\x1f\ud800-\udfff￾￿]")
 _CALC = re.compile(rb"<(?P<p>[\w.-]+:)?calcPr\b(?P<a>[^>]*?)(?P<e>/?)>")
+_ON = (b"1", b"true")
 _FULL = re.compile(rb"""\bfullCalcOnLoad\s*=\s*(?:"([^"]*)"|'([^']*)')""")
 _ROOT = re.compile(rb"<(?P<p>[\w.-]+:)?workbook\b")
 # Elements that follow calcPr in a workbook part (ECMA-376 CT_Workbook), and its end tag.
@@ -313,13 +314,17 @@ def patch_cells(
     translate: Translate | None = None,
     cm: str | None = None,
     fills: Sequence[Fill] = (),
+    value_errors: Mapping[int, str | float] | None = None,
 ) -> int:
     """Copy a worksheet part, replacing the cached values of formula cells that changed.
 
     ``edits`` replace or add cells, keyed ``(row, col)`` (1-based), and ``fills`` add ranges of
     constant cells, each value made when it is written; a cell or row the part does not hold is
     inserted in order. When the master of a shared formula is edited, its other cells get their
-    own formula text, through ``translate``. Returns the number of cells changed.
+    own formula text, through ``translate``. ``value_errors`` maps a ``vm`` value to the error
+    its rich value stands for (``Book.value_errors``): a formula cell caching ``#VALUE!`` with it
+    holds that error, and given the same error it is left as it is, ``vm`` and all, as Excel
+    keeps its own record. Returns the number of cells changed.
     """
     remaining = _Pending(edits or {}, fills)
     editing = bool(edits or fills)  # a write of values alone skips what inserts cells and rows
@@ -482,8 +487,16 @@ def patch_cells(
                 old = "".join(v_text) if v_text is not None else None
                 if old is not None and not v_preserve and c_attrs.get("t") == "str":
                     old = old.strip(_SPACE)  # as Excel reads it
-                if "vm" not in c_attrs and _same(c_attrs.get("t", "n"), old, new):
-                    new = None  # with a vm, the value shown is the rich value's: rewrite
+                old_type, vm = c_attrs.get("t", "n"), c_attrs.get("vm")
+                if vm is None:
+                    if _same(old_type, old, new):
+                        new = None
+                elif old_type == "e" and old == "#VALUE!" and value_errors:
+                    # with a vm, the value shown is the rich value's: unchanged only while it
+                    # is the same error, else rewritten without the vm
+                    stands = value_errors.get(_int_or_none(vm) or 0)  # vm counts from 1
+                    if isinstance(stands, str) and new == ("e", stands):
+                        new = None
             if new is not None or new_f is not None:
                 patches.append((c_start, c_end, _patched(new, new_f, c_end)))
                 count += 1
@@ -556,6 +569,24 @@ def prefix_of(qname: str) -> bytes:
     return prefix + b":" if prefix else b""
 
 
+def _int_or_none(text: str) -> int | None:
+    try:
+        return int(text)
+    except ValueError:
+        return None
+
+
+def _no_full_calc_on_load(workbook: bytes) -> bytes | None:
+    """The workbook part without a set ``fullCalcOnLoad``, as Excel saves a file; else ``None``."""
+    m = _CALC.search(workbook)
+    full = _FULL.search(m["a"]) if m else None
+    if m is None or full is None or (full[1] if full[1] is not None else full[2]) not in _ON:
+        return None
+    attrs = re.sub(rb"""\s+fullCalcOnLoad\s*=\s*(?:"[^"]*"|'[^']*')""", b"", m["a"])
+    tag = b"<" + (m["p"] or b"") + b"calcPr" + attrs + m["e"] + b">"
+    return workbook[: m.start()] + tag + workbook[m.end() :]
+
+
 def _full_calc_on_load(workbook: bytes) -> bytes | None:
     """The workbook part with ``<calcPr fullCalcOnLoad="1">``; ``None`` when it already has it."""
     m = _CALC.search(workbook)
@@ -564,7 +595,7 @@ def _full_calc_on_load(workbook: bytes) -> bytes | None:
         full = _FULL.search(attrs)
         if full:
             value = full[1] if full[1] is not None else full[2]
-            if value in (b"1", b"true"):
+            if value in _ON:
                 return None
             attrs = attrs[: full.start()] + b'fullCalcOnLoad="1"' + attrs[full.end() :]
         else:
@@ -635,7 +666,8 @@ def write(
     ``drop_calc_chain`` removes the calculation chain (its part, relationship and content type),
     which Excel needs when a formula cell was removed.
     With ``full_calc_on_load`` the workbook asks Excel to recalculate when it opens the file;
-    without it the setting stays as it was. Returns the number of cells changed.
+    without it a request the file holds is removed, as Excel removes it when it saves. Returns
+    the number of cells changed.
     """
     target = Path(target)
     count = 0
@@ -650,10 +682,10 @@ def write(
         part_fills = {book.sheet(n).part: fills.get(n, ()) for n in names}
         workbook_part = book.workbook_part
         replaced: dict[str, bytes] = {}
-        if full_calc_on_load:
-            new_workbook = _full_calc_on_load(package.read(workbook_part))
-            if new_workbook is not None:
-                replaced[workbook_part] = new_workbook
+        flag = _full_calc_on_load if full_calc_on_load else _no_full_calc_on_load
+        new_workbook = flag(package.read(workbook_part))
+        if new_workbook is not None:
+            replaced[workbook_part] = new_workbook
         skip: set[str] = set()
         if drop_calc_chain:
             rels_part = posixpath.join(
@@ -737,6 +769,7 @@ def write(
                                 translate,
                                 cm,
                                 part_fills[name],
+                                book.value_errors,
                             )
                         if changed:
                             zw.finish()

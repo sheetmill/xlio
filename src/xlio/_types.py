@@ -126,6 +126,48 @@ def unsigned(text: str | None, default: int) -> int:
     return value if value is not None and value >= 0 else default
 
 
+_DIGITS = re.compile(r"[0-9]+")
+
+
+def _outline_byte(text: str | None) -> int | None:
+    """An outline level as Excel takes it: decimal digits only, kept as a byte; else ``None``.
+
+    The last eight digits are enough, since 10**8 is a multiple of 256.
+    """
+    if text is None or not _DIGITS.fullmatch(text):
+        return None
+    return int(text[-8:]) % 256
+
+
+def outline_level(text: str | None) -> int:
+    """A row's or column's ``outlineLevel`` as Excel reads it (capture ``outline``).
+
+    Decimal digits, leading zeros allowed, are kept modulo 8 (9 is 1, 255 is 7, 256 is 0);
+    anything else (``-1``, ``1.5``, ``+2``, `` 2``, empty) is no level. Captured up to 256;
+    larger values follow the same rule.
+    """
+    value = _outline_byte(text)
+    return value % 8 if value is not None else 0
+
+
+def sheet_outline_level(text: str | None, name: str) -> int:
+    """A sheet's ``outlineLevelRow`` or ``outlineLevelCol`` (capture ``outline``).
+
+    Excel refuses a file stating 8 to 255; it opens one stating 256 or a value that is not
+    decimal digits, and counts the levels from the rows and columns. Read so: 0 to 7 as they
+    are, 256 as 0 (larger values as a byte, as for rows), anything else 0.
+
+    Raises:
+        PackageError: A level from 8 to 255.
+    """
+    value = _outline_byte(text)
+    if value is None or text is None:
+        return 0
+    if value > 7:
+        raise PackageError(f"{name} of {text[:40]!r}, which Excel refuses")
+    return value
+
+
 def double(text: str | None) -> float | None:
     """An ``xsd:double`` (``INF``, ``-INF`` and ``NaN`` included), or ``None``."""
     if text is None:

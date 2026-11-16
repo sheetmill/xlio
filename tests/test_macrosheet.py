@@ -3,7 +3,8 @@
 Capture ``macrosheet`` (``capture/macrosheet_probe.py``): a workbook with an Excel 4.0 macro
 sheet was opened as a person opens it, its macro notice answered, and saved as a copy. Here the
 cells the reader gives must be the ones Excel's copy keeps, with their formulas, for a macro
-sheet and an international one in Excel's own form (root ``xm:macrosheet``).
+sheet and an international one in Excel's own form (root ``xm:macrosheet``). A macro sheet whose
+root is in SpreadsheetML's namespace loses its columns and cells, as in Excel's copy.
 """
 
 from __future__ import annotations
@@ -54,3 +55,17 @@ def test_cells_as_excel_keeps_them(name):
         ]
         assert sheet.columns[0].width == 20.0
     assert cells == kept
+
+
+def test_a_root_in_spreadsheetmls_namespace_loses_columns_and_cells():
+    name = "xlsm, root in SpreadsheetML's namespace"
+    row = ROWS[name]
+    assert (row["outcome"], row["cols"], row["sheetData"]) == ("opened", "-", "-")
+    assert row["pageMargins"].startswith("<pageMargins ")
+    case = next(c for _, c in CASES if c.name == name)
+    data = build(control_workbook(fill), case)
+    with xlio.open(io.BytesIO(data)) as wb:
+        sheet = wb["Macro1"]
+        assert (list(sheet.cells()), sheet.columns, dict(sheet.rows)) == ([], (), {})
+        assert sheet.page_setup.margins is not None
+    xlio.check(io.BytesIO(data))

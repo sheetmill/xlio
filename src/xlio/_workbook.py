@@ -401,6 +401,15 @@ class Sheet:
         return structure
 
     @functools.cached_property
+    def _drops_cells(self) -> bool:
+        """Whether Excel drops the sheet's columns, rows and cells (capture ``macrosheet``).
+
+        So it opens a macro sheet whose root is not its own ``xm:macrosheet`` (one in
+        SpreadsheetML's namespace, say), keeping the rest.
+        """
+        return self.kind == "macrosheet" and self._head.root != "{" + ns.XM + "}macrosheet"
+
+    @functools.cached_property
     def _head(self) -> Structure:
         if "_structure" in self.__dict__:
             return self._structure
@@ -433,7 +442,7 @@ class Sheet:
     @property
     def columns(self) -> tuple[ColumnRange, ...]:
         """Column formats (``cols``), in file order."""
-        return self._head.columns
+        return () if self._drops_cells else self._head.columns
 
     @property
     def rows(self) -> Mapping[int, RowFormat]:
@@ -441,6 +450,8 @@ class Sheet:
 
         After a whole pass of :meth:`cells` this costs nothing: the rows were read with the cells.
         """
+        if self._drops_cells:
+            return {}
         if self._row_formats is None:
             return self._structure.rows
         return self._row_formats
@@ -638,6 +649,8 @@ class Sheet:
 
     def _read(self, rich: bool) -> Iterator[Cell]:
         """The cells, row formats gathered on the way and kept once the part is read whole."""
+        if self._drops_cells:
+            return
         book = self._workbook._book
         formats: dict[int, RowFormat] = {}
 

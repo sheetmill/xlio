@@ -287,17 +287,19 @@ def test_an_error_rich_value_wins_over_any_cached_value():
 def test_a_new_value_drops_the_stale_rich_value(tmp_path):
     # Excel shows and saves the rich value a cell's vm points to, not the cached value beside it,
     # when the file is not recalculated on opening; so a written value drops vm, even when it is
-    # the #VALUE! the cell already caches.
+    # the #VALUE! the cell already caches. Given the error the rich value stands for (#CALC!),
+    # the cell is left as it is, vm and all: Excel's record of it stays right.
     rows = (
         '<row r="1"><c r="A1" t="e" vm="1"><f>FILTER(D1:D2,D1:D2&gt;5)</f><v>#VALUE!</v></c>'
         '<c r="B1" t="e" vm="1"><f>FILTER(D1:D2,D1:D2&gt;5)</f><v>#VALUE!</v></c>'
         '<c r="C1" t="e" vm="1"><v>#VALUE!</v></c>'
-        '<c r="E1" t="e" vm="1"><f>FILTER(D1:D2,D1:D2&gt;5)</f><v>#VALUE!</v></c></row>'
+        '<c r="E1" t="e" vm="1"><f>FILTER(D1:D2,D1:D2&gt;5)</f><v>#VALUE!</v></c>'
+        '<c r="F1" t="e" vm="1"><f>FILTER(D1:D2,D1:D2&gt;5)</f><v>#VALUE!</v></c></row>'
     )
     source = tmp_path / "in.xlsx"
     source.write_bytes(rich_error_package(rows))
     target = tmp_path / "out.xlsx"
-    new = {(1, 1): xlio.ErrorCode.VALUE, (1, 2): 5.0}
+    new = {(1, 1): xlio.ErrorCode.VALUE, (1, 2): 5.0, (1, 6): xlio.ErrorCode.CALC}
     xlio.patch(
         source,
         target,
@@ -307,10 +309,13 @@ def test_a_new_value_drops_the_stale_rich_value(tmp_path):
     )
     sheet_xml = zipfile.ZipFile(target).read("xl/worksheets/sheet1.xml").decode()
     cells = dict(re.findall(r'<c r="([A-Z]+1)"([^>]*)>', sheet_xml))
-    assert ["vm=" in cells[ref] for ref in ("A1", "B1", "C1", "E1")] == [False, False, False, True]
+    kept = ("E1", "F1")
+    assert ["vm=" in cells[ref] for ref in ("A1", "B1", "C1", *kept)] == [False] * 3 + [True] * 2
+    assert rows[rows.index('<c r="F1"') :] in sheet_xml  # untouched
     values = {(c.row, c.column): c.value for c in opened(target.read_bytes())["Data"].cells()}
     assert values == {
         (1, 1): xlio.ErrorCode.VALUE, (1, 2): 5.0, (1, 3): True, (1, 5): xlio.ErrorCode.CALC,
+        (1, 6): xlio.ErrorCode.CALC,
     }  # fmt: skip
 
 
