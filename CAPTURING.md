@@ -18,8 +18,8 @@ program's output. Captured data lives in `tests/captures/`, the scripts that pro
 
 ## Steps that need a person
 
-Some behavior shows only to a person: Excel's repair dialog, and its notice of default
-conversions for a `.csv` file, which an AppleScript open does not show (it applies the default,
+Some behavior shows only to a person: Excel's repair dialog, its notice about macros, and its
+notice of default conversions for a `.csv` file, which an AppleScript open does not show (it applies the default,
 "Convert"). Such a step opens the file through Launch Services (`open -a "Microsoft Excel"`) and
 then exits; it sends Excel nothing more until you have answered the dialog and run its next step
 (answering the conversion notice while a script was querying Excel crashed Excel twice, on
@@ -54,6 +54,9 @@ records, without paths.
 | `theme_bound` | `capture/theme_probe.py` | the theme color index past which Excel refuses a file, bisected |
 | `text` | `capture/text_probe.py` | `.csv` files opened through File > Open's defaults (AppleScript): every cell of the copy with its type, value and number format, the sheet name and the standard font, for conversions (quoted and bare), encodings and structure |
 | `text_launch_*` | `capture/text_probe.py --launch-open`, `--launch CHOICE` | three of those files opened as a person opens them (Launch Services), Excel's notice of default conversions answered by the person (`convert`, `dont`, or `none` when it did not appear) |
+| `strings`, `strings_cached` | `capture/strings_probe.py` | escaped surrogates (a pair, lone halves, the pair reversed or in lowercase hex) in a shared string, an inline string and a formula's cached text, and `t="str"` cells with an empty value and no formula: the text Excel writes back and what `LEN`, `UNICODE`, `ISTEXT` and `ISBLANK` give for it |
+| `macrosheet` | `capture/macrosheet_probe.py` | Excel 4.0 macro sheets (in an `.xlsm` and an `.xlsx`, international, with another root element) opened by a person, Excel's macro notice answered: what the `.xlsm` copy keeps |
+| `outline` | `capture/outline_probe.py` | outline levels past 7, negative or not integers, on a row, a column and the sheet's `sheetFormatPr`: whether Excel opens the file, and the levels it saves |
 | `repair` | `capture/repair_probe.py` | reversed drawing anchors and invalid conditional formats opened by a person, Excel's repair answered Yes: what the repaired workbook keeps, and the repair report's records |
 
 `capture/fixtures.py` is not a capture: it has Excel save workbooks XlsxWriter builds (tables
@@ -63,6 +66,9 @@ stripped of paths and people.
 
 `package` and `value_forms` gave the same results under Office 2021 (Excel 16.114.3) and
 Microsoft 365 (Excel 16.115, Current Channel).
+
+The `outline` capture serves no code in this release: it records how Excel reads outline
+levels, for the next minor release.
 
 The `text` and `text_launch_*` captures serve no code in this release: they record how Excel
 opens CSV files, for the text formats (CSV, TSV, fixed width) planned for the next minor

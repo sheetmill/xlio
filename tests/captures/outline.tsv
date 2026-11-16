@@ -1,0 +1,57 @@
+# suite: outline (capture); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-16; method: AppleScript open, save as .xlsx, read the copy's XML
+# one outline level written into a row, a column or sheetFormatPr; what Excel saves; refused = error -50 (Excel would repair the file)
+case	outcome	error	row 2	cols	sheetFormatPr
+row '7' (control)	opened		<row r="2" spans="1:1" outlineLevel="7" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" outlineLevelRow="7" x14ac:dyDescent="0.2"/>
+col '7' (control)	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	<cols><col min="2" max="2" width="9" customWidth="1" outlineLevel="7"/></cols>	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" outlineLevelCol="7" x14ac:dyDescent="0.2"/>
+outlineLevelRow '7' (control)	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+outlineLevelCol '7' (control)	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+row '8'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+col '8'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	<cols><col min="2" max="2" width="9" customWidth="1"/></cols>	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+outlineLevelRow '8'	refused	-50			
+outlineLevelCol '8'	refused	-50			
+row '9'	opened		<row r="2" spans="1:1" outlineLevel="1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" outlineLevelRow="1" x14ac:dyDescent="0.2"/>
+col '9'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	<cols><col min="2" max="2" width="9" customWidth="1" outlineLevel="1"/></cols>	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" outlineLevelCol="1" x14ac:dyDescent="0.2"/>
+outlineLevelRow '9'	refused	-50			
+outlineLevelCol '9'	refused	-50			
+row '15'	opened		<row r="2" spans="1:1" outlineLevel="7" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" outlineLevelRow="7" x14ac:dyDescent="0.2"/>
+col '15'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	<cols><col min="2" max="2" width="9" customWidth="1" outlineLevel="7"/></cols>	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" outlineLevelCol="7" x14ac:dyDescent="0.2"/>
+outlineLevelRow '15'	refused	-50			
+outlineLevelCol '15'	refused	-50			
+row '255'	opened		<row r="2" spans="1:1" outlineLevel="7" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" outlineLevelRow="7" x14ac:dyDescent="0.2"/>
+col '255'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	<cols><col min="2" max="2" width="9" customWidth="1" outlineLevel="7"/></cols>	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" outlineLevelCol="7" x14ac:dyDescent="0.2"/>
+outlineLevelRow '255'	refused	-50			
+outlineLevelCol '255'	refused	-50			
+row '256'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+col '256'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	<cols><col min="2" max="2" width="9" customWidth="1"/></cols>	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+outlineLevelRow '256'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+outlineLevelCol '256'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+row '-1'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+col '-1'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	<cols><col min="2" max="2" width="9" customWidth="1"/></cols>	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+outlineLevelRow '-1'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+outlineLevelCol '-1'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+row '1.5'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+col '1.5'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	<cols><col min="2" max="2" width="9" customWidth="1"/></cols>	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+outlineLevelRow '1.5'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+outlineLevelCol '1.5'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+row 'abc'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+col 'abc'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	<cols><col min="2" max="2" width="9" customWidth="1"/></cols>	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+outlineLevelRow 'abc'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+outlineLevelCol 'abc'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+row ''	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+col ''	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	<cols><col min="2" max="2" width="9" customWidth="1"/></cols>	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+outlineLevelRow ''	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+outlineLevelCol ''	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+row ' 2'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+col ' 2'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	<cols><col min="2" max="2" width="9" customWidth="1"/></cols>	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+outlineLevelRow ' 2'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+outlineLevelCol ' 2'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+row '02'	opened		<row r="2" spans="1:1" outlineLevel="2" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" outlineLevelRow="2" x14ac:dyDescent="0.2"/>
+col '02'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	<cols><col min="2" max="2" width="9" customWidth="1" outlineLevel="2"/></cols>	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" outlineLevelCol="2" x14ac:dyDescent="0.2"/>
+outlineLevelRow '02'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+outlineLevelCol '02'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+row '+2'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+col '+2'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	<cols><col min="2" max="2" width="9" customWidth="1"/></cols>	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+outlineLevelRow '+2'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>
+outlineLevelCol '+2'	opened		<row r="2" spans="1:1" x14ac:dyDescent="0.2">	-	<sheetFormatPr baseColWidth="10" defaultColWidth="8.83203125" defaultRowHeight="15" x14ac:dyDescent="0.2"/>

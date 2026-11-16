@@ -1,0 +1,19 @@
+# suite: strings_cached (capture); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-16; method: Excel saves a copy of a workbook with A1 = "q" (formula); A1's cached text in that copy replaced; AppleScript open, save as .xlsx, read the copy's XML
+# A1's cached text planted in Excel's own file; B1:H1 kept as Excel cached them, or without values (computed on opening); text outside ASCII as escapes; refused = error -50 (Excel would repair the file)
+case	outcome	error	A1	sharedStrings	B1 LEN(A1)	C1 _xlfn.UNICODE(A1)	D1 _xlfn.UNICODE(MID(A1,2,1))	E1 _xlfn.UNICODE(RIGHT(A1,1))	F1 A1	G1 ISTEXT(A1)	H1 ISBLANK(A1)
+cached: zzz (control)	opened		<c r="A1" t="str"><f>"q"</f><v>zzz</v></c>	-	n:1	n:113	e:#VALUE!	n:113	str:q	b:1	b:0
+cached, B1:H1 uncached: zzz (control)	opened		<c r="A1" t="str"><f>"q"</f><v>zzz</v></c>	-	n:3	n:122	n:122	n:122	str:zzz	b:1	b:0
+cached: pair	opened		<c r="A1" t="str"><f>"q"</f><v>\U0001f600</v></c>	-	n:1	n:113	e:#VALUE!	n:113	str:q	b:1	b:0
+cached, B1:H1 uncached: pair	opened		<c r="A1" t="str"><f>"q"</f><v>\U0001f600</v></c>	-	n:1	n:128512	e:#VALUE!	n:128512	str:\U0001f600	b:1	b:0
+cached: lone high	opened		<c r="A1" t="str"><f>"q"</f><v>a_xD83D_b</v></c>	-	n:1	n:113	e:#VALUE!	n:113	str:q	b:1	b:0
+cached, B1:H1 uncached: lone high	opened		<c r="A1" t="str"><f>"q"</f><v>a_xD83D_b</v></c>	-	n:3	n:97	e:#VALUE!	n:98	str:a_xD83D_b	b:1	b:0
+cached: lone low	opened		<c r="A1" t="str"><f>"q"</f><v>a_xDE00_b</v></c>	-	n:1	n:113	e:#VALUE!	n:113	str:q	b:1	b:0
+cached, B1:H1 uncached: lone low	opened		<c r="A1" t="str"><f>"q"</f><v>a_xDE00_b</v></c>	-	n:3	n:97	n:56832	n:98	str:a_xDE00_b	b:1	b:0
+cached: reversed pair	opened		<c r="A1" t="str"><f>"q"</f><v>_xDE00__xD83D_</v></c>	-	n:1	n:113	e:#VALUE!	n:113	str:q	b:1	b:0
+cached, B1:H1 uncached: reversed pair	opened		<c r="A1" t="str"><f>"q"</f><v>_xDE00__xD83D_</v></c>	-	n:1	n:56832	e:#VALUE!	e:#VALUE!	str:_xDE00__xD83D_	b:1	b:0
+cached: lowercase pair	opened		<c r="A1" t="str"><f>"q"</f><v>\U0001f600</v></c>	-	n:1	n:113	e:#VALUE!	n:113	str:q	b:1	b:0
+cached, B1:H1 uncached: lowercase pair	opened		<c r="A1" t="str"><f>"q"</f><v>\U0001f600</v></c>	-	n:1	n:128512	e:#VALUE!	n:128512	str:\U0001f600	b:1	b:0
+cached: UTF-8 emoji (control)	opened		<c r="A1" t="str"><f>"q"</f><v>\U0001f600</v></c>	-	n:1	n:113	e:#VALUE!	n:113	str:q	b:1	b:0
+cached, B1:H1 uncached: UTF-8 emoji (control)	opened		<c r="A1" t="str"><f>"q"</f><v>\U0001f600</v></c>	-	n:1	n:128512	e:#VALUE!	n:128512	str:\U0001f600	b:1	b:0

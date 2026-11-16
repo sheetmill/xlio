@@ -47,9 +47,10 @@ _DBL_MIN = 2.2250738585072014e-308  # the smallest normal double
 def unescape(text: str) -> str:
     """OOXML's escape of characters XML cannot hold: ``_x000D_`` is a carriage return.
 
-    A high surrogate escaped just before a low one (``_xD83D__xDE00_``) is one character, as
-    UTF-16 holds it (U+1F600). A surrogate without its other half stays a lone surrogate, which
-    no encoding writes; Excel's reading of one is not captured.
+    A high surrogate escaped just before a low one (``_xD83D__xDE00_``, in either case) is one
+    character, as UTF-16 holds it (U+1F600). A surrogate without its other half, or after it,
+    is one character of its own, a lone surrogate that no encoding writes: Excel holds it so
+    and writes it back escaped (captures ``strings`` and ``strings_cached``).
     """
     if "_x" not in text:
         return text

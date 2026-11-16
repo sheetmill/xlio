@@ -110,7 +110,7 @@ def test_formulas_and_cached_values():
         '<c r="C1" t="str"><f>""</f><v/></c>'  # Excel's empty text result
         '<c r="D1" t="str"><f>"a"&amp;"b"</f><v>ab</v></c>'
         '<c r="E1" t="e"><f>1/0</f><v>#DIV/0!</v></c>'
-        '<c r="F1" t="str"><v/></c>'  # no formula: empty text (Excel's reading not captured)
+        '<c r="F1" t="str"><v/></c>'  # no formula: empty text, as Excel reads it (capture strings)
         "</row>"
     )
     v = values(data)
@@ -176,7 +176,7 @@ def test_an_escaped_surrogate_pair_is_one_character():
     )  # fmt: skip
     v = values(data)
     assert [v[ref][0] for ref in ("A1", "B1", "C1")] == ["\U0001f600!", "\U0001f600", "\U0001f600"]
-    # a lone surrogate stays one (Excel's reading is not captured)
+    # a lone surrogate stays one, as Excel holds it (capture strings; tests/test_strings.py)
     assert (v["D1"][0], v["E1"][0]) == ("a\ud83db", "a\ude00b")
     assert unescape("_xDE00__xD83D_") == "\ude00\ud83d"  # the wrong order is no pair
 

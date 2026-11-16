@@ -1,0 +1,21 @@
+# suite: strings (capture); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-16; method: AppleScript open, save as .xlsx, read the copy's XML
+# A1 = the case's text; B1:H1 computed by Excel on opening; text outside ASCII as escapes; refused = error -50 (Excel would repair the file)
+case	outcome	error	A1	sharedStrings	B1 LEN(A1)	C1 _xlfn.UNICODE(A1)	D1 _xlfn.UNICODE(MID(A1,2,1))	E1 _xlfn.UNICODE(RIGHT(A1,1))	F1 A1	G1 ISTEXT(A1)	H1 ISBLANK(A1)
+shared: pair	opened		<c r="A1" t="s"><v>0</v></c>	<si><t>\U0001f600</t></si>	n:1	n:128512	e:#VALUE!	n:128512	str:\U0001f600	b:1	b:0
+inline: pair	opened		<c r="A1" t="s"><v>0</v></c>	<si><t>\U0001f600</t></si>	n:1	n:128512	e:#VALUE!	n:128512	str:\U0001f600	b:1	b:0
+shared: lone high	opened		<c r="A1" t="s"><v>0</v></c>	<si><t>a_xD83D_b</t></si>	n:3	n:97	e:#VALUE!	n:98	str:a_xD83D_b	b:1	b:0
+inline: lone high	opened		<c r="A1" t="s"><v>0</v></c>	<si><t>a_xD83D_b</t></si>	n:3	n:97	e:#VALUE!	n:98	str:a_xD83D_b	b:1	b:0
+shared: lone low	opened		<c r="A1" t="s"><v>0</v></c>	<si><t>a_xDE00_b</t></si>	n:3	n:97	n:56832	n:98	str:a_xDE00_b	b:1	b:0
+inline: lone low	opened		<c r="A1" t="s"><v>0</v></c>	<si><t>a_xDE00_b</t></si>	n:3	n:97	n:56832	n:98	str:a_xDE00_b	b:1	b:0
+shared: reversed pair	opened		<c r="A1" t="s"><v>0</v></c>	<si><t>_xDE00__xD83D_</t></si>	n:1	n:56832	e:#VALUE!	e:#VALUE!	str:_xDE00__xD83D_	b:1	b:0
+inline: reversed pair	opened		<c r="A1" t="s"><v>0</v></c>	<si><t>_xDE00__xD83D_</t></si>	n:1	n:56832	e:#VALUE!	e:#VALUE!	str:_xDE00__xD83D_	b:1	b:0
+shared: lowercase pair	opened		<c r="A1" t="s"><v>0</v></c>	<si><t>\U0001f600</t></si>	n:1	n:128512	e:#VALUE!	n:128512	str:\U0001f600	b:1	b:0
+inline: lowercase pair	opened		<c r="A1" t="s"><v>0</v></c>	<si><t>\U0001f600</t></si>	n:1	n:128512	e:#VALUE!	n:128512	str:\U0001f600	b:1	b:0
+shared: UTF-8 emoji (control)	opened		<c r="A1" t="s"><v>0</v></c>	<si><t>\U0001f600</t></si>	n:1	n:128512	e:#VALUE!	n:128512	str:\U0001f600	b:1	b:0
+inline: UTF-8 emoji (control)	opened		<c r="A1" t="s"><v>0</v></c>	<si><t>\U0001f600</t></si>	n:1	n:128512	e:#VALUE!	n:128512	str:\U0001f600	b:1	b:0
+str <v/>, no formula	opened		<c r="A1" t="s"><v>0</v></c>	<si><t/></si>	n:0	e:#VALUE!	e:#VALUE!	e:#VALUE!	str:(none)	b:1	b:0
+str without <v>, no formula	opened		-	-	n:0	e:#VALUE!	e:#VALUE!	e:#VALUE!	n:0	b:0	b:1
+str <v> </v>, no formula	opened		<c r="A1" t="s"><v>0</v></c>	<si><t xml:space="preserve"> </t></si>	n:1	n:32	e:#VALUE!	n:32	str:	b:1	b:0
+str <v/>, formula "" (control)	opened		<c r="A1" t="str"><f>""</f><v/></c>	-	n:0	e:#VALUE!	e:#VALUE!	e:#VALUE!	str:(none)	b:1	b:0

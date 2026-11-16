@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `ValueError`), and `check()` reads macro sheets whole too. Dialog sheets still raise.
 - A character outside the Basic Multilingual Plane written as an escaped surrogate pair
   (`_xD83D__xDE00_`) reads as one character (U+1F600), not as two lone surrogates that no
-  encoding can write. A lone escaped surrogate is still read as one.
+  encoding can write, as Excel reads it. A lone escaped surrogate is still read as one
+  character, as Excel holds it.
 
 ## [0.1.0] - 2026-11-15
 
