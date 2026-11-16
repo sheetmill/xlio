@@ -37,6 +37,7 @@ _PLAIN_ERRORS = frozenset(
      "#BUSY!"}
 )  # fmt: skip
 _ESCAPE = re.compile(r"_x([0-9A-Fa-f]{4})_")
+_SURROGATE = re.compile("[\ud800-\udfff]")
 _MAX_ROW = 1_048_576
 _MAX_COL = 16_384
 _INF = float("inf")
@@ -44,10 +45,18 @@ _DBL_MIN = 2.2250738585072014e-308  # the smallest normal double
 
 
 def unescape(text: str) -> str:
-    """OOXML's escape of characters XML cannot hold: ``_x000D_`` is a carriage return."""
+    """OOXML's escape of characters XML cannot hold: ``_x000D_`` is a carriage return.
+
+    A high surrogate escaped just before a low one (``_xD83D__xDE00_``) is one character, as
+    UTF-16 holds it (U+1F600). A surrogate without its other half stays a lone surrogate, which
+    no encoding writes; Excel's reading of one is not captured.
+    """
     if "_x" not in text:
         return text
-    return _ESCAPE.sub(lambda m: chr(int(m[1], 16)), text)
+    text = _ESCAPE.sub(lambda m: chr(int(m[1], 16)), text)
+    if _SURROGATE.search(text) is None:
+        return text
+    return text.encode("utf-16-le", "surrogatepass").decode("utf-16-le", "surrogatepass")
 
 
 _LOCAL = {"row": 1, "c": 2, "v": 3, "f": 4, "is": 5, "t": 6, "rPh": 7, "si": 8}

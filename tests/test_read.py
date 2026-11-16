@@ -110,9 +110,11 @@ def test_formulas_and_cached_values():
         '<c r="C1" t="str"><f>""</f><v/></c>'  # Excel's empty text result
         '<c r="D1" t="str"><f>"a"&amp;"b"</f><v>ab</v></c>'
         '<c r="E1" t="e"><f>1/0</f><v>#DIV/0!</v></c>'
+        '<c r="F1" t="str"><v/></c>'  # no formula: empty text (Excel's reading not captured)
         "</row>"
     )
     v = values(data)
+    assert v["F1"] == ("", "str", None)
     assert v["A1"] == (2.0, "n", "1+1")
     assert v["B1"] == (None, "none", "A1*3")
     assert v["C1"] == ("", "str", '""')
@@ -160,6 +162,23 @@ def test_unescape():
     assert unescape("_x005F_x0041_") == "_x0041_"
     assert unescape("a_x000Db") == "a_x000Db"
     assert unescape("plain") == "plain"
+
+
+def test_an_escaped_surrogate_pair_is_one_character():
+    pair, lone_high, lone_low = "_xD83D__xDE00_", "a_xD83D_b", "a_xDE00_b"
+    data = package(
+        '<row r="1"><c r="A1" t="s"><v>0</v></c>'
+        f'<c r="B1" t="inlineStr"><is><t>{pair}</t></is></c>'
+        f'<c r="C1" t="str"><f>"x"</f><v>{pair}</v></c>'
+        '<c r="D1" t="s"><v>1</v></c><c r="E1" t="s"><v>2</v></c></row>',
+        strings=[f"<si><t>{pair}!</t></si>", f"<si><t>{lone_high}</t></si>",
+                 f"<si><t>{lone_low}</t></si>"],
+    )  # fmt: skip
+    v = values(data)
+    assert [v[ref][0] for ref in ("A1", "B1", "C1")] == ["\U0001f600!", "\U0001f600", "\U0001f600"]
+    # a lone surrogate stays one (Excel's reading is not captured)
+    assert (v["D1"][0], v["E1"][0]) == ("a\ud83db", "a\ude00b")
+    assert unescape("_xDE00__xD83D_") == "\ude00\ud83d"  # the wrong order is no pair
 
 
 def test_positions_without_r_attributes():

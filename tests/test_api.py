@@ -116,6 +116,48 @@ def test_every_sheet_with_its_kind_and_state():
         list(wb["Chart"].cells())
 
 
+MACRO_RELS = rels(
+    ("rId1", f"{DOC}/worksheet", "worksheets/sheet1.xml"),
+    ("rId2", "http://schemas.microsoft.com/office/2006/relationships/xlMacrosheet", "m.xml"),
+    ("rId3", "http://schemas.microsoft.com/office/2006/relationships/xlIntlMacrosheet", "i.xml"),
+)
+MACRO_SHEETS = (
+    '<sheet name="Data" sheetId="1" r:id="rId1"/>'
+    '<sheet name="Macro1" sheetId="2" r:id="rId2"/>'
+    '<sheet name="Intl" sheetId="3" r:id="rId3"/>'
+)
+
+
+def macro_sheet(rows: str) -> str:
+    return (
+        f'<xm:macrosheet xmlns="{MAIN}" xmlns:xm="http://schemas.microsoft.com/office/excel/2006/main">'
+        f"<sheetData>{rows}</sheetData></xm:macrosheet>"
+    )
+
+
+def test_a_macro_sheet_has_cells_as_a_worksheet_does():
+    rows = (
+        '<row r="1"><c r="A1"><v>1</v></c></row>'
+        '<row r="2"><c r="A2" t="str"><f>A1&amp;""</f><v>1</v></c></row>'
+    )
+    parts = {WORKBOOK_RELS: MACRO_RELS, "xl/m.xml": macro_sheet(rows), "xl/i.xml": macro_sheet("")}
+    data = package(sheets=MACRO_SHEETS, extra_parts=parts)
+    with opened(data) as wb:
+        assert [s.kind for s in wb.sheets] == ["worksheet", "macrosheet", "macrosheet"]
+        assert [
+            (c.row, c.column, c.value, c.formula and c.formula.text) for c in wb["Macro1"].cells()
+        ] == [
+            (1, 1, 1.0, None),
+            (2, 1, "1", 'A1&""'),
+        ]
+        assert list(wb["Intl"].cells()) == []
+    xlio.check(io.BytesIO(data))
+    off_grid = '<row r="1048577"><c r="A1048577"><v>1</v></c></row>'
+    parts["xl/m.xml"] = macro_sheet(off_grid)
+    with pytest.raises(xlio.PackageError, match="1048577"):  # check() reads macro sheets too
+        xlio.check(io.BytesIO(package(sheets=MACRO_SHEETS, extra_parts=parts)))
+
+
 @pytest.mark.parametrize(
     ("content_type", "kind"),
     [

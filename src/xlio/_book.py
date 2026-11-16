@@ -40,6 +40,10 @@ _REFUSED_ERROR_TYPES = frozenset({"7", "17"})
 _RICH_NUMBERS = {"14": 0.0}
 
 
+CELL_KINDS = frozenset({"worksheet", "xlMacrosheet", "xlIntlMacrosheet"})
+"""The relationship types of sheets that hold cells: worksheets and macro sheets."""
+
+
 @dataclass(frozen=True, slots=True)
 class SheetInfo:
     """A sheet: name, part, ``visible``/``hidden``/``veryHidden``, and its kind.
@@ -330,9 +334,9 @@ class Book:
         rich_strings: list[RichString] | None = None,
         **options: Any,
     ) -> Iterator[Cell]:
-        """The cells of a worksheet, streamed in file order; ``options`` go to ``read_cells``."""
+        """A worksheet's or macro sheet's cells, in file order; ``options`` go to ``read_cells``."""
         info = sheet if isinstance(sheet, SheetInfo) else self.sheet(sheet)
-        if info.kind != "worksheet":
+        if info.kind not in CELL_KINDS:
             raise ValueError(f"{info.name!r} is a {info.kind}, not a worksheet")
         strings = self.shared_strings
         with self._package.part(info.part) as f:

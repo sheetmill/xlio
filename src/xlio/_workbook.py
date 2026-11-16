@@ -74,6 +74,7 @@ _KINDS: dict[str, SheetKind] = {
     "xlMacrosheet": "macrosheet",
     "xlIntlMacrosheet": "macrosheet",
 }
+_CELL_SHEETS: tuple[SheetKind, ...] = ("worksheet", "macrosheet")  # sheets that hold cells
 _STATES: dict[str, SheetState] = {
     "visible": "visible",
     "hidden": "hidden",
@@ -355,7 +356,7 @@ def _resolve(folder: str, target: str) -> str:
 
 
 class Sheet:
-    """A sheet of a workbook: its name, state and kind, and for a worksheet, its cells."""
+    """A sheet of a workbook: its name, state and kind; a worksheet's or macro sheet's cells."""
 
     def __init__(self, workbook: Workbook, info: SheetInfo, index: int) -> None:
         self._workbook = workbook
@@ -604,12 +605,13 @@ class Sheet:
                 shared strings are then read with their runs, once.
 
         Raises:
-            ValueError: The sheet is not a worksheet, or ``ref`` is not a cell or a range.
+            ValueError: The sheet is neither a worksheet nor a macro sheet, or ``ref`` is not a
+                cell or a range.
             LimitError: The range asked for, or without one the range the cells span, covers
                 more cells than ``ReadLimits.max_cells``.
             PackageError: The part is refused.
         """
-        if self.kind != "worksheet":
+        if self.kind not in _CELL_SHEETS:
             raise ValueError(f"{self.name!r} is a {self.kind}, not a worksheet")
         limit = self._workbook._book.package.limits.max_cells
         if ref is not None:
@@ -896,9 +898,10 @@ def check(source: str | os.PathLike[str] | BinaryIO, *, limits: ReadLimits | Non
 
     Every part is inflated once as a stream: it must have exactly the size and checksum the
     archive states and must not declare a DTD; the workbook part must be there; the styles'
-    font sizes and font colors must be ones Excel takes. Then every worksheet is read whole:
-    its structure, its cells (with their style and metadata indexes), its drawing's anchors and
-    its conditional formats, refusing what Excel refuses or would only open after a repair.
+    font sizes and font colors must be ones Excel takes. Then every worksheet and macro sheet
+    is read whole: its structure, its cells (with their style and metadata indexes), its
+    drawing's anchors and its conditional formats, refusing what Excel refuses or would only
+    open after a repair.
     This parses every sheet, so it costs about as much as reading every cell; :func:`open`
     reads lazily and refuses only what it reads.
 
@@ -921,12 +924,12 @@ def check(source: str | os.PathLike[str] | BinaryIO, *, limits: ReadLimits | Non
             with package.part(styles) as f:
                 check_font_sizes(f, styles)
         for sheet in workbook.sheets:
-            if sheet.kind == "worksheet":
+            if sheet.kind in _CELL_SHEETS:
                 _check_sheet(sheet)
 
 
 def _check_sheet(sheet: Sheet) -> None:
-    """Read a worksheet whole, refusing what Excel refuses or repairs (captures)."""
+    """Read a worksheet or macro sheet whole, refusing what Excel refuses or repairs (captures)."""
     sheet.unparsed  # noqa: B018 - the whole structure
     for _ in sheet.cells():
         pass
