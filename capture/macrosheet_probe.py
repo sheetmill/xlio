@@ -35,6 +35,7 @@ from pathlib import Path
 
 from capture.edition import edition_line
 from capture.excel import refuse_open_workbooks
+from capture.paths import write_capture
 from capture.probe import (
     CAPTURES,
     CONTAINER,
@@ -195,7 +196,7 @@ def save(answer: str, report: str) -> None:
         "\t".join(["case", "outcome", "error", *LABELS]),
     ]
     out = CAPTURES / "macrosheet.tsv"
-    out.write_text("\n".join(header + rows) + "\n", encoding="utf-8")
+    write_capture(out, header + rows)
     print(f"wrote {out.relative_to(ROOT)}: {len(rows)} cases")
 
 

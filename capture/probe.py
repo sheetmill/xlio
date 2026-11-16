@@ -24,6 +24,7 @@ from pathlib import Path
 
 from capture.edition import edition_line
 from capture.excel import refuse_open_workbooks
+from capture.paths import write_capture
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -154,7 +155,7 @@ def run(
         "\t".join(["case", "outcome", "error", *labels]),
     ]
     out = CAPTURES / f"{suite}.tsv"
-    out.write_text("\n".join(header + rows) + "\n", encoding="utf-8")
+    write_capture(out, header + rows)
     print(f"wrote {out.relative_to(ROOT)}: {len(rows)} cases")
 
 

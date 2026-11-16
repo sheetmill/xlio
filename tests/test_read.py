@@ -423,7 +423,7 @@ def test_importing_loads_only_the_standard_library():
 
 
 def test_a_text_result_loses_unpreserved_outer_whitespace():
-    """As Excel reads it: ``<v> a </v>`` is ``a`` (xlrecalc's
+    """As Excel reads it: ``<v> a </v>`` is ``a`` (xlrecalc's live Excel test,
     https://github.com/sheetmill/xlrecalc/blob/main/tests/test_excel_live.py)."""
     rows = (
         '<row r="1"><c r="A1" t="str"><f>" a "</f><v> a\n b </v></c>'

@@ -17,7 +17,9 @@ CITING = [
     *(p for p in sorted((ROOT / "tests").glob("*.py")) if p.name != "test_citations.py"),
     ROOT / "CAPTURING.md",
 ]
-POSSESSIVE = re.compile(r"\b(\w+)'s\s+(?:own\s+)?(?:probe|capture|captures|test|tests|runner)\b")
+POSSESSIVE = re.compile(
+    r"\b(\w+)'s\s+(?:own\s+)?(?:`{1,2}[\w.]+`{1,2}\s+)?(?:probe|capture|captures|test|tests|runner)\b"
+)  # "xlrecalc's probe", "xlrecalc's ``open_calc`` capture"
 CAPTURES = {p.stem for p in (ROOT / "tests" / "captures").glob("*.tsv")}
 NAMED = re.compile(r"\bcaptured?\s+`{0,2}([a-z][a-z_]*)`{0,2}")
 WORDS = {"by", "for", "from", "with", "refers", "a", "the", "in", "as"}
@@ -35,7 +37,7 @@ def test_every_cited_capture_is_here():
 
 
 def test_a_capture_kept_elsewhere_comes_with_its_link():
-    for path in SOURCE:
+    for path in CITING:
         text = path.read_text(encoding="utf-8")
         for found in re.finditer(r"captured by (\w+)", text):
             after = text[found.end() : found.end() + 120]

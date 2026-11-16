@@ -27,6 +27,7 @@ import openpyxl
 
 from capture.edition import edition_line
 from capture.excel import refuse_open_workbooks
+from capture.paths import write_capture
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -154,7 +155,7 @@ def main() -> None:
         "refused = error -50",
         "case\toutcome\terror\tA1\tB1",
     ]
-    OUTPUT.write_text("\n".join(header + rows) + "\n", encoding="utf-8")
+    write_capture(OUTPUT, header + rows)
 
 
 if __name__ == "__main__":

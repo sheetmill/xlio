@@ -15,9 +15,11 @@ computes on opening: ``LEN(A1)``, ``UNICODE(A1)``, ``UNICODE(MID(A1,2,1))``,
 
 In ``strings_cached``, the same texts are a formula's cached text. Excel computes every formula
 of a workbook openpyxl wrote, whatever its ``calcId``, and keeps the cached values of one it
-saved itself (xlrecalc's ``open_calc`` capture). So Excel first saves a copy of a workbook with
-A1 = ``="q"``; each case plants its text as A1's cached value in that copy, with B1 to H1 kept
-as Excel cached them or without values (Excel then computes them, from the cached text). The
+saved itself (xlrecalc's ``open_calc`` capture,
+https://github.com/sheetmill/xlrecalc/blob/main/tests/captures/open_calc.tsv).
+So Excel first saves a copy of a workbook with A1 = ``="q"``; each case plants its text as A1's
+cached value in that copy, with B1 to H1 kept as Excel cached them or without values (Excel then
+computes them, from the cached text). The
 control ``zzz`` shows that the cached text is kept.
 
 Each row gives, from Excel's copy: A1's element, the shared strings Excel writes, and B1 to H1's
@@ -123,9 +125,12 @@ BASE_A1 = '<c r="A1" t="str"><f>"q"</f><v>q</v></c>'
 
 
 def excel_base() -> bytes:
-    """Excel's own copy of the control with A1 = ``="q"``: Excel keeps the cached values of a
-    file it saved, where it computes every formula of one openpyxl wrote (xlrecalc's
-    ``open_calc`` capture)."""
+    """Excel's own copy of the control with A1 = ``="q"``.
+
+    Excel keeps the cached values of a file it saved, where it computes every formula of one
+    openpyxl wrote (xlrecalc's ``open_calc`` capture,
+    https://github.com/sheetmill/xlrecalc/blob/main/tests/captures/open_calc.tsv).
+    """
     src, copy = CONTAINER / "xlio_strings_base.xlsx", CONTAINER / "xlio_strings_base_copy.xlsx"
     CONTAINER.mkdir(parents=True, exist_ok=True)
     try:

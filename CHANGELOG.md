@@ -7,15 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- `patch(full_calc_on_load=False)` removes a `fullCalcOnLoad` request the file holds, as Excel
+  removes it when it saves a file. In 0.1.0 it left the request in place.
+
 ### Fixed
-- `Sheet.cells()` reads an Excel 4.0 macro sheet's cells, as it reads a worksheet's (it raised
-  `ValueError`), and `check()` reads macro sheets whole too. Dialog sheets still raise.
-- A character outside the Basic Multilingual Plane written as an escaped surrogate pair
-  (`_xD83D__xDE00_`) reads as one character (U+1F600), not as two lone surrogates that no
-  encoding can write, as Excel reads it. A lone escaped surrogate is still read as one
-  character, as Excel holds it.
+- `Sheet.cells()` reads an Excel 4.0 macro sheet's cells as Excel reads them, as it reads a
+  worksheet's, where 0.1.0 raised `ValueError`; `check()` reads macro sheets whole too. Dialog
+  sheets still raise.
 - A macro sheet whose root element is in SpreadsheetML's namespace, rather than Excel's
   `xm:macrosheet`, reads without its columns, rows and cells, as Excel opens it.
+- A character outside the Basic Multilingual Plane written as an escaped surrogate pair
+  (`_xD83D__xDE00_`) reads as one character (U+1F600), as Excel reads it, not as two lone
+  surrogates that no encoding can write. A lone escaped surrogate is still read as one
+  character, as Excel holds it.
 - Outline levels read as Excel reads them: a row's or column's `outlineLevel` is kept modulo 8
   (9 reads as 1), and one that is not decimal digits (`-1`, `1.5`, `+2`) reads as no level; a
   sheet's `outlineLevelRow` or `outlineLevelCol` of 8 to 255 is refused (`PackageError`, and by
@@ -23,8 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `patch()` leaves a formula cell untouched, `vm` included, when its new value is the error
   its rich value already stands for (`#CALC!`, say), so Excel's own record of it stays; any
   other new value still drops the `vm`.
-- `patch(full_calc_on_load=False)` removes a `fullCalcOnLoad` request the file holds, as
-  Excel removes it when it saves; it left the request in place.
 
 ## [0.1.0] - 2026-11-15
 

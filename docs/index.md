@@ -4,9 +4,9 @@
 them and changes their cells without disturbing anything else. It was extracted from
 [xlrecalc](https://github.com/sheetmill/xlrecalc), whose own reader and writer it began as, to be
 shared by the sheetmill packages. It is not intended for direct use: its API may change in any
-minor release (0.1 to 0.2) without the deprecation period the public sheetmill packages give,
-while patch releases only fix bugs and keep the API. If you depend on it anyway, pin a minor
-version (for example `xlio==0.1.*`).
+minor release (such as 0.2 to 0.3) without the deprecation period the public sheetmill packages
+give, while patch releases only fix bugs and keep the API. If you depend on it anyway, pin a
+minor version (for example `xlio==0.2.*`).
 
 It is written in pure Python with the standard library only; this documentation covers its
 public names.

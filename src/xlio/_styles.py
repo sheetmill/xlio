@@ -459,7 +459,7 @@ class CellFormat:
     Attributes:
         number_format_id: The number format's id.
         number_format: The format code of a custom number format, or ``None`` for a built-in id
-            (whose code depends on the locale; xlformat has the table).
+            (whose code depends on the locale).
         font: The font, or ``None`` when the index leads nowhere.
         fill: The fill, or ``None``.
         border: The border, or ``None``.

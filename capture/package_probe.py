@@ -30,6 +30,7 @@ import openpyxl
 
 from capture.edition import edition_line
 from capture.excel import refuse_open_workbooks
+from capture.paths import write_capture
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "tests" / "captures" / "package.tsv"
@@ -322,20 +323,21 @@ def run() -> None:
     for (name, _), path in zip(CASES, paths, strict=True):
         outcome = _open(path)
         print(f"{name}\t{outcome}", flush=True)
-        rows.append(f"{name}\t{outcome}\n")
+        rows.append(f"{name}\t{outcome}")
         if outcome.startswith("timed out"):
             finished = False
             break
     if not finished:
         sys.exit("a case hung: stopped, and nothing written. Look into it before running again.")
-    with OUTPUT.open("w", encoding="utf-8") as out:
-        out.write(f"# suite: package (capture.package_probe); Excel {version} for Mac, en_US\n")
-        out.write(edition + "\n")
-        out.write(f"# captured: {dt.date.today().isoformat()}; method: open with alerts off, ")
-        out.write("read A1 (111 unless the case changes it), the number of sheets, the widths of ")
-        out.write("A and B, the heights of rows 1 and 2, and A1's font size\n")
-        out.write("case\toutcome\tA1\tsheets\twidth A\theight 1\twidth B\theight 2\tfont size\n")
-        out.writelines(rows)
+    header = [
+        f"# suite: package (capture.package_probe); Excel {version} for Mac, en_US",
+        edition,
+        f"# captured: {dt.date.today().isoformat()}; method: open with alerts off, read A1 (111 "
+        "unless the case changes it), the number of sheets, the widths of A and B, the heights "
+        "of rows 1 and 2, and A1's font size",
+        "case\toutcome\tA1\tsheets\twidth A\theight 1\twidth B\theight 2\tfont size",
+    ]
+    write_capture(OUTPUT, header + rows)
     print(f"{len(rows)} rows written to {OUTPUT}")
     for path in paths:  # kept only when a case hung, to look into
         path.unlink(missing_ok=True)

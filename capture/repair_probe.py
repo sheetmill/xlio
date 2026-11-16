@@ -43,6 +43,7 @@ import xlsxwriter
 from capture.edition import edition_line
 from capture.excel import refuse_open_workbooks
 from capture.fixtures import png
+from capture.paths import write_capture
 from capture.probe import CAPTURES, CONTAINER, HERE, TIME_LIMIT, Case, build, read
 
 DRAWING = "xl/drawings/drawing1.xml"
@@ -187,7 +188,7 @@ def write() -> None:
         "case\tworkbook\tpictures\tanchors\trules\tdxfs\treport",
     ]
     rows = ["\t".join([name, *state[name]]) for name in CASES if name in state]
-    (CAPTURES / "repair.tsv").write_text("\n".join(header + rows) + "\n", encoding="utf-8")
+    write_capture((CAPTURES / "repair.tsv"), header + rows)
     STATE.unlink()
     print(f"wrote tests/captures/repair.tsv: {len(rows)} cases")
 
