@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-16
+
 ### Changed
 - `patch(full_calc_on_load=False)` removes a `fullCalcOnLoad` request the file holds, as Excel
   removes it when it saves a file. In 0.1.0 it left the request in place.
@@ -145,5 +147,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Each rule read from Excel's behavior rests on a capture from Excel for Mac, with its probe
   (`CAPTURING.md`), and the tests read workbooks Excel saved.
 
-[Unreleased]: https://github.com/sheetmill/xlio/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/sheetmill/xlio/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/sheetmill/xlio/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/sheetmill/xlio/releases/tag/v0.1.0

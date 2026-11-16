@@ -111,7 +111,7 @@ from xlio._workbook import (
     open,  # noqa: A004 - xlio.open, as gzip.open and tarfile.open
 )
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 __all__ = [
     "Alignment",
