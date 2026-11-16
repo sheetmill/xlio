@@ -71,3 +71,36 @@ def test_every_error_excel_shows_is_an_error_code():
     errors = {s for s in shown if s.startswith("#")}
     assert errors <= {e.value for e in xlio.ErrorCode}
     assert {e.value for e in xlio.ErrorCode} - errors == {"#EXTERNAL!", "#PYTHON!"}
+
+
+# Capture ``errors_stale``: a formula cell whose vm leads to an error rich value (#CALC!) while
+# its <v> caches something else, planted in a file Excel saved (so it keeps cached values).
+# Excel shows the rich value's error whatever the cell caches; without the vm, the cached value.
+from capture.errors_probe import A1, STALE, STALE_FORMULA  # noqa: E402
+from capture.probe import SHEET, Case  # noqa: E402
+
+STALE_ROWS = [
+    dict(zip(HEADER, line.split("\t"), strict=False))
+    for line in (Path(__file__).with_name("captures") / "errors_stale.tsv")
+    .read_text(encoding="utf-8")
+    .splitlines()
+    if line.strip() and not line.startswith(("# ", "case\t"))  # a case may start with "#"
+]
+
+
+def test_every_stale_case_is_captured():
+    names = {r["case"] for r in STALE_ROWS}
+    assert set(STALE) | {f"{n}, B1:E1 uncached" for n in STALE} <= names
+    assert all(r["outcome"] == "opened" for r in STALE_ROWS)
+
+
+@pytest.mark.parametrize("name", list(STALE))
+def test_an_error_rich_value_wins_over_the_cached_value(name):
+    shown = next(r for r in STALE_ROWS if r["case"] == f"{name}, B1:E1 uncached")
+    kind, value = STALE[name]
+    vm = "" if name.endswith("(control)") else ' vm="1"'
+    t = "" if kind == "n" else f' t="{kind}"'
+    rich = BUILT["rich 13"]  # the parts of a #CALC! rich value (errorType 13)
+    cell = f'<c r="A1"{t}{vm}><f>{STALE_FORMULA}</f><v>{value}</v></c>'
+    case = Case(name, ((SHEET, A1, cell), *rich.edits[1:]), rich.parts)
+    assert a1(build(CONTROL, case)) == shown["E1 =VALUETOTEXT(A1)"].removeprefix("str:")

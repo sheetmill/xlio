@@ -358,8 +358,8 @@ def read_cells(
             elif inline_rich is not None and cell.type == "inlineStr":
                 cell = cell._replace(rich=inline_rich)
             # An error rich value behind vm wins, whatever <v> holds: Excel shows it over a
-            # cached 5 or TRUE when it does not recalculate. Other rich values (pictures, data
-            # types) leave the cell as it is.
+            # cached 5, TRUE, text or other error when it does not recalculate (capture
+            # errors_stale). Other rich values (pictures, data types) leave the cell as it is.
             rich_value = None
             if value_errors is not None and cell.vm is not None:
                 rich_value = value_errors.get(cell.vm)

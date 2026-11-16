@@ -1,0 +1,17 @@
+# suite: errors_stale (capture); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-16; method: Excel saves a copy of openpyxl's workbook with A1 = FILTER(...) matching nothing (#CALC!, a rich value); A1's cached value in that copy replaced, its vm kept; opened with alerts off and saved as a copy
+# cells as type:value from Excel's copy; a rich value as its structure type and keys; B1:E1 as Excel cached them, or computed on opening (uncached); refused = error -50 (Excel would repair the file)
+case	outcome	error	A1	A1 vm	A1 rich value	B1 =A1	C1 =ERROR.TYPE(A1)	D1 =ISERROR(A1)	E1 =VALUETOTEXT(A1)
+base (Excel's own)	opened		e:#VALUE!	1	_error errorType=13 subType=3	e:#VALUE!	n:14	b:1	str:#CALC!
+base, B1:E1 uncached	opened		e:#VALUE!	1	_error errorType=13 subType=3	e:#VALUE!	n:14	b:1	str:#CALC!
+#VALUE! without vm (control)	opened		e:#VALUE!	-	-	e:#VALUE!	n:14	b:1	str:#CALC!
+#VALUE! without vm (control), B1:E1 uncached	opened		e:#VALUE!	-	-	e:#VALUE!	n:3	b:1	str:#VALUE!
+cached 5	opened		e:#VALUE!	1	_error errorType=13 subType=3	e:#VALUE!	n:14	b:1	str:#CALC!
+cached 5, B1:E1 uncached	opened		e:#VALUE!	1	_error errorType=13 subType=3	e:#VALUE!	n:14	b:1	str:#CALC!
+cached TRUE	opened		e:#VALUE!	1	_error errorType=13 subType=3	e:#VALUE!	n:14	b:1	str:#CALC!
+cached TRUE, B1:E1 uncached	opened		e:#VALUE!	1	_error errorType=13 subType=3	e:#VALUE!	n:14	b:1	str:#CALC!
+cached text	opened		e:#VALUE!	1	_error errorType=13 subType=3	e:#VALUE!	n:14	b:1	str:#CALC!
+cached text, B1:E1 uncached	opened		e:#VALUE!	1	_error errorType=13 subType=3	e:#VALUE!	n:14	b:1	str:#CALC!
+cached #DIV/0!	opened		e:#VALUE!	1	_error errorType=13 subType=3	e:#VALUE!	n:14	b:1	str:#CALC!
+cached #DIV/0!, B1:E1 uncached	opened		e:#VALUE!	1	_error errorType=13 subType=3	e:#VALUE!	n:14	b:1	str:#CALC!
