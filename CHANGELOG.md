@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Reading cells is faster (about 15% on many small workbooks): a cell's style index is read
+  through a cache of the texts met, the rarer cells (runs, rich values, errors) take a separate
+  path, and the cells no longer need the styles read whole, only their count of cell formats.
+  A styles part Excel refuses (a font size, say) is now refused when the styles are read, not
+  when only the cells are. A sheet's head (views, properties) no longer reads its relationships.
+
 ## [0.2.0] - 2026-11-16
 
 ### Changed

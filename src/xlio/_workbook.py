@@ -42,7 +42,7 @@ from xlio._structure import (
     read_structure,
     row_format,
 )
-from xlio._styles import Styles, check_font_sizes, read_styles
+from xlio._styles import Styles, check_font_sizes, count_cell_formats, read_styles
 from xlio._tables import AutoFilter, SortState, Table, read_table
 from xlio._theme import Theme, read_theme
 from xlio._types import Unparsed, choice, flag, integer, local, unsigned
@@ -389,7 +389,8 @@ class Sheet:
         parts = self._workbook.parts
         if self.part not in parts:
             return read_structure(io.BytesIO(b"<worksheet/>"), self.part, {})
-        targets = {r.id: r.target for r in self.relationships if r.external}
+        # hyperlinks, whose targets these are, come after <sheetData>: a head read needs none
+        targets = {} if head else {r.id: r.target for r in self.relationships if r.external}
         with parts.open(self.part) as f:
             return read_structure(f, self.part, targets, head=head)
 
@@ -657,7 +658,7 @@ class Sheet:
         def on_row(row: int, attrs: dict[str, str]) -> None:
             formats[row] = row_format(attrs)
 
-        styles = len(self._workbook.styles.cell_formats)
+        styles = self._workbook._cell_format_count
         cms, vms = book.metadata_counts
         yield from book.cells(
             self._info,
@@ -852,6 +853,17 @@ class Workbook:
             relations,
         )
         return {vm: records[i] for vm, i in self._book.value_rich.items() if 0 <= i < len(records)}
+
+    @functools.cached_property
+    def _cell_format_count(self) -> int:
+        """How many cell formats the styles hold: what reading cells needs, and no more."""
+        if "styles" in self.__dict__:
+            return len(self.styles.cell_formats)
+        part = self._related("/styles")
+        if part is None or part not in self.parts:
+            return 0
+        with self.parts.open(part) as f:
+            return count_cell_formats(f, part)
 
     @functools.cached_property
     def styles(self) -> Styles:

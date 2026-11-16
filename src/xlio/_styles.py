@@ -730,6 +730,49 @@ def check_font_sizes(stream: BinaryIO, part: str) -> None:
         raise PackageError(f"{part}: {exc}") from exc
 
 
+class _CountedError(Exception):
+    """Raised to stop the count at the end of ``cellXfs``."""
+
+
+def count_cell_formats(stream: BinaryIO, part: str) -> int:
+    """The number of cell formats :func:`read_styles` would read, without reading them.
+
+    The part is streamed up to the end of its first ``cellXfs``, whose ``xf`` children are
+    counted, as :func:`read_styles` takes them.
+
+    Raises:
+        PackageError: The part, as far as it is read, is not well-formed.
+    """
+    depth = count = 0
+    state = 0  # 0 before cellXfs, 1 inside it
+
+    def start(name: str, _: dict[str, str]) -> None:
+        nonlocal depth, count, state
+        depth += 1
+        if depth == 2 and state == 0 and name.rpartition("}")[2] == "cellXfs":
+            state = 1
+        elif depth == 3 and state == 1 and name.rpartition("}")[2] == "xf":
+            count += 1
+
+    def end(_: str) -> None:
+        nonlocal depth
+        depth -= 1
+        if depth == 1 and state == 1:
+            raise _CountedError
+
+    p = xml.parsers.expat.ParserCreate(namespace_separator="}")
+    p.StartElementHandler, p.EndElementHandler = start, end
+    try:
+        while chunk := stream.read(1 << 16):
+            p.Parse(chunk, False)
+        p.Parse(b"", True)
+    except _CountedError:
+        pass
+    except xml.parsers.expat.ExpatError as exc:
+        raise PackageError(f"{part}: {exc}") from exc
+    return count
+
+
 def read_styles(root: ET.Element, part: str) -> Styles:
     """The styles from their part's element tree.
 

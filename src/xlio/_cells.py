@@ -341,6 +341,30 @@ def read_cells(
             collect = 6
             t_preserve = attrs.get("xml:space") == "preserve"
 
+    def finish(cell: Cell) -> Cell:
+        """A cell with its runs, or the error its rich value stands for: the rarer cells."""
+        if rich_strings is not None and cell.type == "s":
+            index = int(v or "-1")  # checked by _cell
+            if index < len(rich_strings):
+                cell = cell._replace(rich=rich_strings[index])
+        elif inline_rich is not None and cell.type == "inlineStr":
+            cell = cell._replace(rich=inline_rich)
+        # An error rich value behind vm wins, whatever <v> holds: Excel shows it over a
+        # cached 5, TRUE, text or other error when it does not recalculate (capture
+        # errors_stale). Other rich values (pictures, data types) leave the cell as it is.
+        rich_value = None
+        if value_errors is not None and cell.vm is not None:
+            rich_value = value_errors.get(cell.vm)
+        if isinstance(rich_value, float):
+            cell = cell._replace(value=rich_value, type="n", rich=None)
+        elif rich_value is not None:
+            error = errors.get(rich_value, rich_value) if errors is not None else rich_value
+            cell = cell._replace(value=error, type="e", rich=None)
+        elif cell.type == "e":
+            text = cast(str, cell.value)
+            cell = cell._replace(value=errors.get(text, text) if errors is not None else text)
+        return cell
+
     def end(name: str) -> None:
         nonlocal v, f_text, collect, in_is, phonetic, builder, inline_rich
         code = codes[name]
@@ -350,35 +374,14 @@ def read_cells(
                 inline_rich = rich(builder.close())
                 builder = None
         if code == 2:
-            cell = _cell(row, col, attrs_c, v, v_preserve, f_text, f_attrs, inline, strings)
-            if rich_strings is not None and cell.type == "s":
-                index = int(v or "-1")  # checked by _cell
-                if index < len(rich_strings):
-                    cell = cell._replace(rich=rich_strings[index])
-            elif inline_rich is not None and cell.type == "inlineStr":
-                cell = cell._replace(rich=inline_rich)
-            # An error rich value behind vm wins, whatever <v> holds: Excel shows it over a
-            # cached 5, TRUE, text or other error when it does not recalculate (capture
-            # errors_stale). Other rich values (pictures, data types) leave the cell as it is.
-            rich_value = None
-            if value_errors is not None and cell.vm is not None:
-                rich_value = value_errors.get(cell.vm)
-            if isinstance(rich_value, float):
-                cell = cell._replace(value=rich_value, type="n", rich=None)
-            elif rich_value is not None:
-                error = errors.get(rich_value, rich_value) if errors is not None else rich_value
-                cell = cell._replace(value=error, type="e", rich=None)
-            elif cell.type == "e":
-                text = cast(str, cell.value)
-                cell = cell._replace(value=errors.get(text, text) if errors is not None else text)
-            if bounds is not None and (
-                (cell.style and cell.style >= bounds[0])
-                or (cell.cm is not None and cell.cm > bounds[1])
-                or (cell.vm is not None and cell.vm > bounds[2])
-            ):
-                raise PackageError(
-                    f"row {row}, column {col}: a format or metadata index past its table"
-                )
+            cell = _cell(row, col, attrs_c, v, v_preserve, f_text, f_attrs, inline, strings, bounds)
+            if (
+                rich_strings is not None
+                or inline_rich is not None
+                or cell.vm is not None
+                or cell.type == "e"
+            ):  # the hot path skips what most cells do not need
+                cell = finish(cell)  # leaves style, cm and vm, which _cell checked
             out.append(cell)
         elif code == 3:
             v = "".join(buffer)
@@ -423,6 +426,7 @@ def _cell(
     f_attrs: dict[str, str] | None,
     inline: list[str] | None,
     strings: list[str],
+    bounds: tuple[int, int, int] | None = None,
 ) -> Cell:
     t = attrs.get("t", "n")
     value: float | str | bool | None
@@ -464,19 +468,41 @@ def _cell(
             _shared_index(si, row, col) if si is not None else None,
             f_attrs,
         )
-    # The hot path: most cells have no cm, vm or ph, so _index is called only for those written.
+    # The hot path: most cells have no cm, vm or ph, so _index is called only for those written,
+    # and a style index too short to need a bound is read directly.
     s, cm, vm = attrs.get("s"), attrs.get("cm"), attrs.get("vm")
+    if s is None:
+        style = 0
+    else:
+        style = _STYLES.get(s, -1)
+        if style < 0:
+            style = _index(s, None) or 0
+            if len(_STYLES) < _STYLES_KEPT:
+                _STYLES[s] = style
+    cm_index = _index(cm, None) if cm is not None else None
+    vm_index = _index(vm, None) if vm is not None else None
+    if bounds is not None and (
+        (style and style >= bounds[0])
+        or (cm_index is not None and cm_index > bounds[1])
+        or (vm_index is not None and vm_index > bounds[2])
+    ):
+        raise PackageError(f"row {row}, column {col}: a format or metadata index past its table")
     return Cell(
         row,
         col,
         value,
         t,  # type: ignore[arg-type]  # one of CellType, by the branches above
         formula,
-        (_index(s, None) or 0) if s is not None else 0,
-        _index(cm, None) if cm is not None else None,
-        _index(vm, None) if vm is not None else None,
+        style,
+        cm_index,
+        vm_index,
         attrs.get("ph") in _TRUE,
     )
+
+
+_STYLES: dict[str, int] = {}
+"""An ``s`` attribute's text -> the style index read from it: a sheet repeats a few texts."""
+_STYLES_KEPT = 65_536  # the cache stops growing there, whatever a file holds
 
 
 def _index(text: str | None, default: int | None) -> int | None:
