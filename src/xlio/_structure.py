@@ -499,7 +499,7 @@ class ColumnRange:
 
 @dataclass(frozen=True, slots=True)
 class RowFormat:
-    """What a ``<row>`` sets beside its cells; only rows that set anything have one.
+    """What a ``<row>`` sets beside its cells: for a row that sets anything, or holds no cell.
 
     Attributes:
         height: The height in points as Excel takes it (its magnitude, wrapped and capped at
@@ -632,14 +632,14 @@ def read_structure(
     level = 0
     in_data = seen_data = False
     after: list[int] = []  # indexes in children of the records written after <sheetData>
-    row = 0
+    row = empty_row = 0
     root = ""
 
     def clark(name: str) -> str:
         return "{" + name if "}" in name else name
 
     def start(name: str, attrs: dict[str, str]) -> None:
-        nonlocal builder, level, in_data, seen_data, row, root
+        nonlocal builder, level, in_data, seen_data, row, root, empty_row
         level += 1
         if level == 1:
             root = clark(name)
@@ -651,6 +651,10 @@ def read_structure(
                     raise PackageError(f"row {row} is off the sheet")
                 if not ROW_ATTRIBUTES.isdisjoint(attrs):
                     rows[row] = row_format(attrs)
+                else:
+                    empty_row = row  # recorded at its end if it holds no cell
+            elif level == 4 and name.rpartition("}")[2] == "c":
+                empty_row = 0
             return
         if level == 2:
             if name.rpartition("}")[2] == "sheetData":
@@ -664,11 +668,14 @@ def read_structure(
             builder.start(clark(name), {clark(k): v for k, v in attrs.items()})
 
     def end(name: str) -> None:
-        nonlocal builder, level, in_data
+        nonlocal builder, level, in_data, empty_row
         level -= 1
         if in_data:
             if level == 1:
                 in_data = False
+            elif level == 2 and empty_row:  # a row without format attributes or cells
+                rows[empty_row] = RowFormat()
+                empty_row = 0
             return
         if builder is not None:
             builder.end(clark(name))

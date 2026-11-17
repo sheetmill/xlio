@@ -449,6 +449,9 @@ class Sheet:
     def rows(self) -> Mapping[int, RowFormat]:
         """Row number (1-based) → what its ``<row>`` says, for rows that say anything.
 
+        A ``<row>`` that holds no cell and sets nothing (``<row r="3"/>``) is here too, with
+        an empty :class:`RowFormat` (every field its default): Excel counts the row.
+
         After a whole pass of :meth:`cells` this costs nothing: the rows were read with the cells.
         """
         if self._drops_cells:

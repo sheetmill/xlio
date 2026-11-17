@@ -255,8 +255,9 @@ def read_cells(
         strings: The shared strings.
         rich_strings: The shared strings with their runs, to give string cells their runs.
         on_row: Called with each ``<row>`` that has an attribute of :data:`ROW_ATTRIBUTES`
-            (its 1-based number and its attributes), so row formats are gathered in the
-            same pass.
+            (its 1-based number and its attributes), and with each that has none and holds no
+            cell (its number and no attributes: Excel counts the row), so row formats are
+            gathered in the same pass.
         errors: Error texts mapped to the values given (a text not in it is given as written).
         value_errors: Value-metadata indexes mapped to the error a rich value stands for; an
             error cell with such a ``vm`` is given that error, or that number (a ``float``).
@@ -283,15 +284,17 @@ def read_cells(
     f_attrs: dict[str, str] | None = None
     inline: list[str] | None = None
     collect = 0  # 3 <v>, 4 <f>, 6 <t> inside <is>
+    empty_row = 0  # a <row> without format attributes, until a cell shows it holds one
     in_is = phonetic = 0
 
     def start(name: str, attrs: dict[str, str]) -> None:
-        nonlocal row, col, attrs_c, v, v_preserve, t_preserve, f_text, f_attrs, inline
+        nonlocal row, col, attrs_c, v, v_preserve, t_preserve, f_text, f_attrs, inline, empty_row
         nonlocal collect, in_is, phonetic, builder, inline_rich
         code = codes[name]
         if builder is not None:
             builder.start(name, attrs)
         if code == 2:
+            empty_row = 0
             ref = attrs.get("r")
             if ref:
                 try:
@@ -326,8 +329,11 @@ def read_cells(
             if row > _MAX_ROW:
                 raise PackageError(f"row {row} is off the sheet")
             col = 0
-            if on_row is not None and not ROW_ATTRIBUTES.isdisjoint(attrs):
-                on_row(row, attrs)
+            if on_row is not None:
+                if ROW_ATTRIBUTES.isdisjoint(attrs):
+                    empty_row = row  # reported at its end if it holds no cell
+                else:
+                    on_row(row, attrs)
         elif code == 5:
             in_is += 1
             inline = []
@@ -366,7 +372,7 @@ def read_cells(
         return cell
 
     def end(name: str) -> None:
-        nonlocal v, f_text, collect, in_is, phonetic, builder, inline_rich
+        nonlocal v, f_text, collect, in_is, phonetic, builder, inline_rich, empty_row
         code = codes[name]
         if builder is not None:
             builder.end(name)
@@ -398,6 +404,9 @@ def read_cells(
             phonetic -= 1
         elif code == 5:
             in_is -= 1
+        elif code == 1 and empty_row:
+            on_row(empty_row, {})  # type: ignore[misc]  # set only with on_row
+            empty_row = 0
 
     def text(data: str) -> None:
         if collect:

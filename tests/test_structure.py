@@ -498,3 +498,26 @@ def test_outline_symbols_with_their_text_as_written(written, shown, text):
 def test_outline_symbols_without_outline_properties():
     properties = sheet_of("<sheetPr/><sheetData/>").properties
     assert (properties.show_outline_symbols, properties.show_outline_symbols_text) == (True, None)
+
+
+EMPTY_ROWS = (
+    '<sheetData><row r="1" ht="20" customHeight="1"><c r="A1"><v>1</v></c></row>'
+    '<row r="3"/><row r="4" spans="1:2"></row><row r="5"><c r="A5"><v>5</v></c></row>'
+    '<row r="6"><extLst/></row><row r="7" hidden="1"/></sheetData>'
+)
+
+
+def test_a_row_without_cells_or_formats_is_counted():
+    expected = {
+        1: xlio.RowFormat(height=20.0, custom_height=True, raw_height="20"),
+        3: xlio.RowFormat(),
+        4: xlio.RowFormat(),
+        6: xlio.RowFormat(),
+        7: xlio.RowFormat(hidden=True),
+    }
+    structural = sheet_of(EMPTY_ROWS)  # the rows from the structural pass
+    assert dict(structural.rows) == expected
+    streamed = sheet_of(EMPTY_ROWS)  # the rows gathered by a pass of cells
+    assert [(c.row, c.value) for c in streamed.cells()] == [(1, 1.0), (5, 5.0)]
+    assert dict(streamed.rows) == expected
+    assert list(streamed.rows) == list(structural.rows) == [1, 3, 4, 6, 7]

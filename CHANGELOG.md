@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- `Sheet.rows` includes a `<row>` that holds no cell and sets nothing (`<row r="3"/>`), with an
+  empty `RowFormat` (every field its default), since Excel counts such a row; it left it out.
+  Rows that set anything read as before.
 - The 0.3.0 entry for `read_csv()` left out `TextOptions`, the public base of `CsvOptions`,
   which also holds `fallback_encoding` (the encoding of a file without a byte order mark when
   `encoding` is `None`; `"mac_roman"` by default).
