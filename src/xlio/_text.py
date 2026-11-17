@@ -530,6 +530,17 @@ def _lines(text: str, options: CsvOptions) -> Iterator[list[str]]:
             yield from ([row[0][i : i + _LINE]] for i in range(0, len(row[0]), _LINE))
 
 
+def _read_bounded(stream: BinaryIO, limit: int) -> bytes:
+    """The stream's bytes, read in chunks (a read of the limit's size would allocate it)."""
+    chunks, size = [], 0
+    while chunk := stream.read(1 << 20):
+        size += len(chunk)
+        if size > limit:
+            raise LimitError(f"the file is larger than the limit of {limit} bytes")
+        chunks.append(chunk)
+    return b"".join(chunks)
+
+
 def sheet_name_of(path: str | os.PathLike[str]) -> str:
     """The sheet's name Excel gives a file: its stem, brackets as parentheses, 31 characters."""
     stem = Path(path).stem
@@ -564,12 +575,10 @@ def read_csv(
     if isinstance(source, (str, os.PathLike)):
         name = options.sheet_name or sheet_name_of(source)
         with Path(source).open("rb") as f:
-            data = f.read(limits.max_text_bytes + 1)
+            data = _read_bounded(f, limits.max_text_bytes)
     else:
         name = options.sheet_name or "Sheet1"
-        data = source.read(limits.max_text_bytes + 1)
-    if len(data) > limits.max_text_bytes:
-        raise LimitError(f"the file is larger than the limit of {limits.max_text_bytes} bytes")
+        data = _read_bounded(source, limits.max_text_bytes)
     text = _decode(data, options)
     del data
     today = options.today or datetime.date.today()
