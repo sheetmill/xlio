@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `xlio.read_csv()` reads a delimited text file as Excel for Mac opens it (File > Open, en_US)
+  into the same `Workbook` an xlsx file gives: one sheet named after the file, Excel's
+  conversions with the number formats it assigns (numbers cut to 15 digits, thousands,
+  currency, percentages, fractions, dates with two-digit years from 1950 to 2049, times,
+  booleans, errors), formulas as formula cells without a cached value, its encoding detection
+  (a UTF-8 or UTF-16 little-endian byte order mark, else Mac Roman) and its splitting of rows
+  and fields. `CsvOptions` (and `CsvOptions.tsv()`) set the encoding, the conversions (`"excel"`,
+  `"keep"` as "Don't Convert" gives, `"none"`), formulas as text, the date a date without a
+  year takes, the sheet's name, the delimiter and the quote.
+
 ### Fixed
 - Reading cells is faster (about 15% on many small workbooks): a cell's style index is read
   through a cache of the texts met, the rarer cells (runs, rich values, errors) take a separate

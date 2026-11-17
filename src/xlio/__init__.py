@@ -93,6 +93,7 @@ from xlio._tables import (
     TableStyles,
     Top10,
 )
+from xlio._text import CsvOptions, TextOptions, read_csv
 from xlio._theme import ColorScheme, SchemeColor, SchemeFonts, Theme
 from xlio._types import CellRef, Color, Unparsed
 from xlio._workbook import (
@@ -143,6 +144,7 @@ __all__ = [
     "ColumnRange",
     "Comment",
     "ConditionalFormat",
+    "CsvOptions",
     "CustomFilter",
     "DataBar",
     "DateGroup",
@@ -211,6 +213,7 @@ __all__ = [
     "TableStyleElementType",
     "TableStyleInfo",
     "TableStyles",
+    "TextOptions",
     "Theme",
     "ThreadedComment",
     "Top10",
@@ -228,4 +231,5 @@ __all__ = [
     "open",
     "patch",
     "presets",
+    "read_csv",
 ]

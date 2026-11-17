@@ -349,6 +349,17 @@
 .. autodata:: xlio.Translate
 ```
 
+## Text files
+
+```{eval-rst}
+.. autofunction:: xlio.read_csv
+
+.. autoclass:: xlio.CsvOptions
+   :members: tsv
+
+.. autoclass:: xlio.TextOptions
+```
+
 ## Limits and errors
 
 ```{eval-rst}
