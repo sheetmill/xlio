@@ -12,9 +12,11 @@ import calendar
 import dataclasses
 import datetime
 import io
+import itertools
 import os
 import re
 import zipfile
+from collections.abc import Iterator
 from dataclasses import dataclass
 from decimal import ROUND_DOWN, Decimal
 from pathlib import Path
@@ -99,7 +101,7 @@ def _decode(data: bytes, options: TextOptions) -> str:
     return data.decode(options.fallback_encoding, errors="replace").replace("\x00", "")
 
 
-def _records(text: str, delimiter: str, quote: str) -> list[list[str]]:
+def _records(text: str, delimiter: str, quote: str) -> Iterator[list[str]]:
     """The rows and fields, as Excel splits them (capture ``text``, the ``structure`` cases).
 
     A quote opens a quoted run only as a field's first character; inside it ``""`` is a quote,
@@ -107,7 +109,6 @@ def _records(text: str, delimiter: str, quote: str) -> list[list[str]]:
     unterminated run takes the rest of the file. CR, LF and CRLF end a row; an empty line is an
     empty row.
     """
-    rows: list[list[str]] = []
     fields: list[str] = []
     field: list[str] = []
     i, n = 0, len(text)
@@ -137,7 +138,7 @@ def _records(text: str, delimiter: str, quote: str) -> list[list[str]]:
             start = True
         elif ch in "\r\n":
             fields.append("".join(field))
-            rows.append(fields)
+            yield fields
             fields, field, start = [], [], True
             if ch == "\r" and i + 1 < n and text[i + 1] == "\n":
                 i += 1
@@ -146,8 +147,7 @@ def _records(text: str, delimiter: str, quote: str) -> list[list[str]]:
         i += 1
     if field or fields or quoted:
         fields.append("".join(field))
-        rows.append(fields)
-    return rows
+        yield fields
 
 
 # Conversions --------------------------------------------------------------------------------
@@ -404,11 +404,17 @@ def _text_xml(text: str) -> str:
     )
 
 
-def _package(rows: list[list[str]], name: str, options: TextOptions, today: datetime.date) -> bytes:
+def _package(
+    rows: Iterator[list[str]], name: str, options: TextOptions, today: datetime.date
+) -> bytes:
+    """The workbook package, its sheet written row by row as the rows come."""
     strings: dict[str, int] = {}
     formats: dict[int | str, int] = {0: 0}
-    sheet = [f'<worksheet xmlns="{_MAIN}"><sheetData>']
-    for r, fields in enumerate(rows[:_MAX_ROW], 1):
+    out = io.BytesIO()
+    z = zipfile.ZipFile(out, "w", zipfile.ZIP_STORED)
+    sheet = z.open("xl/worksheets/sheet1.xml", "w", force_zip64=True)
+    sheet.write(f'<worksheet xmlns="{_MAIN}"><sheetData>'.encode())
+    for r, fields in enumerate(itertools.islice(rows, _MAX_ROW), 1):
         cells = []
         for c, field in enumerate(fields[:_MAX_COL], 1):
             value = convert(field, options, today)
@@ -429,8 +435,9 @@ def _package(rows: list[list[str]], name: str, options: TextOptions, today: date
                 index = strings.setdefault(str(data), len(strings))
                 cells.append(f'<c {ref} t="s"><v>{index}</v></c>')
         if cells:
-            sheet.append(f'<row r="{r}">' + "".join(cells) + "</row>")
-    sheet.append("</sheetData></worksheet>")
+            sheet.write((f'<row r="{r}">' + "".join(cells) + "</row>").encode("utf-8"))
+    sheet.write(b"</sheetData></worksheet>")
+    sheet.close()
     custom = {code: 164 + i for i, code in enumerate(f for f in formats if isinstance(f, str))}
     xfs = "".join(
         f'<xf numFmtId="{custom[f] if isinstance(f, str) else f}" fontId="0" fillId="0"'
@@ -482,15 +489,22 @@ def _package(rows: list[list[str]], name: str, options: TextOptions, today: date
             f'<Relationship Id="rId3" Type="{_DOC}/sharedStrings" Target="sharedStrings.xml"/>'
             "</Relationships>"
         ),
-        "xl/worksheets/sheet1.xml": "".join(sheet),
         "xl/styles.xml": styles,
         "xl/sharedStrings.xml": f'<sst xmlns="{_MAIN}">{shared}</sst>',
     }
-    out = io.BytesIO()
-    with zipfile.ZipFile(out, "w", zipfile.ZIP_STORED) as z:
+    with z:
         for part, body in parts.items():
             z.writestr(part, body.encode("utf-8"))
     return out.getvalue()
+
+
+def _lines(text: str, options: CsvOptions) -> Iterator[list[str]]:
+    """The rows, a line past Excel's length continuing below (capture text_limits)."""
+    for row in _records(text, options.delimiter, options.quote):
+        if len(row) != 1 or len(row[0]) <= _LINE:
+            yield row
+        else:
+            yield from ([row[0][i : i + _LINE]] for i in range(0, len(row[0]), _LINE))
 
 
 def sheet_name_of(path: str | os.PathLike[str]) -> str:
@@ -532,13 +546,8 @@ def read_csv(
     if len(data) > limits.max_part_bytes:
         raise LimitError(f"the file is larger than the limit of {limits.max_part_bytes} bytes")
     text = _decode(data, options)
-    rows: list[list[str]] = []
-    for row in _records(text, options.delimiter, options.quote):
-        line = options.delimiter.join(row)  # a line past Excel's length continues below
-        if len(line) <= _LINE or len(row) != 1:
-            rows.append(row)
-            continue
-        rows += [[line[i : i + _LINE]] for i in range(0, len(line), _LINE)]
+    del data
     today = options.today or datetime.date.today()
-    package = _package(rows, name, options, today)
+    package = _package(_lines(text, options), name, options, today)
+    del text
     return open_workbook(io.BytesIO(package), limits=limits)
