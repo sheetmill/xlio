@@ -2,8 +2,9 @@
 
 Every rule here is one the captures ``text``, ``text_launch_*``, ``text_extra``, ``text_forms``
 and ``text_limits`` show (``tests/captures/``), unless its comment says it is not captured. The file
-becomes a one-sheet workbook built in memory and read by :func:`xlio.open`, so a text file and
-an xlsx file give the same :class:`~xlio.Workbook`.
+becomes a one-sheet workbook package built by xlio (in memory, or in a temporary file past
+8 MiB) and read by :func:`xlio.open`, so a text file and an xlsx file give the same
+:class:`~xlio.Workbook`.
 """
 
 from __future__ import annotations
@@ -565,8 +566,10 @@ def read_csv(
             workbook built from it by the other limits.
 
     Returns:
-        The workbook, one sheet built in memory: its parts (``Workbook.parts``) are the ones
-        xlio synthesizes for it, not a file's, and :func:`xlio.patch` cannot write it.
+        The workbook, one sheet built by xlio (in memory, or in a temporary file past 8 MiB,
+        deleted when the workbook is closed): its parts (``Workbook.parts``) are the ones xlio
+        synthesizes for it, not a file's, and :func:`xlio.patch` cannot write it. A file from a
+        stranger whose fields go on to another program: see ``TextOptions.formulas``.
 
     Raises:
         LimitError: The file is larger than ``limits.max_text_bytes``.

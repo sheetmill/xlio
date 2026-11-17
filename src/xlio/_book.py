@@ -49,7 +49,8 @@ class SheetInfo:
     """A sheet: name, part, ``visible``/``hidden``/``veryHidden``, and its kind.
 
     ``kind`` is the last segment of the relationship type: ``worksheet``, ``chartsheet``,
-    ``dialogsheet`` or ``xlMacrosheet``; only worksheets have cells to read.
+    ``dialogsheet``, ``xlMacrosheet`` or ``xlIntlMacrosheet``; worksheets and macro sheets have
+    cells to read (:data:`CELL_KINDS`).
     """
 
     name: str

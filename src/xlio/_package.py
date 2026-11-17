@@ -43,9 +43,11 @@ class PackageError(ValueError):
 
 
 class LimitError(PackageError):
-    """The package exceeds a limit set by ``ReadLimits``.
+    """The file exceeds a limit set by ``ReadLimits``.
 
-    Too many parts, or more decompressed bytes in one part or in all of them than allowed.
+    Too many parts; more decompressed bytes in one part, in all of them, or in a VML drawing
+    than allowed; a range of cells larger than ``max_cells``; or a text file larger than
+    ``max_text_bytes``.
     """
 
 
@@ -87,7 +89,8 @@ class ReadLimits:
     UNTRUSTED: ClassVar[ReadLimits]
     """The limits for files from people the caller does not trust (10,000 parts, 256 MiB a part,
     1 GiB in all, one full column of cells, 8 MiB of VML, 32 MiB of text: under about 0.6 GiB
-    of memory for a text file)."""
+    of memory for a text file). Limits bound resources, not meaning: a text file's formulas
+    stay formulas (``TextOptions.formulas`` says when to ask for text)."""
 
 
 ReadLimits.UNTRUSTED = ReadLimits(
