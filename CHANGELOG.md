@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- The 0.3.0 entry for `read_csv()` left out `TextOptions`, the public base of `CsvOptions`,
+  which also holds `fallback_encoding` (the encoding of a file without a byte order mark when
+  `encoding` is `None`; `"mac_roman"` by default).
+
 ## [0.3.0] - 2026-11-16
 
 ### Added
