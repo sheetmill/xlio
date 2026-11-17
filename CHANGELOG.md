@@ -8,12 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
-- `Sheet.rows` includes a `<row>` that holds no cell and sets nothing (`<row r="3"/>`), with an
-  empty `RowFormat` (every field its default), since Excel counts such a row; it left it out.
+- `Sheet.rows` now includes a `<row>` that holds no cell and sets nothing (`<row r="3"/>`), with
+  an empty `RowFormat` (every field its default): Excel counts such a row, and xlio left it out.
   Rows that set anything read as before.
-- The 0.3.0 entry for `read_csv()` left out `TextOptions`, the public base of `CsvOptions`,
-  which also holds `fallback_encoding` (the encoding of a file without a byte order mark when
-  `encoding` is `None`; `"mac_roman"` by default).
 
 ## [0.3.0] - 2026-11-16
 
@@ -24,9 +21,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   currency, percentages, fractions, dates with two-digit years from 1950 to 2049, times,
   booleans, errors), formulas as formula cells without a cached value, its encoding detection
   (a UTF-8 or UTF-16 little-endian byte order mark, else Mac Roman) and its splitting of rows
-  and fields. `CsvOptions` (and `CsvOptions.tsv()`) set the encoding, the conversions (`"excel"`,
-  `"keep"` as "Don't Convert" gives, `"none"`), formulas as text, the date a date without a
-  year takes, the sheet's name, the delimiter and the quote. The workbook's parts are the ones
+  and fields. `CsvOptions` (and `CsvOptions.tsv()`), on its base `TextOptions`, set the
+  encoding (and `fallback_encoding`, the encoding of a file without a byte order mark,
+  `"mac_roman"` by default), the conversions (`"excel"`, `"keep"` as "Don't Convert" gives,
+  `"none"`), formulas as text, the date a date without a year takes, the sheet's name, the
+  delimiter and the quote. The workbook's parts are the ones
   xlio builds for it, and `patch()` refuses a CSV source.
 - `SheetProperties.show_outline_symbols` (`outlinePr showOutlineSymbols`), and
   `SheetProperties.show_outline_symbols_text` and `SheetView.show_outline_symbols_text`: the
