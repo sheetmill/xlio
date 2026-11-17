@@ -1,0 +1,25 @@
+# suite: text_extra (capture.text_extra_probe); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-16; method: a .csv file opened with alerts off (File > Open's defaults) and saved as a workbook copy
+# one line per cell of the copy's first sheet: type:value as the XML has it, and the cell's number format; the sheet column is the copy's sheet name
+case	outcome	sheet	cell	value	format
+years	opened	xlio_years	A1	n:36527	builtin 14
+years	opened	xlio_years	A2	n:47120	builtin 14
+years	opened	xlio_years	A3	n:47485	builtin 14
+years	opened	xlio_years	A4	n:54425	builtin 14
+years	opened	xlio_years	A5	n:18265	builtin 14
+years	opened	xlio_years	A6	n:36162	builtin 14
+years	opened	xlio_years	A7	n:47120	builtin 15
+years	opened	xlio_years	A8	n:47485	builtin 15
+years	opened	xlio_years	A9	n:47120	builtin 14
+years	opened	xlio_years	A10	n:10960	builtin 14
+name 31 characters	opened	nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn	A1	n:1	builtin 0
+name 32 characters	opened	nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn	A1	n:1	builtin 0
+name 40 characters	opened	abcdefghijabcdefghijabcdefghija	A1	n:1	builtin 0
+name bracket	opened, read by hand	a(b)c	A1	n:1	(the workbook opened as a(b)c.csv, which the script could not address: no copy; sheet name and A1 read through AppleScript)
+name star	opened	a*b	A1	n:1	builtin 0
+name question mark	opened	a?b	A1	n:1	builtin 0
+name backslash	opened, read by hand	b	A1	n:1	(the backslash taken as a path separator: the workbook opened as b.csv; no copy; sheet name and A1 read through AppleScript)
+name colon	not run	-50			(the script's path to a:b.csv did not reach Excel: nothing captured)
+name History	opened	History	A1	n:1	builtin 0
+name apostrophe first	opened	'ab	A1	n:1	builtin 0

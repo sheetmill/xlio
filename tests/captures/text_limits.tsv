@@ -1,0 +1,10 @@
+# suite: text_limits (capture.text_extra_probe); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-16; method: a .csv file opened through Launch Services (open -a) as a person opens it, dialogs answered 'ok' by the person (none: not shown), then saved as a workbook copy through AppleScript
+# the copy's first sheet: last row, last column, number of cells, lengths of the texts in row 1; dialogs answered OK by the person, their wording not noted in this run; reopened alone, the 1,048,577-row file and the 16,385-column file each showed "This data set is too large for the Excel grid. If you save this workbook, you'll lose data that wasn't loaded." (OK only) and then opened; the long-field files were not reopened
+case	outcome	error	last row	last column	cells	lengths
+field 32767	opened		2	1	2	32759
+field 32768	opened		2	1	2	32759
+field 40000	opened		2	1	2	32759
+rows 1048577	opened		1048576	1	1048576	-
+columns 16385	opened		1	16384	16384	-
