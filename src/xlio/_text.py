@@ -1,7 +1,7 @@
 """Text formats: a CSV file read as Excel for Mac opens it (File > Open, en_US).
 
-Every rule here is one the captures ``text``, ``text_launch_*``, ``text_extra`` and
-``text_limits`` show (``tests/captures/``), unless its comment says it is not captured. The file
+Every rule here is one the captures ``text``, ``text_launch_*``, ``text_extra``, ``text_forms``
+and ``text_limits`` show (``tests/captures/``), unless its comment says it is not captured. The file
 becomes a one-sheet workbook built in memory and read by :func:`xlio.open`, so a text file and
 an xlsx file give the same :class:`~xlio.Workbook`.
 """

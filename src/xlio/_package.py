@@ -34,11 +34,11 @@ _CHUNK = 1 << 16
 class PackageError(ValueError):
     """The file is not a readable xlsx package.
 
-    Not a zip archive, no workbook part, a part that is not well-formed XML or declares a DTD, a
-    part named twice, encrypted, compressed by a method an xlsx package does not use, damaged, or
-    not the size the archive states, content Excel refuses (a number it does not write, a row off
-    its grid), or, when writing, a part in an encoding other than UTF-8. A subclass of
-    ``ValueError``.
+    The file is not a zip archive, is encrypted, or has no workbook part. A part is named twice,
+    is not well-formed XML or declares a DTD, is compressed by a method an xlsx package does not
+    use, is damaged, or is not the size the archive states. The content is something Excel
+    refuses (a number it does not write, a row off its grid). Or, when writing, a part is in an
+    encoding other than UTF-8. A subclass of ``ValueError``.
     """
 
 

@@ -1,6 +1,6 @@
 """CSV files read as Excel for Mac opens them.
 
-Captures ``text``, ``text_launch_*``, ``text_extra`` and ``text_limits``
+Captures ``text``, ``text_launch_*``, ``text_extra``, ``text_forms`` and ``text_limits``
 (``capture/text_probe.py``, ``capture/text_extra_probe.py``): each case is a ``.csv`` file Excel
 opened and saved as a workbook; the TSV holds every cell of the copy (type, value and number
 format) and the sheet's name. Here :func:`xlio.read_csv` must give the same cells.

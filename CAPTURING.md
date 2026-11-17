@@ -71,21 +71,23 @@ stripped of paths and people.
 `package` and `value_forms` gave the same results under Office 2021 (Excel 16.114.3) and
 Microsoft 365 (Excel 16.115, Current Channel).
 
-The `text`, `text_launch_*`, `text_extra`, `text_forms` and `text_limits` captures are read by
-`xlio.read_csv` and replayed by `tests/test_text.py`.
+`xlio.read_csv` follows the `text`, `text_launch_*`, `text_extra`, `text_forms` and
+`text_limits` captures, and `tests/test_text.py` replays them.
 
 ## Captures kept elsewhere
 
 Some rules were captured by xlrecalc (https://github.com/sheetmill/xlrecalc/), where this code
-was first written, and are cited with a link: the outer whitespace Excel drops
-([`whitespace.tsv`](https://github.com/sheetmill/xlrecalc/blob/main/tests/captures/whitespace.tsv)),
-dynamic-array and rich-value metadata
-([`arrays.tsv`](https://github.com/sheetmill/xlrecalc/blob/main/tests/captures/arrays.tsv)) and
-text results read by Excel
-([`test_excel_live.py`](https://github.com/sheetmill/xlrecalc/blob/main/tests/test_excel_live.py)),
-and when Excel recalculates on opening: it keeps the cached values of a file it saved itself
-and computes every formula of one openpyxl wrote
-([`open_calc.tsv`](https://github.com/sheetmill/xlrecalc/blob/main/tests/captures/open_calc.tsv)).
+was first written, and are cited with a link:
+
+- the outer whitespace Excel drops
+  ([`whitespace.tsv`](https://github.com/sheetmill/xlrecalc/blob/main/tests/captures/whitespace.tsv));
+- dynamic-array and rich-value metadata
+  ([`arrays.tsv`](https://github.com/sheetmill/xlrecalc/blob/main/tests/captures/arrays.tsv));
+- text results read by Excel
+  ([`test_excel_live.py`](https://github.com/sheetmill/xlrecalc/blob/main/tests/test_excel_live.py));
+- when Excel recalculates on opening: it keeps the cached values of a file it saved itself and
+  computes every formula of one openpyxl wrote
+  ([`open_calc.tsv`](https://github.com/sheetmill/xlrecalc/blob/main/tests/captures/open_calc.tsv)).
 
 ## Platforms
 

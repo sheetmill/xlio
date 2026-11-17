@@ -5,7 +5,7 @@
 
 The control (openpyxl's): A1 = 1, B1 = ``=A1``, C1 = ``=ERROR.TYPE(A1)``, D1 = ``=ISERROR(A1)``,
 E1 = ``=VALUETOTEXT(A1)`` (the error's text),
-A2 = 5, A3 = 6; ``fullCalcOnLoad``, so Excel computes B1:D1 on open. Four groups of cases:
+A2 = 5, A3 = 6; ``fullCalcOnLoad``, so Excel computes B1:E1 on open. Four groups of cases:
 
 - ``plain <code>``: A1 is ``<c t="e"><v>code</v></c>``, every code Excel defines and two it does
   not; does Excel open it, and which error does it read (B1, C1)?

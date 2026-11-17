@@ -829,10 +829,10 @@ class Workbook:
 
         A picture placed in a cell is an :class:`ImageValue`: the cell caches ``#VALUE!``, as
         :meth:`Sheet.cells` gives it, and Excel draws the picture instead. An error rich value
-        is what :meth:`Sheet.cells` gives for its cell, whatever the cell caches; other rich
-        values leave the cell's value as cached. Other rich values
-        (data types, the errors :class:`CellMetadata` already maps) are :class:`RichValue`
-        records, raw. Not to be confused with rich text (:attr:`Cell.rich`).
+        is what :meth:`Sheet.cells` gives for its cell, whatever the cell caches. Other rich
+        values (data types, the errors :class:`CellMetadata` already maps) leave the cell's
+        value as cached and are :class:`RichValue` records, raw. Not to be confused with rich
+        text (:attr:`Cell.rich`).
         """
         parts = self.parts
         found: dict[str, str] = {}
