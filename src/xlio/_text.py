@@ -50,7 +50,10 @@ class TextOptions:
             more than 15 digits and ``0 1/2`` stay text); ``"none"``, every field text.
         formulas: ``"formula"``: a field Excel takes as a formula (``=1+1``, ``+1+1``,
             ``@SUM(1)``) is a formula cell without a cached value, as Excel holds it before
-            calculating; ``"text"``: it stays the text written.
+            calculating; ``"text"``: it stays the text written. xlio evaluates nothing, and
+            ``ReadLimits.UNTRUSTED`` leaves this as Excel does (limits bound resources, not
+            meaning); a caller that passes fields on to another program that may evaluate
+            them (a spreadsheet, a CSV export: "CSV injection") asks for ``"text"``.
         today: The date a date without a year takes its year from (``1/2``); ``None`` is the
             clock's.
         sheet_name: The sheet's name; ``None`` takes the file's name as Excel does (its stem,

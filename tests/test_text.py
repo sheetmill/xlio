@@ -186,3 +186,41 @@ def test_broken_formulas_newer_errors_and_fractions():
     from capture.text_probe import csv_text
 
     compare("text_forms", {"forms": csv_text(FORMS).encode()}, xlio.CsvOptions(today=TODAY))
+
+
+def test_a_file_is_read_in_chunks_of_at_most_a_megabyte():
+    class Recording(io.BytesIO):
+        def __init__(self, data: bytes) -> None:
+            super().__init__(data)
+            self.asked: list[int] = []
+
+        def read(self, size: int | None = -1) -> bytes:
+            self.asked.append(-1 if size is None else size)
+            return super().read(size)
+
+    source = Recording((b"x" * 999 + b"\n") * 1_200)  # 1.2 MB: more than one chunk
+    with xlio.read_csv(source) as wb:
+        assert sum(1 for _ in wb.sheets[0].cells()) == 1_200
+    assert len(source.asked) > 2
+    assert source.asked
+    assert all(0 < n <= 1 << 20 for n in source.asked)
+
+
+def test_a_large_package_goes_to_temporary_files(monkeypatch):
+    import tempfile
+
+    import xlio._text
+
+    made: list[tempfile.SpooledTemporaryFile[bytes]] = []
+    original = tempfile.SpooledTemporaryFile
+
+    def spooled(max_size: int = 0) -> tempfile.SpooledTemporaryFile[bytes]:
+        made.append(original(max_size=max_size))
+        return made[-1]
+
+    monkeypatch.setattr(xlio._text, "_SPOOL", 64)
+    monkeypatch.setattr(xlio._text.tempfile, "SpooledTemporaryFile", spooled)
+    with xlio.read_csv(io.BytesIO(b"a,b,c\n" * 100)) as wb:
+        assert sum(1 for _ in wb.sheets[0].cells()) == 300
+        assert made
+        assert made[0]._rolled  # the package past 64 bytes: a temporary file
