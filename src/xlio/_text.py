@@ -11,10 +11,10 @@ from __future__ import annotations
 import calendar
 import dataclasses
 import datetime
-import io
 import itertools
 import os
 import re
+import tempfile
 import zipfile
 from collections.abc import Iterator
 from dataclasses import dataclass
@@ -84,6 +84,7 @@ class CsvOptions(TextOptions):
 
 
 _MAX_ROW, _MAX_COL = 1_048_576, 16_384
+_SPOOL = 8 << 20  # a built package larger than this goes to a temporary file
 _LINE = 32_759  # a longer line continues on the next row (capture text_limits)
 
 
@@ -406,11 +407,18 @@ def _text_xml(text: str) -> str:
 
 def _package(
     rows: Iterator[list[str]], name: str, options: TextOptions, today: datetime.date
-) -> bytes:
-    """The workbook package, its sheet written row by row as the rows come."""
-    strings: dict[str, int] = {}
+) -> BinaryIO:
+    """The workbook package, its sheet written row by row as the rows come.
+
+    The package goes to a temporary file past a few megabytes (deleted when it is closed), so
+    a large file's package is not held in memory beside its text and shared strings.
+    """
+    # Each text is written to the shared strings as it comes, without looking for an equal
+    # one: a table of the texts met would cost far more than the file (a value reads the same).
+    strings = tempfile.SpooledTemporaryFile(max_size=_SPOOL)  # noqa: SIM115
+    count = 0
     formats: dict[int | str, int] = {0: 0}
-    out = io.BytesIO()
+    out = tempfile.SpooledTemporaryFile(max_size=_SPOOL)  # noqa: SIM115 - the workbook keeps it
     z = zipfile.ZipFile(out, "w", zipfile.ZIP_STORED)
     sheet = z.open("xl/worksheets/sheet1.xml", "w", force_zip64=True)
     sheet.write(f'<worksheet xmlns="{_MAIN}"><sheetData>'.encode())
@@ -432,7 +440,10 @@ def _package(
             elif kind == "f":
                 cells.append(f"<c {ref}><f>{_text_xml(str(data))}</f></c>")
             else:
-                index = strings.setdefault(str(data), len(strings))
+                index, count = count, count + 1
+                strings.write(
+                    f'<si><t xml:space="preserve">{_text_xml(str(data))}</t></si>'.encode()
+                )
                 cells.append(f'<c {ref} t="s"><v>{index}</v></c>')
         if cells:
             sheet.write((f'<row r="{r}">' + "".join(cells) + "</row>").encode("utf-8"))
@@ -461,7 +472,6 @@ def _package(
         '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>'
         "</styleSheet>"
     )
-    shared = "".join(f'<si><t xml:space="preserve">{_text_xml(s)}</t></si>' for s in strings)
     parts = {
         "[Content_Types].xml": (
             '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
@@ -490,12 +500,19 @@ def _package(
             "</Relationships>"
         ),
         "xl/styles.xml": styles,
-        "xl/sharedStrings.xml": f'<sst xmlns="{_MAIN}">{shared}</sst>',
     }
     with z:
         for part, body in parts.items():
             z.writestr(part, body.encode("utf-8"))
-    return out.getvalue()
+        with z.open("xl/sharedStrings.xml", "w", force_zip64=True) as sst:
+            sst.write(f'<sst xmlns="{_MAIN}">'.encode())
+            strings.seek(0)
+            while chunk := strings.read(1 << 20):
+                sst.write(chunk)
+            sst.write(b"</sst>")
+        strings.close()
+    out.seek(0)
+    return out  # type: ignore[return-value]
 
 
 def _lines(text: str, options: CsvOptions) -> Iterator[list[str]]:
@@ -524,13 +541,15 @@ def read_csv(
     Args:
         source: A path, or a binary file open for reading.
         options: How to read it (:class:`CsvOptions`); Excel's defaults when ``None``.
-        limits: What reading may cost; the file's size counts as a part's.
+        limits: What reading may cost: the file's size is bounded by ``max_text_bytes``, and the
+            workbook built from it by the other limits.
 
     Returns:
-        The workbook, one sheet built in memory; it holds no file of its own.
+        The workbook, one sheet built in memory: its parts (``Workbook.parts``) are the ones
+        xlio synthesizes for it, not a file's, and :func:`xlio.patch` cannot write it.
 
     Raises:
-        LimitError: The file is larger than ``limits.max_part_bytes``.
+        LimitError: The file is larger than ``limits.max_text_bytes``.
     """
     from xlio._workbook import open as open_workbook
 
@@ -539,15 +558,15 @@ def read_csv(
     if isinstance(source, (str, os.PathLike)):
         name = options.sheet_name or sheet_name_of(source)
         with Path(source).open("rb") as f:
-            data = f.read(limits.max_part_bytes + 1)
+            data = f.read(limits.max_text_bytes + 1)
     else:
         name = options.sheet_name or "Sheet1"
-        data = source.read(limits.max_part_bytes + 1)
-    if len(data) > limits.max_part_bytes:
-        raise LimitError(f"the file is larger than the limit of {limits.max_part_bytes} bytes")
+        data = source.read(limits.max_text_bytes + 1)
+    if len(data) > limits.max_text_bytes:
+        raise LimitError(f"the file is larger than the limit of {limits.max_text_bytes} bytes")
     text = _decode(data, options)
     del data
     today = options.today or datetime.date.today()
     package = _package(_lines(text, options), name, options, today)
     del text
-    return open_workbook(io.BytesIO(package), limits=limits)
+    return open_workbook(package, limits=limits)

@@ -16,7 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (a UTF-8 or UTF-16 little-endian byte order mark, else Mac Roman) and its splitting of rows
   and fields. `CsvOptions` (and `CsvOptions.tsv()`) set the encoding, the conversions (`"excel"`,
   `"keep"` as "Don't Convert" gives, `"none"`), formulas as text, the date a date without a
-  year takes, the sheet's name, the delimiter and the quote.
+  year takes, the sheet's name, the delimiter and the quote. The workbook's parts are the ones
+  xlio builds for it, and `patch()` refuses a CSV source.
+- `ReadLimits.max_text_bytes` bounds a text file's size (16 GiB by default; 32 MiB in
+  `ReadLimits.UNTRUSTED`, which keeps reading one under about 0.6 GiB of memory).
 
 ### Fixed
 - Reading cells is faster (about 15% on many small workbooks): a cell's style index is read

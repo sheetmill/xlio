@@ -363,7 +363,7 @@ def test_the_default_limits_read_a_cell_in_the_last_position():
 
 def test_the_untrusted_preset():
     u = xlio.ReadLimits.UNTRUSTED
-    assert dataclasses.astuple(u) == (10_000, 256 << 20, 1 << 30, 1_048_576, 8 << 20)
+    assert dataclasses.astuple(u) == (10_000, 256 << 20, 1 << 30, 1_048_576, 8 << 20, 32 << 20)
     assert dataclasses.replace(u, max_cells=5).max_parts == 10_000
     defaults = xlio.ReadLimits()
     assert (defaults.max_part_bytes, defaults.max_total_bytes) == (16 << 30, 64 << 30)

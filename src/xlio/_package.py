@@ -72,6 +72,9 @@ class ReadLimits:
             for, or, without one, to the range the cells themselves span (never the file's
             ``<dimension>``). The default is the whole sheet.
         max_vml_bytes: Decompressed bytes of a VML drawing part, which is read whole.
+        max_text_bytes: Bytes of a text file (:func:`xlio.read_csv`). Reading one takes up to
+            about 17 times its size in memory (a file of short distinct fields; an ordinary
+            one about 8 times).
     """
 
     max_parts: int = 100_000
@@ -79,10 +82,12 @@ class ReadLimits:
     max_total_bytes: int = 64 * _GIB
     max_cells: int = 1_048_576 * 16_384
     max_vml_bytes: int = 1 * _GIB
+    max_text_bytes: int = 16 * _GIB
 
     UNTRUSTED: ClassVar[ReadLimits]
     """The limits for files from people the caller does not trust (10,000 parts, 256 MiB a part,
-    1 GiB in all, one full column of cells, 8 MiB of VML)."""
+    1 GiB in all, one full column of cells, 8 MiB of VML, 32 MiB of text: under about 0.6 GiB
+    of memory for a text file)."""
 
 
 ReadLimits.UNTRUSTED = ReadLimits(
@@ -91,6 +96,7 @@ ReadLimits.UNTRUSTED = ReadLimits(
     max_total_bytes=1 * _GIB,
     max_cells=1_048_576,
     max_vml_bytes=8 * _MIB,
+    max_text_bytes=32 * _MIB,
 )
 
 
@@ -277,7 +283,10 @@ class Package:
         try:
             self._zip = zipfile.ZipFile(source)
         except (zipfile.BadZipFile, OSError) as exc:
-            raise PackageError(f"not an xlsx package (not a zip archive): {exc}") from exc
+            raise PackageError(
+                f"not an xlsx package (not a zip archive; a CSV file is read with "
+                f"xlio.read_csv, and cannot be patched): {exc}"
+            ) from exc
         try:
             self._check_directory()
         except BaseException:

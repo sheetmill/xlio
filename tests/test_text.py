@@ -152,3 +152,28 @@ def test_columns_past_the_grid_are_dropped():
     with xlio.read_csv(io.BytesIO(data)) as wb:
         cells = list(wb.sheets[0].cells())
     assert (len(cells), cells[-1].column) == (int(case[5]), int(case[4]))
+
+
+def test_a_csv_file_is_not_a_package(tmp_path):
+    source = tmp_path / "data.csv"
+    source.write_bytes(b"a,b\n1,2\n")
+    for call in (
+        lambda: xlio.open(source),
+        lambda: xlio.patch(
+            source, tmp_path / "out.xlsx", cells={"data": {(1, 1): xlio.CellEdit(None, 5.0)}}
+        ),
+    ):
+        with pytest.raises(xlio.PackageError, match=r"a CSV file is read with xlio\.read_csv"):
+            call()
+    with xlio.read_csv(source) as wb:  # its parts are built for it
+        assert wb.sheets[0].name == "data"
+        assert "xl/worksheets/sheet1.xml" in wb.parts
+
+
+def test_a_text_file_past_its_limit_is_refused():
+    limits = xlio.ReadLimits(max_text_bytes=8)
+    with pytest.raises(xlio.LimitError, match="limit of 8 bytes"):
+        xlio.read_csv(io.BytesIO(b"1,2,3,4,5\n"), limits=limits)
+    with xlio.read_csv(io.BytesIO(b"1,2,3\n"), limits=limits) as wb:
+        assert len(list(wb.sheets[0].cells())) == 3
+    assert xlio.ReadLimits.UNTRUSTED.max_text_bytes == 32 << 20
