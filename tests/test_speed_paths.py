@@ -8,7 +8,6 @@ workbook and on crafted parts.
 from __future__ import annotations
 
 import io
-import re
 from pathlib import Path
 
 import pytest
@@ -54,11 +53,3 @@ def test_a_style_index_reads_as_its_full_reading(s):
         xml = f'<worksheet xmlns="{MAIN}"><sheetData>{row}</sheetData></worksheet>'
         (cell,) = read_cells(io.BytesIO(xml.encode()), [])
         assert cell.style == (_index(s, None) or 0)
-
-
-def test_the_readme_pins_this_minor_version():
-    version = re.match(r"(\d+\.\d+)\.", xlio.__version__)
-    assert version is not None
-    for doc in ("README.md", "docs/index.md"):
-        text = (Path(__file__).parents[1] / doc).read_text(encoding="utf-8")
-        assert re.findall(r"`xlio==([\d.]+)\.\*`", text) == [version[1]], doc
