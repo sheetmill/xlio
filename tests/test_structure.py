@@ -472,3 +472,29 @@ def test_structures_excel_saved_agree_with_openpyxl(name):
             assert row.height == ws.row_dimensions[number].height
         assert sheet.format.default_row_height == ws.sheet_format.defaultRowHeight
         assert wb.views[0].active_tab == 0
+
+
+@pytest.mark.parametrize(
+    ("written", "shown", "text"),
+    [
+        (None, True, None),
+        ("0", False, "0"),
+        ("1", True, "1"),
+        ("false", False, "false"),
+        ("x", True, "x"),
+    ],
+)
+def test_outline_symbols_with_their_text_as_written(written, shown, text):
+    attribute = f' showOutlineSymbols="{written}"' if written is not None else ""
+    sheet = sheet_of(
+        f"<sheetPr><outlinePr{attribute}/></sheetPr>"
+        f'<sheetViews><sheetView workbookViewId="0"{attribute}/></sheetViews><sheetData/>'
+    )
+    properties, view = sheet.properties, sheet.views[0]
+    assert (properties.show_outline_symbols, properties.show_outline_symbols_text) == (shown, text)
+    assert (view.show_outline_symbols, view.show_outline_symbols_text) == (shown, text)
+
+
+def test_outline_symbols_without_outline_properties():
+    properties = sheet_of("<sheetPr/><sheetData/>").properties
+    assert (properties.show_outline_symbols, properties.show_outline_symbols_text) == (True, None)

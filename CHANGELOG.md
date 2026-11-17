@@ -18,15 +18,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `"keep"` as "Don't Convert" gives, `"none"`), formulas as text, the date a date without a
   year takes, the sheet's name, the delimiter and the quote. The workbook's parts are the ones
   xlio builds for it, and `patch()` refuses a CSV source.
+- `SheetProperties.show_outline_symbols` (`outlinePr showOutlineSymbols`), and
+  `SheetProperties.show_outline_symbols_text` and `SheetView.show_outline_symbols_text`: the
+  attribute as written, `None` when the file leaves it out, so a reader can tell a stated value
+  from the default.
 - `ReadLimits.max_text_bytes` bounds a text file's size (16 GiB by default; 32 MiB in
   `ReadLimits.UNTRUSTED`, which keeps reading one under about 0.6 GiB of memory).
 
-### Fixed
+### Changed
+- A styles part Excel refuses (a font size, a font color it does not take) is refused when the
+  styles are read (`Workbook.styles`, and `check()`, as before), no longer when only a sheet's
+  cells are read: `Sheet.cells()` raised `PackageError` for it in 0.2.0, since it read the
+  styles whole; it now reads only their number of cell formats.
+- A file that is not a zip archive is refused with a message that points at `read_csv()`
+  (still a `PackageError`).
 - Reading cells is faster (about 15% on many small workbooks): a cell's style index is read
   through a cache of the texts met, the rarer cells (runs, rich values, errors) take a separate
-  path, and the cells no longer need the styles read whole, only their count of cell formats.
-  A styles part Excel refuses (a font size, say) is now refused when the styles are read, not
-  when only the cells are. A sheet's head (views, properties) no longer reads its relationships.
+  path, and a sheet's head (views, properties) no longer reads the sheet's relationships.
 
 ## [0.2.0] - 2026-11-16
 

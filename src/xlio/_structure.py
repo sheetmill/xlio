@@ -170,6 +170,9 @@ class SheetProperties:
         filter_mode: A filter is hiding rows.
         code_name: The sheet's VBA code name, or ``None``.
         published: Whether the sheet is published (``published``).
+        show_outline_symbols: Outline symbols shown (``outlinePr showOutlineSymbols``).
+        show_outline_symbols_text: That attribute as written, or ``None`` when the file leaves
+            it out (``show_outline_symbols`` is then the default).
         source: The element as written, or ``None`` when the sheet has none.
     """
 
@@ -181,6 +184,8 @@ class SheetProperties:
     filter_mode: bool = False
     code_name: str | None = None
     published: bool = True
+    show_outline_symbols: bool = True
+    show_outline_symbols_text: str | None = None
     source: ET.Element | None = field(default=None, compare=False, repr=False)
 
     @classmethod
@@ -204,6 +209,8 @@ class SheetProperties:
             flag(element.get("filterMode"), False),
             element.get("codeName"),
             flag(element.get("published"), True),
+            flag(get("showOutlineSymbols"), True),
+            get("showOutlineSymbols"),
             element,
         )
 
@@ -291,6 +298,8 @@ class SheetView:
         window_protection: Panes cannot be moved.
         pane: The split or frozen pane, or ``None``.
         selections: The selections, one per pane at most.
+        show_outline_symbols_text: ``showOutlineSymbols`` as written, or ``None`` when the file
+            leaves it out (``show_outline_symbols`` is then the default).
         source: The element as written.
     """
 
@@ -315,6 +324,7 @@ class SheetView:
     window_protection: bool = False
     pane: Pane | None = None
     selections: tuple[Selection, ...] = ()
+    show_outline_symbols_text: str | None = None
     source: ET.Element | None = field(default=None, compare=False, repr=False)
 
     @property
@@ -368,6 +378,7 @@ class SheetView:
             flag(get("windowProtection"), False),
             pane,
             tuple(selections),
+            get("showOutlineSymbols"),
             element,
         )
 
