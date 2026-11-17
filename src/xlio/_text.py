@@ -161,12 +161,15 @@ _THOUSANDS = re.compile(r"[+-]?\d{1,3}(?:,\d{3})+(?:\.\d*)?")
 _PERCENT = re.compile(r"([+-]?(?:\d+\.?\d*|\.\d+))%|%((?:\d+\.?\d*|\.\d+))")
 _DOLLARS = re.compile(r"(\()?\$(\d{1,3}(?:,\d{3})+(?:\.\d*)?|\d+\.?\d*|\.\d+)(\))?")
 _PARENTHESES = re.compile(r"\((\d+\.?\d*|\.\d+|\d{1,3}(?:,\d{3})+(?:\.\d*)?)\)")
-_FRACTION = re.compile(r"(\d+) (\d+)/(\d+)")
+_FRACTION = re.compile(r"(-?)(\d+) (\d+)/(\d+)")
 _MONTHS = {m.lower(): i for i, m in enumerate(calendar.month_abbr) if m}
 _MONTHS.update({m.lower(): i for i, m in enumerate(calendar.month_name) if m})
 _ERRORS = {"#NULL!", "#DIV/0!", "#VALUE!", "#REF!", "#NAME?", "#NUM!", "#N/A"}
-_NEWER_ERRORS = {"#SPILL!", "#CALC!", "#FIELD!", "#BLOCKED!", "#CONNECT!", "#BUSY!",
-                 "#EXTERNAL!", "#UNKNOWN!", "#PYTHON!", "#TIMEOUT!", "#GETTING_DATA"}  # fmt: skip
+# Newer errors as Excel reads them in a CSV file (capture text_forms); #EXTERNAL! stays text.
+_NEWER_ERRORS = {"#SPILL!": "#VALUE!", "#CALC!": "#VALUE!", "#FIELD!": "#VALUE!",
+                 "#BLOCKED!": "#VALUE!", "#CONNECT!": "#VALUE!", "#BUSY!": "#VALUE!",
+                 "#UNKNOWN!": "#VALUE!", "#PYTHON!": "#VALUE!", "#TIMEOUT!": "#VALUE!",
+                 "#GETTING_DATA": "#N/A"}  # fmt: skip
 
 Value = tuple[str, object, "int | str"]  # (kind, value, number format: a built-in id or a code)
 
@@ -216,10 +219,12 @@ def _number(s: str, keep: bool) -> Value | None:
     if m:
         return "n", -_fifteen(m[1].replace(",", "")), 3 if "," in m[1] else 0
     m = _FRACTION.fullmatch(s)
-    if m and int(m[3]) != 0:
-        if keep and m[1] == "0":
+    if m and int(m[4]) != 0:
+        if keep and m[2] == "0":
             return None
-        return "n", int(m[1]) + int(m[2]) / int(m[3]), 12
+        value = int(m[2]) + int(m[3]) / int(m[4])
+        # "# ?/?" for a one-digit denominator, "# ??/??" for more (capture text_forms)
+        return "n", -value if m[1] else value, 12 if int(m[4]) < 10 else 13
     return None
 
 
@@ -322,14 +327,15 @@ def _formula(field: str) -> str | None:
     """The formula a field holds, as Excel takes it, or ``None``.
 
     ``=``, ``+``, ``-`` and ``@`` start one (``+1+1`` is ``1+1``, ``@SUM(1)`` is ``SUM(1)``);
-    ``=`` alone, ``==1`` and text ending in an operator (``-5-``) stay text. Excel parses the
-    formula; xlio does not, so this test of its shape is an approximation (captured for the
-    cases of capture ``text``).
+    ``=`` alone, ``==1``, text ending in an operator (``-5-``, ``=1+``, ``=A1:``) and unbalanced
+    parentheses (``=SUM(``, ``=1)``) stay text, while ``=foo bar`` is a formula. Excel parses
+    the formula; xlio does not, so this test of its shape follows the cases captured (captures
+    ``text`` and ``text_forms``) and may differ from Excel's parser elsewhere.
     """
     if not field or field[0] not in "=+-@":
         return None
     body = field[1:] if field[0] in "=+@" else field
-    if not body or body[0] == "=" or body[-1] in "+-*/^&=<>,(":
+    if not body or body[0] == "=" or body[-1] in "+-*/^&=<>,(:":
         return None
     if body.count("(") != body.count(")"):
         return None
@@ -352,8 +358,8 @@ def convert(field: str, options: TextOptions, today: datetime.date) -> Value | N
         return "b", upper == "TRUE", 0
     if upper in _ERRORS and s == field:
         return "e", upper, 0
-    if upper in _NEWER_ERRORS and s == field:  # #SPILL! is #VALUE! (capture text); others alike
-        return "e", "#VALUE!", 0
+    if upper in _NEWER_ERRORS and s == field:
+        return "e", _NEWER_ERRORS[upper], 0
     keep = options.conversions == "keep"
     number = _number(s, keep) if s else None
     if number is not None:

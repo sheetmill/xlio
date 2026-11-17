@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import datetime
 import io
+import re
 from pathlib import Path
 
 import pytest
@@ -75,8 +76,9 @@ def same(want: tuple[str, str], have: tuple[str, str]) -> bool:
     (value, fmt), (got_value, got_fmt) = want, have
     if fmt != got_fmt:
         return False
-    if value.startswith("n:="):  # a formula, cached by Excel: xlio holds no value
-        return got_value == value[2:].split(" -> ")[0]
+    formula = re.match(r"\w+:(=.*) -> ", value)
+    if formula:  # a formula, with the value Excel cached: xlio holds no value
+        return got_value == formula[1]
     if value.startswith("n:") and got_value.startswith("n:"):
         return float(value[2:]) == float(got_value[2:])
     return unescape(value) == got_value
@@ -177,3 +179,10 @@ def test_a_text_file_past_its_limit_is_refused():
     with xlio.read_csv(io.BytesIO(b"1,2,3\n"), limits=limits) as wb:
         assert len(list(wb.sheets[0].cells())) == 3
     assert xlio.ReadLimits.UNTRUSTED.max_text_bytes == 32 << 20
+
+
+def test_broken_formulas_newer_errors_and_fractions():
+    from capture.text_extra_probe import FORMS
+    from capture.text_probe import csv_text
+
+    compare("text_forms", {"forms": csv_text(FORMS).encode()}, xlio.CsvOptions(today=TODAY))

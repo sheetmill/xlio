@@ -1,0 +1,31 @@
+# suite: text_forms (capture.text_extra_probe); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-16; method: a .csv file opened with alerts off (File > Open's defaults) and saved as a workbook copy
+# one line per cell of the copy's first sheet: type:value as the XML has it, and the cell's number format; the sheet column is the copy's sheet name
+case	outcome	sheet	cell	value	format
+forms	opened	xlio_forms	A1	s:=1+	builtin 0
+forms	opened	xlio_forms	A2	s:=SUM(	builtin 0
+forms	opened	xlio_forms	A3	s:=1)	builtin 0
+forms	opened	xlio_forms	A4	e:=foo bar -> #NAME?	builtin 0
+forms	opened	xlio_forms	A5	s:=A1:	builtin 0
+forms	opened	xlio_forms	A6	s:+	builtin 0
+forms	opened	xlio_forms	A7	s:-	builtin 0
+forms	opened	xlio_forms	A8	s:@	builtin 0
+forms	opened	xlio_forms	A9	n:=1+1 -> 2	builtin 0
+forms	opened	xlio_forms	A10	e:#VALUE!	builtin 0
+forms	opened	xlio_forms	A11	e:#VALUE!	builtin 0
+forms	opened	xlio_forms	A12	e:#VALUE!	builtin 0
+forms	opened	xlio_forms	A13	e:#VALUE!	builtin 0
+forms	opened	xlio_forms	A14	e:#N/A	builtin 0
+forms	opened	xlio_forms	A15	e:#VALUE!	builtin 0
+forms	opened	xlio_forms	A16	e:#VALUE!	builtin 0
+forms	opened	xlio_forms	A17	e:#VALUE!	builtin 0
+forms	opened	xlio_forms	A18	e:#VALUE!	builtin 0
+forms	opened	xlio_forms	A19	s:#EXTERNAL!	builtin 0
+forms	opened	xlio_forms	A20	e:#VALUE!	builtin 0
+forms	opened	xlio_forms	A21	n:1.5	builtin 12
+forms	opened	xlio_forms	A22	n:1.3333333333333333	builtin 12
+forms	opened	xlio_forms	A23	n:1.1875	builtin 13
+forms	opened	xlio_forms	A24	n:1.625	builtin 13
+forms	opened	xlio_forms	A25	n:0.03	builtin 13
+forms	opened	xlio_forms	A26	n:-1.5	builtin 12

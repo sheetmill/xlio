@@ -3,6 +3,7 @@
     uv run python -m capture.text_extra_probe                 # text_extra, unattended
     uv run python -m capture.text_extra_probe --limits-open   # text_limits: opens, then exits
     uv run python -m capture.text_extra_probe --limits-save ANSWER [REPORT]
+    uv run python -m capture.text_extra_probe --forms         # text_forms, unattended
 
 ``text_extra`` (opened through AppleScript, as ``text`` is, and saved as a workbook copy):
 
@@ -13,6 +14,12 @@
   and ``History``, a name Excel reserves.
 
 Each row is a cell of the copy's first sheet, as in ``text``, with the sheet's name.
+
+``text_forms`` (opened as ``text_extra`` is): one file, a field a row, of fields that look like
+formulas Excel may not parse (``=1+``, ``=SUM(``, ``=1)``, ``=foo bar``, ``=A1:``, a lone ``+``,
+``-`` or ``@``), every newer error code (``#SPILL!``, captured in ``text``, as the control), and
+fractions that may take another format than ``# ?/?`` (``1 1/3``, ``1 3/16``, ``1 10/16``,
+``0 3/100``, ``-1 1/2``; ``1 1/2`` as the control).
 
 ``text_limits``: a field of 32,767 characters, one of 32,768 and one of 40,000; a file of
 1,048,577 rows; and a row of 16,385 fields. Excel may tell a person that a file was not loaded
@@ -56,6 +63,12 @@ NAMES = {
     "History": "History",
     "apostrophe first": "'ab",
 }
+FORMS = [
+    "=1+", "=SUM(", "=1)", "=foo bar", "=A1:", "+", "-", "@", "=1+1",
+    "#SPILL!", "#CALC!", "#FIELD!", "#BUSY!", "#GETTING_DATA", "#BLOCKED!", "#CONNECT!",
+    "#UNKNOWN!", "#PYTHON!", "#EXTERNAL!", "#TIMEOUT!",
+    "1 1/2", "1 1/3", "1 3/16", "1 10/16", "0 3/100", "-1 1/2",
+]  # fmt: skip
 LIMITS = {
     "field 32767": ("x" * 32767 + "\n").encode(),
     "field 32768": ("x" * 32768 + "\n").encode(),
@@ -73,12 +86,17 @@ def extra_files() -> dict[str, tuple[str, bytes]]:
     return out
 
 
-def extra() -> None:
+def extra(suite: str = "text_extra") -> None:
     refuse_open_workbooks()
     version = excel_version()
     CONTAINER.mkdir(parents=True, exist_ok=True)
     rows = []
-    for case, (name, data) in extra_files().items():
+    cases = (
+        extra_files()
+        if suite == "text_extra"
+        else {"forms": ("xlio_forms.csv", csv_text(FORMS).encode())}
+    )
+    for case, (name, data) in cases.items():
         src, copy = CONTAINER / name, CONTAINER / "xlio_extra_copy.xlsx"
         try:
             src.write_bytes(data)
@@ -95,7 +113,7 @@ def extra() -> None:
             copy.unlink(missing_ok=True)
         print(rows[-1], flush=True)
     header = [
-        f"# suite: text_extra (capture.text_extra_probe); Excel {version} for Mac, en_US",
+        f"# suite: {suite} (capture.text_extra_probe); Excel {version} for Mac, en_US",
         edition_line(),
         f"# captured: {datetime.date.today()}; method: a .csv file opened with alerts off "
         "(File > Open's defaults) and saved as a workbook copy",
@@ -103,7 +121,7 @@ def extra() -> None:
         "cell's number format; the sheet column is the copy's sheet name",
         "case\toutcome\tsheet\tcell\tvalue\tformat",
     ]
-    write_capture(CAPTURES / "text_extra.tsv", header + rows)
+    write_capture(CAPTURES / f"{suite}.tsv", header + rows)
 
 
 def limit_source(i: int) -> Path:
@@ -172,9 +190,11 @@ if __name__ == "__main__":
     args = sys.argv[1:]
     if not args:
         extra()
+    elif args == ["--forms"]:
+        extra("text_forms")
     elif args == ["--limits-open"]:
         limits_open()
     elif args[:1] == ["--limits-save"] and args[1:2] in (["none"], ["ok"]):
         limits_save(args[1], " ".join(args[2:]))
     else:
-        raise SystemExit("no argument, --limits-open, or --limits-save none|ok [REPORT]")
+        raise SystemExit("no argument, --forms, --limits-open, or --limits-save none|ok [REPORT]")

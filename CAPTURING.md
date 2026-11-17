@@ -59,6 +59,7 @@ records, without paths.
 | `macrosheet` | `capture/macrosheet_probe.py` | Excel 4.0 macro sheets (in an `.xlsm` and an `.xlsx`, international, with another root element) opened by a person, Excel's macro notice answered: what the `.xlsm` copy keeps |
 | `outline` | `capture/outline_probe.py` | outline levels past 7, negative or not integers, on a row, a column and the sheet's `sheetFormatPr`: whether Excel opens the file, and the levels it saves |
 | `text_extra` | `capture/text_extra_probe.py` | `.csv` files with two-digit years, and file names that make sheet names Excel would not take (long, reserved characters, `History`): the cells and the sheet's name |
+| `text_forms` | `capture/text_extra_probe.py --forms` | `.csv` fields that look like formulas Excel may not parse, every newer error code, and fractions with longer denominators: the cells Excel makes |
 | `text_limits` | `capture/text_extra_probe.py --limits-open`, `--limits-save` | `.csv` files past Excel's limits (a field of 32,767 characters and more, 1,048,577 rows, 16,385 columns), opened by a person: what the copy keeps, and the dialog Excel shows |
 | `repair` | `capture/repair_probe.py` | reversed drawing anchors and invalid conditional formats opened by a person, Excel's repair answered Yes: what the repaired workbook keeps, and the repair report's records |
 
@@ -70,8 +71,8 @@ stripped of paths and people.
 `package` and `value_forms` gave the same results under Office 2021 (Excel 16.114.3) and
 Microsoft 365 (Excel 16.115, Current Channel).
 
-The `text`, `text_launch_*`, `text_extra` and `text_limits` captures are not used by the code yet: they record how Excel
-opens CSV files, for the planned text formats (CSV, TSV, fixed width).
+The `text`, `text_launch_*`, `text_extra`, `text_forms` and `text_limits` captures are read by
+`xlio.read_csv` and replayed by `tests/test_text.py`.
 
 ## Captures kept elsewhere
 
