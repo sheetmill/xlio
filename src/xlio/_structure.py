@@ -476,8 +476,9 @@ class ColumnRange:
         min: The first column.
         max: The last column.
         width: The width as Excel takes it, derived for a Normal font of Calibri 11 (kept in
-            points modulo 65,536 at its 6-point digit; NaN, infinity and 8e305 and past are 0),
-            or ``None`` when absent or not a number. ``raw_width`` is the value stored.
+            points modulo 65,536 at its 6-point digit; NaN, infinity, 8e305 and past, and text
+            that is not a number are 0, a hidden column), or ``None`` when absent. ``raw_width``
+            is the value stored.
         style: The index of the columns' cell format.
         hidden: The columns are hidden.
         best_fit: The width was set to fit the contents.

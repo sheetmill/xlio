@@ -132,6 +132,13 @@ def test_a_width_keeps_one_point_up_to_7e305(text, width):
     assert sheet.columns[0].width == width
 
 
+@pytest.mark.parametrize(("col", "width"), [('width="abc"', 0.0), ('width=""', 0.0), ("", None)])
+def test_a_width_that_is_not_a_number_is_0_and_an_absent_one_none(col, width):
+    # Text that is not a number makes a hidden column (capture attributes); None is absence.
+    sheet = sheet_of(f'<cols><col min="1" max="1" {col} hidden="1"/></cols><sheetData/>')
+    assert sheet.columns[0].width == width
+
+
 # Columns, rows, merges -----------------------------------------------------------------------
 
 
