@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-11-19
+
 ### Fixed
 - A border side written both ways now reads as Excel keeps it: `Border.left` is the `<start>`
   side and `Border.right` the `<end>` side when the border has one, and `<left>` and `<right>`
@@ -205,7 +207,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Each rule read from Excel's behavior rests on a capture from Excel for Mac, with its probe
   (`CAPTURING.md`), and the tests read workbooks Excel saved.
 
-[Unreleased]: https://github.com/sheetmill/xlio/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/sheetmill/xlio/compare/v0.3.2...HEAD
+[0.3.2]: https://github.com/sheetmill/xlio/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/sheetmill/xlio/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/sheetmill/xlio/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/sheetmill/xlio/compare/v0.1.0...v0.2.0
