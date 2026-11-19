@@ -4,9 +4,10 @@ The cells are skipped as they stream past; only ``<row>`` attributes are kept. E
 of the worksheet is built as an element tree (they are small) and read into records; the children
 not modeled are kept whole as :class:`Unparsed`.
 
-Sizes follow Excel's reading, captured (``package``): a column width is kept in points modulo
-65,536 at 6 points a digit, a row height is its magnitude and wraps in twips past 409.5, and the
-sheet's default sizes are ignored or refused as Excel ignores or refuses them.
+Sizes follow Excel's reading, captured (``package``, with a Normal font of Calibri 11): a column
+width is kept in points modulo 65,536 at 6 points a digit, a row height is its magnitude and
+wraps in twips past 409.5, and the sheet's default sizes are ignored or refused as Excel ignores
+or refuses them.
 """
 
 from __future__ import annotations
@@ -57,14 +58,16 @@ _CHUNK = 1 << 16
 _DIGIT_POINTS = 6  # at Calibri 11, the only font the width rule was captured with
 _WIDTH_WRAP = 65_536  # points: Excel keeps a column's width in 16 bits
 _WIDEST_FILE_WIDTH = 10_922.0  # the widest that does not wrap
-_ONE_POINT_WIDTH = 0.1  # a file width of one point: what Excel makes of 1e9 to 1e30
+_ONE_POINT_WIDTH = 0.1  # a file width of one point: what Excel makes of 1e9 to 7e305
+_WIDTH_UNITS = 256  # a width overflowing in 256ths of a character is 0 (capture edges)
 _INT_RANGE = 2**31
-_ENORMOUS = 1e30  # past this, a width or a height is 0; 1e30 and 1e308 are captured
+_ENORMOUS = 1e30  # past this, a height or a default width is 0; 1e30 and 1e308 are captured
 _TALLEST = 409.5
 _TWIPS = 20
 _HEIGHT_WRAP = 65_536  # twips
 _WIDEST_DEFAULT = 255.0  # 256 and past are refused (capture attributes)
 _WIDEST_BASE = 255
+_BASE_OF_255 = 10  # Excel shows columns of 10 characters for a baseColWidth of 255
 _MODELED = frozenset(
     {
         "sheetPr",
@@ -112,15 +115,16 @@ def _measure(text: str) -> float | None:
 def column_width(text: str) -> float | None:
     """A ``<col width>`` as Excel takes it, in the file's units (captured ``package``).
 
-    Kept in points modulo 65,536: a negative width or one past 10,922 wraps; 1e9 to 1e30 is one
-    point; NaN, either infinity and 1e308 are 0 (a hidden column), and so is text that is not a
-    number (captured ``attributes``).
+    Kept in points modulo 65,536: a negative width or one past 10,922 wraps; 1e9 to 7e305, and
+    -1e9 to -7e305, is one point; from 8e305 (where the width in 256ths of a character overflows
+    a double), NaN and either infinity it is 0, a hidden column (capture ``edges``), and so is
+    text that is not a number (captured ``attributes``).
     """
     width = _measure(text)
     if width is None:
         return 0.0  # a hidden column (capture attributes: "abc", "", "20pt")
-    if not math.isfinite(width) or abs(width) > _ENORMOUS:
-        return 0.0
+    if not math.isfinite(width * _WIDTH_UNITS):
+        return 0.0  # 8e305 and past, either sign (capture edges)
     if 0 <= width <= _WIDEST_FILE_WIDTH:
         return width
     points = width * _DIGIT_POINTS
@@ -389,7 +393,8 @@ class SheetFormat:
 
     Attributes:
         base_col_width: Characters of the default column width before padding; 8 when absent,
-            negative or past an integer (captured), or not an integer.
+            negative or past an integer (captured), or not an integer; 10 when written 255, as
+            Excel shows it, and as written from 0 to 254 (capture ``edges``).
         default_col_width: The default column width, or ``None`` when absent or ignored (NaN,
             infinity); past 1e30 it is 0 (captured).
         default_row_height: The default row height in points (magnitude, wrapped as a row
@@ -429,7 +434,7 @@ class SheetFormat:
             if value is not None and 0 <= value < _INT_RANGE:
                 if value > _WIDEST_BASE:
                     raise PackageError(f"baseColWidth of {base_text[:40]!r}, which Excel refuses")
-                base = value
+                base = _BASE_OF_255 if value == _WIDEST_BASE else value
         width_text = get("defaultColWidth")
         width = None
         if width_text is not None:
@@ -470,8 +475,9 @@ class ColumnRange:
     Attributes:
         min: The first column.
         max: The last column.
-        width: The width as Excel takes it (kept in points modulo 65,536; NaN, infinity and
-            1e308 are 0), or ``None`` when absent or not a number.
+        width: The width as Excel takes it, derived for a Normal font of Calibri 11 (kept in
+            points modulo 65,536 at its 6-point digit; NaN, infinity and 8e305 and past are 0),
+            or ``None`` when absent or not a number. ``raw_width`` is the value stored.
         style: The index of the columns' cell format.
         hidden: The columns are hidden.
         best_fit: The width was set to fit the contents.
@@ -479,7 +485,7 @@ class ColumnRange:
         phonetic: Phonetic guides shown.
         outline_level: The outline level.
         collapsed: The outline is collapsed here.
-        raw_width: ``width`` as written; the wrap loses it.
+        raw_width: ``width`` as written, the value Excel stored; the wrap loses it.
         source: The element as written.
     """
 

@@ -2,8 +2,9 @@
 
 Indices are resolved: a cell format holds its font, fill, border and named style, not their
 numbers (the numbers stay beside them). An index that leads nowhere gives ``None``. Font sizes
-are read as Excel reads them (captured ``package``): the magnitude, from 1 to 409, and any other
-size makes Excel refuse the file, so it is refused here too.
+are read as Excel reads them (captures ``package`` and ``edges``): the magnitude, from 1 to below
+409.6, and any other size makes Excel refuse the file, so it is refused here too. So are a border
+that writes ``left`` before ``start`` or ``right`` before ``end`` (capture ``edges``).
 """
 
 from __future__ import annotations
@@ -41,7 +42,9 @@ __all__ = [
 ]
 
 _RGB = re.compile(r"[0-9A-Fa-f]{8}")
-_SMALLEST, _LARGEST = 1.0, 409.0
+# Excel keeps a font size in twentieths of a point, cut down, up to 8,191 (409.55): 409.56 is
+# kept as 409.55 and 409.6 is refused (capture edges).
+_SMALLEST, _TOO_LARGE = 1.0, 409.6
 _T = TypeVar("_T")
 
 Underline = Literal["single", "double", "singleAccounting", "doubleAccounting", "none"]
@@ -72,17 +75,22 @@ _VERTICALS: tuple[Vertical, ...] = Vertical.__args__  # type: ignore[attr-define
 
 
 def font_size(text: str) -> float:
-    """A font size as Excel takes it: its magnitude, from 1 to 409 (captured ``package``).
+    """A font size as Excel takes it: its magnitude, from 1 to below 409.6.
+
+    Captures ``package`` and ``edges``.
+
+    Excel keeps the size in twentieths of a point, cut down (409.54 is 409.5, capture
+    ``edges``); the size is returned as written, since that cut is known only there.
 
     Raises:
-        PackageError: Any other size (0, 0.5, 410, NaN, infinity), which makes Excel refuse
+        PackageError: Any other size (0, 0.5, 409.6, NaN, infinity), which makes Excel refuse
             the file.
     """
     try:
         points = abs(float(text.strip())) if "_" not in text else math.nan
     except ValueError:
         points = math.nan
-    if not _SMALLEST <= points <= _LARGEST:  # NaN compares false
+    if not _SMALLEST <= points < _TOO_LARGE:  # NaN compares false
         raise PackageError(f"a font size of {text[:40]!r}, which Excel refuses")
     return points
 
@@ -168,9 +176,9 @@ class Font:
     Attributes:
         name: The typeface (``name``, ``rFont`` in a run), or ``None``.
         size: The size in points as Excel takes it, or ``None`` when absent: in the styles'
-            fonts, 1 to 409 (another size is refused); in a run, its magnitude clamped to 1 to
-            409.55; in a differential format, its magnitude up to 409.55 (0, or a size past
-            it, is refused; captures ``package`` and ``attributes``).
+            fonts, 1 to below 409.6 (another size is refused); in a run, its magnitude
+            clamped to 1 to 409.55; in a differential format, its magnitude up to 409.55 (0, or
+            a size past it, is refused; captures ``package``, ``attributes`` and ``edges``).
         bold: Bold.
         italic: Italic.
         underline: The underline, or ``None`` when absent (``<u/>`` alone is ``single``).
@@ -343,8 +351,10 @@ class Border:
     """A border (``border``).
 
     Attributes:
-        left: The left side (``start`` in a right-to-left file), or ``None`` when absent.
-        right: The right side (``end``), or ``None``.
+        left: The left side, or ``None`` when absent: ``start`` when the border has one, as
+            Excel draws it over a ``left`` written after it (capture ``edges``; a ``left``
+            written before ``start`` makes Excel refuse the file).
+        right: The right side: ``end`` when the border has one, else ``right``; or ``None``.
         top: The top side, or ``None``.
         bottom: The bottom side, or ``None``.
         diagonal: The diagonal line, drawn where ``diagonal_up`` or ``diagonal_down`` says.
@@ -370,6 +380,8 @@ class Border:
 
     @classmethod
     def read(cls, element: ET.Element) -> Border:
+        """Raises ``PackageError`` for a ``left`` before ``start`` or a ``right`` before ``end``."""
+        border_order([local(e.tag) for e in element])
         c = _children(element)
 
         def side(*names: str) -> BorderSide | None:
@@ -381,8 +393,8 @@ class Border:
 
         get = element.get
         return cls(
-            side("left", "start"),
-            side("right", "end"),
+            side("start", "left"),
+            side("end", "right"),
             side("top"),
             side("bottom"),
             side("diagonal"),
@@ -696,21 +708,40 @@ def read_differential_formats(element: ET.Element) -> tuple[DifferentialFormat, 
     return tuple(_dxf(d) for d in element if local(d.tag) == "dxf")
 
 
+def border_order(names: list[str]) -> None:
+    """Refuse a border with ``left`` before ``start``, or ``right`` before ``end``.
+
+    Excel refuses such a file (capture ``edges``).
+
+    Raises:
+        PackageError: Such a border.
+    """
+    for before, after in (("left", "start"), ("right", "end")):
+        if before in names and after in names and names.index(before) < names.index(after):
+            raise PackageError(f"a border with {before} before {after}, which Excel refuses")
+
+
 def check_font_sizes(stream: BinaryIO, part: str) -> None:
     """Refuse a styles part whose fonts hold a size Excel refuses, without building the styles.
 
     The fonts of ``fonts`` (size and theme color) and of differential formats (size) are
-    checked, by the rules the captures settled.
+    checked, by the rules the captures settled, and so is the order of each border's sides.
 
     Raises:
         PackageError: A font size or font color Excel refuses, or a part that is not
             well-formed.
     """
     path: list[str] = []
+    sides: list[str] = []
 
     def start(name: str, attrs: dict[str, str]) -> None:
         path.append(name.rpartition("}")[2])
-        if path[-3:] == ["fonts", "font", "sz"] and len(path) == 4 and "val" in attrs:
+        if len(path) == 4 and path[1:3] == ["borders", "border"]:
+            sides.append(path[3])
+            border_order(sides)
+        elif len(path) == 3 and path[1:] == ["borders", "border"]:
+            sides.clear()
+        elif path[-3:] == ["fonts", "font", "sz"] and len(path) == 4 and "val" in attrs:
             font_size(attrs["val"])
         elif path[-4:] == ["dxfs", "dxf", "font", "sz"] and len(path) == 5 and "val" in attrs:
             dxf_font_size(attrs["val"])

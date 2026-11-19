@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- A border side written both ways now reads as Excel keeps it: `Border.left` is the `<start>`
+  side and `Border.right` the `<end>` side when the border has one, and `<left>` and `<right>`
+  otherwise. xlio read `<left>` and `<right>` first. A border that writes `<left>` before
+  `<start>`, or `<right>` before `<end>`, is now refused, as Excel refuses the file.
+- A column width from 1e30 to 7e305, of either sign, now reads as one point
+  (`ColumnRange.width` 0.1), as Excel keeps it; xlio read it as 0, a hidden column. From 8e305
+  it is still 0.
+- A `baseColWidth` of 255 now reads as 10 (`SheetFormat.base_col_width`), the columns of 10
+  characters Excel shows; xlio read 255.
+- A font size past 409 and below 409.6 (409.5, for example) in the styles' fonts now opens with
+  that size, as Excel opens it; xlio refused the file. 409.6 and past are refused.
+- Text written in a `<t>` before rich-text runs is now a run of its own without properties,
+  first (`RichString.runs`), as Excel keeps it; xlio left it out of the runs. A string with a
+  `<t>` after a run, shared or inline, is now refused, as Excel refuses the file.
+- `ColumnRange.width`'s docstring now says that the width it derives assumes a Normal font of
+  Calibri 11 (a 6-point digit), and that `ColumnRange.raw_width` is the value stored.
+
 ## [0.3.1] - 2026-11-17
 
 ### Fixed

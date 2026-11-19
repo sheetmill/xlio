@@ -568,8 +568,9 @@ def read_csv(
     Returns:
         The workbook, one sheet built by xlio (in memory, or in a temporary file past 8 MiB,
         deleted when the workbook is closed): its parts (``Workbook.parts``) are the ones xlio
-        synthesizes for it, not a file's, and :func:`xlio.patch` cannot write it. A file from a
-        stranger whose fields go on to another program: see ``TextOptions.formulas``.
+        synthesizes for it, not a file's, and :func:`xlio.patch` cannot write it. When a file
+        comes from people the caller does not trust and its fields go on to another program,
+        ``TextOptions.formulas`` says when to read formulas as text.
 
     Raises:
         LimitError: The file is larger than ``limits.max_text_bytes``.

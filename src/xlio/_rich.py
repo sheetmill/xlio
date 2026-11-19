@@ -66,7 +66,9 @@ class RichString:
 
     Attributes:
         text: The text as Excel reads it, the same as the plain string.
-        runs: The runs, in order; empty for a string without runs.
+        runs: The runs, in order; empty for a string without runs. A ``<t>`` written before
+            runs is a run of its own without properties, first, as Excel keeps it (capture
+            ``edges``); a ``<t>`` after a run makes Excel refuse the file, and xlio too.
         phonetic: The phonetic guides.
         phonetic_properties: How the guides are shown, or ``None``.
         source: The element as written (``si`` or ``is``).
@@ -97,18 +99,25 @@ def rich(element: ET.Element) -> RichString:
     xlrecalc:
     https://github.com/sheetmill/xlrecalc/blob/main/tests/captures/whitespace.tsv),
     and ``_xHHHH_`` escapes are decoded.
+
+    Raises:
+        PackageError: A ``<t>`` after a run, which makes Excel refuse the file (capture
+            ``edges``).
     """
     from xlio._cells import unescape
 
     runs: list[Run] = []
+    formatted = False
     phonetic: list[PhoneticRun] = []
     properties = None
-    plain: list[str] = []
     for child in element:
         name = _name(child.tag)
         if name == "t":
-            plain.append(_text(child, unescape))
+            if formatted:
+                raise PackageError("a string with text after its runs, which Excel refuses")
+            runs.append(Run(_text(child, unescape)))
         elif name == "r":
+            formatted = True
             text = "".join(_text(t, unescape) for t in child if _name(t.tag) == "t")
             props = next((p for p in child if _name(p.tag) == "rPr"), None)
             font = Font.read(_renamed(props), kind="run") if props is not None else None
@@ -124,8 +133,8 @@ def rich(element: ET.Element) -> RichString:
                 choice(child.get("type"), _TYPES, "fullwidthKatakana"),
                 choice(child.get("alignment"), _ALIGNMENTS, "left"),
             )
-    text = "".join(plain) + "".join(r.text for r in runs)
-    return RichString(text, tuple(runs), tuple(phonetic), properties, element)
+    text = "".join(r.text for r in runs)
+    return RichString(text, tuple(runs) if formatted else (), tuple(phonetic), properties, element)
 
 
 def _renamed(element: ET.Element) -> ET.Element:

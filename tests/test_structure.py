@@ -105,6 +105,9 @@ def test_every_size_case_reads_as_excel_reads_it():
         ('baseColWidth="12" defaultColWidth="20.5" defaultRowHeight="-18"', 12, 20.5, 18.0),
         ('baseColWidth="-1" defaultColWidth="abc" defaultRowHeight="15"', 8, None, 15.0),
         ('baseColWidth="99999999999" defaultRowHeight="1e308"', 8, None, 0.0),
+        # Excel shows columns of 10 characters for 255, and 254 as written (capture edges)
+        ('baseColWidth="255"', 10, None, None),
+        ('baseColWidth="254"', 254, None, None),
     ],
 )
 def test_default_sizes(attributes, base, width, height):
@@ -115,6 +118,18 @@ def test_default_sizes(attributes, base, width, height):
         height,
     )
     assert fmt.source is not None
+
+
+@pytest.mark.parametrize(
+    ("text", "width"),
+    [("1e30", 0.1), ("1e300", 0.1), ("7e305", 0.1), ("-7e305", 0.1), ("8e305", 0.0),
+     ("-8e305", 0.0), ("1e308", 0.0)],
+)  # fmt: skip
+def test_a_width_keeps_one_point_up_to_7e305(text, width):
+    # Excel keeps one point up to 7e305 and makes 8e305 and past 0, either sign (capture
+    # edges).
+    sheet = sheet_of(f'<cols><col min="1" max="1" width="{text}"/></cols><sheetData/>')
+    assert sheet.columns[0].width == width
 
 
 # Columns, rows, merges -----------------------------------------------------------------------

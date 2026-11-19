@@ -93,6 +93,33 @@ def test_a_font_size_is_its_magnitude(text, size):
     assert (wb.styles.fonts[0].size, wb.styles.fonts[0].raw_size) == (size, text)
 
 
+@pytest.mark.parametrize("text", ["409.5", "-409.5", "409.55", "409.59"])
+def test_a_font_size_past_409_opens(text):
+    # Excel opens sizes below 409.6, kept in twentieths of a point; 409.6 is refused (capture
+    # edges).
+    wb = with_styles(f'<fonts><font><sz val="{text}"/></font></fonts>')
+    assert wb.styles.fonts[0].size == abs(float(text))
+    with pytest.raises(xlio.PackageError, match=r"font size of '409\.6'"):
+        xlio.check(
+            io.BytesIO(package(extra_parts=_parts('<fonts><font><sz val="409.6"/></font></fonts>')))
+        )
+
+
+def test_start_and_end_are_drawn_over_left_and_right():
+    # Excel keeps start over a left written after it, and end over a right; alone, start and
+    # end are the left and right sides (capture edges).
+    wb = with_styles(
+        "<borders>"
+        '<border><start style="thick"/><end style="thick"/><left style="thin"/>'
+        '<right style="dashed"/><top/><bottom/><diagonal/></border>'
+        '<border><start style="double"/><end style="mediumDashed"/><top/><bottom/></border>'
+        "</borders>"
+    )
+    both, alone = wb.styles.borders
+    assert (both.left.style, both.right.style) == ("thick", "thick")
+    assert (alone.left.style, alone.right.style) == ("double", "mediumDashed")
+
+
 # The tables, crafted --------------------------------------------------------------------------
 
 STYLES = (
@@ -215,6 +242,43 @@ def test_rich_strings_and_their_plain_text_agree():
     assert font.color == xlio.Color(theme=4)
     assert rich[2].phonetic == (xlio.PhoneticRun("トウキョウ", 0, 2),)
     assert rich[2].phonetic_properties == xlio.PhoneticProperties(1, "Hiragana", "center")
+
+
+@pytest.mark.parametrize(
+    "border",
+    ['<left style="thin"/><start style="thick"/>', '<right style="thin"/><end style="thick"/>'],
+)
+def test_a_left_before_start_is_refused(border):
+    # Excel refuses a border that writes left before start, or right before end (capture edges).
+    parts = _parts(f"<borders><border/><border>{border}</border></borders>")
+    with pytest.raises(xlio.PackageError, match="before"):
+        xlio.check(io.BytesIO(package(extra_parts=parts)))
+    with pytest.raises(xlio.PackageError, match="before"):
+        xlio.open(io.BytesIO(package(extra_parts=parts))).styles  # noqa: B018
+
+
+def test_a_t_before_runs_is_a_run_of_its_own():
+    # Excel keeps a <t> written before runs as a run without properties, first (capture edges).
+    strings = ['<si><t xml:space="preserve">HH </t><r><rPr><b/></rPr><t>HH</t></r></si>']
+    wb = with_styles("<fonts><font/></fonts>", strings=strings)
+    (first,) = wb.rich_strings
+    assert [(r.text, r.font is None) for r in first.runs] == [("HH ", True), ("HH", False)]
+    assert first.runs[1].font is not None
+    assert first.runs[1].font.bold
+    assert [r.text for r in wb.rich_strings] == list(wb.shared_strings) == ["HH HH"]
+
+
+@pytest.mark.parametrize("text", ["<r><t>a</t></r><t>b</t>", "<t>a</t><r><t>b</t></r><t>c</t>"])
+def test_a_t_after_a_run_is_refused(text):
+    # Excel refuses a string with a <t> after a run (capture edges), shared or inline.
+    shared = package('<row r="1"><c r="A1" t="s"><v>0</v></c></row>', strings=[f"<si>{text}</si>"])
+    with pytest.raises(xlio.PackageError, match="after its runs"):
+        list(xlio.open(io.BytesIO(shared))["Data"].cells())
+    with pytest.raises(xlio.PackageError, match="after its runs"):
+        xlio.check(io.BytesIO(shared))
+    rows = f'<row r="1"><c r="A1" t="inlineStr"><is>{text}</is></c></row>'
+    with pytest.raises(xlio.PackageError, match="after its runs"):
+        list(xlio.open(io.BytesIO(package(rows)))["Data"].cells())
 
 
 def test_cells_with_their_runs():

@@ -60,7 +60,7 @@ def unescape(text: str) -> str:
     return text.encode("utf-16-le", "surrogatepass").decode("utf-16-le", "surrogatepass")
 
 
-_LOCAL = {"row": 1, "c": 2, "v": 3, "f": 4, "is": 5, "t": 6, "rPh": 7, "si": 8}
+_LOCAL = {"row": 1, "c": 2, "v": 3, "f": 4, "is": 5, "t": 6, "rPh": 7, "si": 8, "r": 9}
 
 
 def _codes() -> dict[str, int]:
@@ -81,6 +81,10 @@ def read_shared_strings(stream: BinaryIO) -> list[str]:
     Each ``<t>`` not marked ``xml:space="preserve"`` loses its leading and trailing whitespace,
     as Excel reads it (captured by xlrecalc:
     https://github.com/sheetmill/xlrecalc/blob/main/tests/captures/whitespace.tsv).
+
+    Raises:
+        PackageError: A ``<t>`` after a run (``<r>``) of the same string, which makes Excel
+            refuse the file (capture ``edges``).
     """
     strings: list[str] = []
     parts: list[str] = []
@@ -88,12 +92,15 @@ def read_shared_strings(stream: BinaryIO) -> list[str]:
     in_t = False
     t_start = 0
     preserve = False
-    phonetic = 0
+    phonetic = in_run = 0
+    ran = False  # the string has had a run
 
     def start(name: str, attrs: dict[str, str]) -> None:
-        nonlocal in_t, t_start, preserve, phonetic
+        nonlocal in_t, t_start, preserve, phonetic, in_run, ran
         code = codes[name]
         if code == 6:
+            if ran and not in_run and not phonetic:
+                raise PackageError("a string with text after its runs, which Excel refuses")
             in_t = True
             t_start = len(parts)
             preserve = attrs.get("xml:space") == "preserve"
@@ -101,9 +108,13 @@ def read_shared_strings(stream: BinaryIO) -> list[str]:
             phonetic += 1
         elif code == 8:
             parts.clear()
+            ran = False
+        elif code == 9:
+            in_run += 1
+            ran = True
 
     def end(name: str) -> None:
-        nonlocal in_t, phonetic
+        nonlocal in_t, phonetic, in_run
         code = codes[name]
         if code == 6:
             in_t = False
@@ -113,6 +124,8 @@ def read_shared_strings(stream: BinaryIO) -> list[str]:
             phonetic -= 1
         elif code == 8:
             strings.append(unescape("".join(parts)))
+        elif code == 9:
+            in_run -= 1
 
     def text(data: str) -> None:
         if in_t and not phonetic:
@@ -285,11 +298,12 @@ def read_cells(
     inline: list[str] | None = None
     collect = 0  # 3 <v>, 4 <f>, 6 <t> inside <is>
     empty_row = 0  # a <row> without format attributes, until a cell shows it holds one
-    in_is = phonetic = 0
+    in_is = phonetic = in_run = 0
+    ran = False  # the inline string has had a run
 
     def start(name: str, attrs: dict[str, str]) -> None:
         nonlocal row, col, attrs_c, v, v_preserve, t_preserve, f_text, f_attrs, inline, empty_row
-        nonlocal collect, in_is, phonetic, builder, inline_rich
+        nonlocal collect, in_is, phonetic, builder, inline_rich, in_run, ran
         code = codes[name]
         if builder is not None:
             builder.start(name, attrs)
@@ -336,13 +350,21 @@ def read_cells(
                     on_row(row, attrs)
         elif code == 5:
             in_is += 1
+            ran = False
             inline = []
             if rich_strings is not None:
                 builder = ET.TreeBuilder()
                 builder.start(name, attrs)
         elif code == 7:
             phonetic += 1
+        elif code == 9 and in_is:
+            in_run += 1
+            ran = True
         elif code == 6 and in_is:
+            if ran and not in_run and not phonetic:
+                raise PackageError(
+                    f"row {row}: a string with text after its runs, which Excel refuses"
+                )
             buffer.clear()
             collect = 6
             t_preserve = attrs.get("xml:space") == "preserve"
@@ -372,7 +394,7 @@ def read_cells(
         return cell
 
     def end(name: str) -> None:
-        nonlocal v, f_text, collect, in_is, phonetic, builder, inline_rich, empty_row
+        nonlocal v, f_text, collect, in_is, phonetic, builder, inline_rich, empty_row, in_run
         code = codes[name]
         if builder is not None:
             builder.end(name)
@@ -404,6 +426,8 @@ def read_cells(
             phonetic -= 1
         elif code == 5:
             in_is -= 1
+        elif code == 9 and in_is:
+            in_run -= 1
         elif code == 1 and empty_row:
             on_row(empty_row, {})  # type: ignore[misc]  # set only with on_row
             empty_row = 0
