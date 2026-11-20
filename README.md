@@ -6,7 +6,7 @@ them and changes their cells without disturbing anything else. It was extracted 
 shared by the sheetmill packages. It is not intended for direct use: its API may change in any
 minor release (such as 0.3 to 0.4) without the deprecation period the public sheetmill packages
 give, while patch releases only fix bugs and keep the API. If you depend on it anyway, pin a
-minor version (for example `xlio==0.3.*`).
+minor version (for example `xlio==0.4.*`).
 
 It is written in pure Python with the standard library only. The reader checks a package before
 it parses anything (part count and sizes, compression methods, encryption, names used twice, a
