@@ -11,6 +11,7 @@ from types import TracebackType
 from typing import Any, BinaryIO
 
 from xlio._cells import Cell, read_cells, read_shared_strings
+from xlio._formulas import FormulaCell, NotPlainError, read_formulas, scan_formulas
 from xlio._package import Package, PackageError, ReadLimits
 from xlio._rich import RichString, read_rich_strings
 from xlio._types import bounded_int
@@ -345,6 +346,29 @@ class Book:
                 yield from read_cells(f, strings, rich_strings, **options)
             except xml.parsers.expat.ExpatError as exc:
                 raise PackageError(f"{info.part}: {exc}") from exc
+
+    def formulas(self, info: SheetInfo, cms: int | None) -> Iterator[FormulaCell]:
+        """A worksheet's or macro sheet's formula cells, in file order.
+
+        The part is scanned; a part the scan does not take is read again with expat, from the
+        item where the scan stopped.
+        """
+        given = 0
+        try:
+            with self._package.part(info.part) as f:
+                try:
+                    for item in scan_formulas(f, cms):
+                        yield item
+                        given += 1
+                    return
+                except NotPlainError:
+                    pass
+            with self._package.part(info.part) as f:
+                for n, item in enumerate(read_formulas(f, cms)):
+                    if n >= given:
+                        yield item
+        except xml.parsers.expat.ExpatError as exc:
+            raise PackageError(f"{info.part}: {exc}") from exc
 
     def part_name(self, relative: str) -> str:
         """A part name relative to the workbook part's folder."""

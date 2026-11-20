@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+A dependent pinned to `xlio==0.3.*` moves to `xlio==0.4.*`; nothing it uses changes, so no code
+change is needed.
+
+### Added
+- `Sheet.formulas()` streams a sheet's formula cells only, in file order, as `FormulaCell`
+  records: the row, the column, the `Formula` as `Cell.formula` gives it (the dependent cells of
+  a shared formula with their `si` and no text, as `Sheet.cells()` gives them), the `cm` index,
+  and whether the cell holds a cached value. No other cell is read and no value or style is
+  parsed, so it costs a fraction of `Sheet.cells()`; it refuses what `Sheet.cells()` refuses in
+  the cells it reads (a part that is not well-formed, a formula cell off the sheet, an `si` that
+  is not a number, a `cm` past the metadata table, more cells than `ReadLimits.max_cells`).
+- `Sheet.drawing_id`, `Sheet.legacy_drawing_id`, `Sheet.picture_id` and `Sheet.table_ids`: the
+  relationship ids the sheet's `<drawing>`, `<legacyDrawing>`, `<picture>` and `<tableParts>`
+  name, so a relationship no element names is not taken for one.
+
 ## [0.3.2] - 2026-11-19
 
 ### Fixed

@@ -17,6 +17,9 @@
 .. autoclass:: xlio.Formula
    :members:
 
+.. autoclass:: xlio.FormulaCell
+   :members:
+
 .. autoclass:: xlio.ErrorCode
    :members:
    :undoc-members:

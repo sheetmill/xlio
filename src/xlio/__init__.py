@@ -32,6 +32,7 @@ from xlio._drawing import (
     Vml,
     VmlShape,
 )
+from xlio._formulas import FormulaCell
 from xlio._package import LimitError, PackageError, ReadLimits
 from xlio._patch import ArrayFill, CachedValues, CellEdit, CellValue, Translate, patch
 from xlio._print import (
@@ -159,6 +160,7 @@ __all__ = [
     "FilterColumn",
     "Font",
     "Formula",
+    "FormulaCell",
     "GradientFill",
     "GradientStop",
     "HeaderFooter",

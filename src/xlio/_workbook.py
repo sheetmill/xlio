@@ -27,6 +27,7 @@ from xlio._comments import (
 )
 from xlio._conditional import ConditionalFormat, Extension, read_conditional_formats
 from xlio._drawing import Drawing, Vml, read_drawing, read_vml
+from xlio._formulas import FormulaCell
 from xlio._package import LimitError, Package, PackageError, ReadLimits
 from xlio._print import PageBreak, PageSetup, PrintArea, PrintTitles, print_area, print_titles
 from xlio._rich import RichString
@@ -487,6 +488,30 @@ class Sheet:
             if r.type.endswith(suffix) and r.target_part is not None and r.target_part in parts
         ]
 
+    @property
+    def drawing_id(self) -> str | None:
+        """The relationship id the sheet's ``<drawing>`` names (``r:id``), or ``None``.
+
+        :attr:`relationships` gives its target. Unlike a lookup of the relationships by type,
+        it names only a relationship the sheet's element refers to.
+        """
+        return self._structure.drawing_id
+
+    @property
+    def legacy_drawing_id(self) -> str | None:
+        """The relationship id the sheet's ``<legacyDrawing>`` names (``r:id``), or ``None``."""
+        return self._structure.legacy_drawing_id
+
+    @property
+    def picture_id(self) -> str | None:
+        """The relationship id the sheet's ``<picture>`` (its background) names, or ``None``."""
+        return self._structure.picture_id
+
+    @property
+    def table_ids(self) -> tuple[str, ...]:
+        """The relationship ids the sheet's ``<tableParts>`` names, in file order."""
+        return self._structure.table_ids
+
     @functools.cached_property
     def drawing(self) -> Drawing | None:
         """The sheet's drawing (``drawing``): its anchored objects in z-order, or ``None``.
@@ -643,6 +668,49 @@ class Sheet:
         top = left = _MAX_ROW + _MAX_COL
         bottom = right = 0
         for cell in self._read(rich):
+            row, col = cell.row, cell.column
+            if row < top or row > bottom or col < left or col > right:
+                top, bottom = min(top, row), max(bottom, row)
+                left, right = min(left, col), max(right, col)
+                if (bottom - top + 1) * (right - left + 1) > limit:
+                    raise LimitError(f"{self.name!r}: more than the limit of {limit} cells")
+            yield cell
+
+    def formulas(self) -> Iterator[FormulaCell]:
+        """The sheet's formula cells only, streamed in file order, read without the others.
+
+        For a caller that needs the formulas before, or without, the values: no other cell is
+        read, and no value or style is parsed, so it costs a fraction of :meth:`cells` (the
+        part is decompressed once more if :meth:`cells` reads it later). The dependent cells
+        of a shared formula are given as :meth:`cells` gives them, with the ``si`` of their
+        master and no text: xlio does not parse formulas, and a dependent's text is its
+        master's moved to the cell, which takes a formula parser.
+
+        What :meth:`cells` refuses about these cells is refused here too: a part that is not
+        well-formed, a formula cell off the sheet, an ``si`` that is not a number, a ``cm`` past
+        the cell-metadata table, and, under ``ReadLimits.max_cells``, formula cells spanning
+        more cells than the limit. The other cells are not read, so what Excel refuses in them
+        (a value it does not read, for instance) is refused by :meth:`cells` and
+        :func:`xlio.check`, not here.
+
+        Raises:
+            ValueError: The sheet is neither a worksheet nor a macro sheet.
+            LimitError: The formula cells span more cells than ``ReadLimits.max_cells``.
+            PackageError: The part is refused.
+        """
+        if self.kind not in _CELL_SHEETS:
+            raise ValueError(f"{self.name!r} is a {self.kind}, not a worksheet")
+        if self._drops_cells:
+            return
+        book = self._workbook._book
+        limit = book.package.limits.max_cells
+        cells = book.formulas(self._info, book.metadata_counts[0])
+        if limit >= _MAX_ROW * _MAX_COL:
+            yield from cells
+            return
+        top = left = _MAX_ROW + _MAX_COL
+        bottom = right = 0
+        for cell in cells:
             row, col = cell.row, cell.column
             if row < top or row > bottom or col < left or col > right:
                 top, bottom = min(top, row), max(bottom, row)
