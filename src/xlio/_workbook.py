@@ -773,6 +773,7 @@ class Workbook:
 
     def __init__(self, book: Book) -> None:
         self._book = book
+        self._closed = False
         self.parts: Parts = Parts(book.package)
         """Every part of the package, raw."""
         self.sheets: tuple[Sheet, ...] = tuple(
@@ -817,8 +818,20 @@ class Workbook:
         self.close()
 
     def close(self) -> None:
-        """Close the file (a stream given to :func:`open` is left open)."""
+        """Close the file (a stream given to :func:`open` is left open).
+
+        Closing a closed workbook does nothing.
+        """
         self._book.close()
+        self._closed = True
+
+    @property
+    def closed(self) -> bool:
+        """The workbook is closed, by :meth:`close` or at the end of a ``with`` block.
+
+        As a file's ``closed`` says: what is still to be read from its parts can no longer be read.
+        """
+        return self._closed
 
     def __len__(self) -> int:
         return len(self.sheets)

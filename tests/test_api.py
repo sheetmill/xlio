@@ -499,3 +499,22 @@ def test_external_links():
         "xl/externalLinks/externalLink2.xml",
     )
     assert opened(package()).external_links == ()
+
+
+def test_a_workbook_says_when_it_is_closed(tmp_path):
+    path = tmp_path / "book.xlsx"
+    path.write_bytes(package())
+    wb = xlio.open(path)
+    assert not wb.closed
+    wb.close()
+    assert wb.closed
+    wb.close()  # again: nothing happens
+    assert wb.closed
+    with xlio.open(path) as wb:
+        assert not wb.closed
+    assert wb.closed
+    csv = tmp_path / "data.csv"
+    csv.write_text("1,2\n", encoding="utf-8")
+    with xlio.read_csv(csv) as wb:
+        assert not wb.closed
+    assert wb.closed

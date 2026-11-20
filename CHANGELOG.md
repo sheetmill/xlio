@@ -21,6 +21,8 @@ change is needed.
 - `Sheet.drawing_id`, `Sheet.legacy_drawing_id`, `Sheet.picture_id` and `Sheet.table_ids`: the
   relationship ids the sheet's `<drawing>`, `<legacyDrawing>`, `<picture>` and `<tableParts>`
   name, so a relationship no element names is not taken for one.
+- `Workbook.closed`: true once the workbook is closed (`close()`, or the end of a `with` block),
+  as a file's `closed` is, for a caller that reads a workbook it was given later.
 
 ## [0.3.2] - 2026-11-19
 
