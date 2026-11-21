@@ -20,14 +20,16 @@ xlio is part of the [sheetmill](https://github.com/sheetmill) project, with
 
 ## Development
 
-`uv sync --group docs` then `uv run pytest`; `CONTRIBUTING.md` has the pip route, the full set of
-checks and the commit conventions.
+`uv sync --group docs` then `uv run pytest`;
+[`CONTRIBUTING.md`](https://github.com/sheetmill/xlio/blob/main/CONTRIBUTING.md) has the pip route, the
+full set of checks and the commit conventions.
 
 Most of the code is written with Claude Code, reviewed before each commit and tested against
-results captured from Excel; see `CONTRIBUTING.md`.
+results captured from Excel; see [`CONTRIBUTING.md`](https://github.com/sheetmill/xlio/blob/main/CONTRIBUTING.md).
 
 ## License
 
-The code is under the MIT license (`LICENSE`). `src/xlio/data/presetTableStyles.xml`, the
-built-in table and pivot table styles from ECMA-376, is under Ecma International's text
-copyright policy, as published by Ecma; see `NOTICE`.
+The code is under the MIT license ([`LICENSE`](https://github.com/sheetmill/xlio/blob/main/LICENSE)).
+`src/xlio/data/presetTableStyles.xml`, the built-in table and pivot table styles from ECMA-376,
+is under Ecma International's text copyright policy, as published by Ecma; see
+[`NOTICE`](https://github.com/sheetmill/xlio/blob/main/NOTICE).
