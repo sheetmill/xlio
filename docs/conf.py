@@ -1,6 +1,6 @@
 """Sphinx configuration for the xlio documentation.
 
-Build: ``uv run --group docs sphinx-build -W docs docs/_build/html``, then
+Build: ``uv run --group docs sphinx-build -n -W docs docs/_build/html``, then
 ``npx --yes pagefind@1.5.2 --site docs/_build/html`` for the search index (``pagefind.yml``).
 """
 
