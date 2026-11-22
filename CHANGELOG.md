@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- `Sheet.formulas()` on a file openpyxl wrote: its formula cells, whose empty value is written
+  `<v />`, are read the quick way, as an Excel-written file's are, and no longer slower than
+  `Sheet.cells()`. The items are the same.
+
 ## [0.4.0] - 2026-11-20
 
 A dependent pinned to `xlio==0.3.*` moves to `xlio==0.4.*`; nothing it uses changes, so no code

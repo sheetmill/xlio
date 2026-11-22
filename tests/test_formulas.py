@@ -59,7 +59,7 @@ ROWS = (
     '<row r="1"><c r="A1"><v>1</v></c><c r="B1"><f>A1*2</f><v>2</v></c>'
     '<c r="C1" t="str"><f>"a"&amp;"b"</f><v>ab</v></c></row>'
     '<row r="2"><c r="A2"><f t="shared" ref="A2:A4" si="0">B1+1</f><v>3</v></c>'
-    '<c r="B2" t="str"><f>""</f><v></v></c><c r="C2"><f ca="1">NOW()</f></c></row>'
+    '<c r="B2" t="str"><f>""</f><v></v></c><c r="C2"><f ca="1">NOW()</f><v /></c></row>'
     '<row r="3"><c r="A3"><f t="shared" si="0"/><v>4</v></c>'
     '<c r="B3" cm="1"><f t="array" ref="B3:B4" aca="false">SEQUENCE(2)</f><v>1</v></c></row>'
 )
@@ -103,10 +103,21 @@ def test_each_way_a_cell_is_written_reads_alike():
         '<c t="str" r="B1" cm="1"><f>"x"</f><v>x</v></c>'
         "<c  r = 'C1'  t = 'str' ><f  t = 'normal' >\"x\"</f><v>x</v></c>"
         '<c r="D1" t="inlineStr"><f>"x"</f><is><t>x</t></is></c></row>'
+        # openpyxl's empty value, with a space: uncached, or the empty text
+        '<row r="2"><c r="A2"><f>1</f><v /></c><c r="B2" t="str"><f>""</f><v    /></c>'
+        '<c t="n" r="C2"><f>1</f><v /></c><c r="D2"><f>1</f><v    /></c></row>'
     )
     got = agree(package(rows, extra_parts=METADATA), plain=True)
-    assert [(f.formula.text, f.cached) for f in got] == [('"x"', True)] * 4
-    assert [f.cm for f in got] == [1, 1, None, None]
+    assert [(f.formula.text, f.cached) for f in got][:4] == [('"x"', True)] * 4
+    assert [f.cached for f in got][4:] == [False, True, False, False]
+    assert [f.cm for f in got] == [1, 1] + [None] * 6
+
+
+def test_openpyxl_cells_take_the_quick_way():
+    # openpyxl writes an empty value as <v />: its formula cells match the quick patterns too.
+    for cell in (b'<c r="B1"><f>A1*2</f><v /></c>', b'<c r="B1"><f>A1*2</f><v/></c>'):
+        assert _formulas._EXCEL.match(cell) is not None
+        assert _formulas._USUAL.match(cell) is not None
 
 
 def test_a_value_left_empty_is_cached_only_as_text():

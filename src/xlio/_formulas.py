@@ -240,7 +240,7 @@ def scan_formulas(stream: BinaryIO, cms: int | None = None) -> Iterator[FormulaC
                             col,
                             formula,
                             cm,
-                            value is not None and (len(value) > 7 or t == b"str"),  # <v></v>: 7
+                            value is not None and (t == b"str" or _filled(value)),
                         )
                     )
                     continue
@@ -267,7 +267,7 @@ def scan_formulas(stream: BinaryIO, cms: int | None = None) -> Iterator[FormulaC
                             col,
                         ),
                         _cm(attrs_c.get("cm"), row, col, cms),
-                        value is not None and (value not in (b"<v/>", b"<v></v>") or t == "str"),
+                        value is not None and (t == "str" or _filled(value)),
                     )
                 )
                 continue
@@ -336,7 +336,7 @@ def scan_formulas(stream: BinaryIO, cms: int | None = None) -> Iterator[FormulaC
 
 _ATTRS = rb"""((?:\s+[A-Za-z_][\w:.-]*\s*=\s*(?:"[^"<]*"|'[^'<]*'))*)\s*"""
 _USUAL = re.compile(
-    rb"<c" + _ATTRS + rb"><f" + _ATTRS + rb"(?:/>|>([^<]*)</f>)(<v>[^<]*</v>|<v/>)?</c>"
+    rb"<c" + _ATTRS + rb"><f" + _ATTRS + rb"(?:/>|>([^<]*)</f>)(<v>[^<]*</v>|<v */>)?</c>"
 )
 """A formula cell as Excel writes it: its formula, then its value or none, nothing else."""
 
@@ -344,10 +344,18 @@ _USUAL = re.compile(
 _EXCEL = re.compile(
     rb'<c r="([A-Z]{1,3})([1-9][0-9]{0,6})"(?: s="[0-9]{1,10}")?(?: t="([a-z]{1,9})")?'
     rb'(?: cm="([0-9]{1,10})")?(?: vm="[0-9]{1,10}")?><f' + _ATTRS + rb"(?:/>|>([^<]*)</f>)"
-    rb"(<v>[^<]*</v>|<v/>)?</c>"
+    rb"(<v>[^<]*</v>|<v */>)?</c>"
 )
 """A formula cell exactly as Excel writes one: attributes in its order, a column in capitals."""
 _LETTERS: dict[bytes, int] = {}
+
+
+def _filled(value: bytes) -> bool:
+    """A ``<v>`` the quick patterns matched holds text.
+
+    It is neither ``<v></v>`` nor ``<v/>``, which openpyxl writes ``<v />``.
+    """
+    return len(value) > 7 and not value.endswith(b"/>")
 
 
 def _letters(letters: bytes) -> int:

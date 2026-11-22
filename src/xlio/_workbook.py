@@ -681,7 +681,9 @@ class Sheet:
 
         For a caller that needs the formulas before, or without, the values: no other cell is
         read, and no value or style is parsed, so it costs a fraction of :meth:`cells` (the
-        part is decompressed once more if :meth:`cells` reads it later). The dependent cells
+        part is decompressed once more if :meth:`cells` reads it later). The fraction is small
+        where values make most of the sheet, and large where formulas do: each formula cell
+        costs about what :meth:`cells` spends on a cell. The dependent cells
         of a shared formula are given as :meth:`cells` gives them, with the ``si`` of their
         master and no text: xlio does not parse formulas, and a dependent's text is its
         master's moved to the cell, which takes a formula parser.
