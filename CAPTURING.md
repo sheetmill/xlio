@@ -93,8 +93,13 @@ was first written, and are cited with a link:
 
 ## Platforms
 
-Every capture here is from Excel for Mac. Excel for Windows is not captured; where the two may
-differ, the reader follows the Mac.
+Every capture in `tests/captures/` is from Excel for Mac. `tests/captures/windows/` holds the
+captures from Excel for Windows, each beside the job that made it (`<suite>.job.json`, in
+sheetmill's capture-job format, version 1:
+https://github.com/sheetmill/sheetmill/blob/e3a5207/docs/capture-jobs.md), its header copied
+from the job's result. `csv_open` is the first: the job `capture/csv_job.py write` makes, run on
+Windows, with its Mac twin (`capture/csv_job.py mac`) in `tests/captures/csv_open.tsv`, paired row
+by row in `tests/test_csv_open.py`. Where Windows is not captured, the reader follows the Mac.
 
 ## Test workbooks
 

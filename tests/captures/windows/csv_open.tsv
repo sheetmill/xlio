@@ -1,0 +1,581 @@
+# suite: csv_open
+# generator: capture/csv_job.py
+# method: the job beside this file (csv_open.job.json) opens each .csv file through the
+#   object model and saves an .xlsx copy; each copy is read as capture/text_probe.py
+#   reads the Mac's (control characters written \uXXXX)
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "font_smoothing": {
+#      "expected": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "found": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "ok": true
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "fonts_missing": [],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "'ab.csv": {
+#      "bytes": 2,
+#      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+#     },
+#     "History.csv": {
+#      "bytes": 2,
+#      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+#     },
+#     "[ab].csv": {
+#      "bytes": 2,
+#      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+#     },
+#     "a[b]c.csv": {
+#      "bytes": 2,
+#      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+#     },
+#     "a]b.csv": {
+#      "bytes": 2,
+#      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+#     },
+#     "abcdefghijabcdefghijabcdefghijabcdefghij.csv": {
+#      "bytes": 2,
+#      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+#     },
+#     "bytes_80_ff.csv": {
+#      "bytes": 256,
+#      "sha256": "2fc4195d63ef0a22f8768f5875aee555718923231dffb3a988773eeaf135bddc"
+#     },
+#     "control.csv": {
+#      "bytes": 2,
+#      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+#     },
+#     "currency_1252.csv": {
+#      "bytes": 25,
+#      "sha256": "bc5aee9a0236ea81b3ceeaa92b8ed193334c6fab5f10b51b152a38780feb1e96"
+#     },
+#     "currency_utf8.csv": {
+#      "bytes": 34,
+#      "sha256": "7e3bb0848b610dfb3d447282786b61f53566dcbbb61982d09852785dc090ab39"
+#     },
+#     "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn.csv": {
+#      "bytes": 2,
+#      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+#     },
+#     "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn.csv": {
+#      "bytes": 2,
+#      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+#     },
+#     "words_none.csv": {
+#      "bytes": 46,
+#      "sha256": "4f93d20b753e1dc0fabe0912bd8aacf2252e2c9813f75b731cdecd7429a93db5"
+#     },
+#     "words_utf16be.csv": {
+#      "bytes": 70,
+#      "sha256": "95a228e71e784c4a2fe02d4429d8f45d1e51b3b65030c50eb89eafe301194d83"
+#     },
+#     "words_utf16le.csv": {
+#      "bytes": 70,
+#      "sha256": "bd871a44279f678a95ca180541283632bd6bfb7c46b8fba0c34d9f9e7835e143"
+#     },
+#     "words_utf8.csv": {
+#      "bytes": 49,
+#      "sha256": "71046805efee1b183543e1363be2e1e1bc853959e815f3caab1a82c1f107a870"
+#     },
+#     "xlio_forms.csv": {
+#      "bytes": 237,
+#      "sha256": "f9c92d8709f1cabf207460e2e6dfb9102c56630ec36a4be279420a4f353cde31"
+#     },
+#     "xlio_limits_0.csv": {
+#      "bytes": 32768,
+#      "sha256": "1c77ffbde16a3e2c3407775dcd2fb1044fcc016cc7c6e02d7462b289ce002062"
+#     },
+#     "xlio_limits_1.csv": {
+#      "bytes": 32769,
+#      "sha256": "b1de6f515002ae0f026308ca3d300a592f9dfed807eafcb4eff27b44d675ea3e"
+#     },
+#     "xlio_limits_2.csv": {
+#      "bytes": 40001,
+#      "sha256": "e50972c39b902a9e195006850d45815637b39683ff3fca41be63428a08931d58"
+#     },
+#     "xlio_limits_3.csv": {
+#      "bytes": 7277512,
+#      "sha256": "1f2484775f83d22bd2c97c673cf07a0f335510d65ea931de2169807243ad94c7"
+#     },
+#     "xlio_limits_4.csv": {
+#      "bytes": 87204,
+#      "sha256": "f2e756698641e94b002b05d7bc9840eb5c14e8d7a137844143f06b333d4a8228"
+#     },
+#     "xlio_years.csv": {
+#      "bytes": 98,
+#      "sha256": "7cc98a6959e3f3c878e1a23d4673c47020cf50a295df743a749653cc4afcfac4"
+#     }
+#    },
+#    "job_id": "xlio-20261124-153012-csv-open",
+#    "manifest_sha256": "11f54df66e9e5415f2359789924ba9cb50946ff1207dc43b74daec23e4f7c6ce",
+#    "runner_version": "0.1.28"
+#   }
+case	outcome	error	sheet	cell	value	format	font
+bytes 80-ff	opened		bytes_80_ff	A1	s:€	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A2	s:\u0081	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A3	s:‚	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A4	s:ƒ	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A5	s:„	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A6	s:…	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A7	s:†	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A8	s:‡	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A9	s:ˆ	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A10	s:‰	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A11	s:Š	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A12	s:‹	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A13	s:Œ	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A14	s:\u008d	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A15	s:Ž	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A16	s:\u008f	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A17	s:\u0090	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A18	s:‘	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A19	s:’	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A20	s:“	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A21	s:”	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A22	s:•	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A23	s:–	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A24	s:—	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A25	s:˜	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A26	s:™	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A27	s:š	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A28	s:›	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A29	s:œ	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A30	s:\u009d	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A31	s:ž	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A32	s:Ÿ	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A33	s: 	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A34	s:¡	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A35	s:¢	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A36	s:£	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A37	s:¤	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A38	s:¥	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A39	s:¦	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A40	s:§	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A41	s:¨	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A42	s:©	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A43	s:ª	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A44	s:«	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A45	s:¬	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A46	s:­	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A47	s:®	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A48	s:¯	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A49	s:°	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A50	s:±	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A51	s:²	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A52	s:³	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A53	s:´	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A54	s:µ	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A55	s:¶	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A56	s:·	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A57	s:¸	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A58	s:¹	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A59	s:º	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A60	s:»	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A61	s:¼	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A62	s:½	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A63	s:¾	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A64	s:¿	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A65	s:À	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A66	s:Á	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A67	s:Â	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A68	s:Ã	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A69	s:Ä	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A70	s:Å	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A71	s:Æ	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A72	s:Ç	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A73	s:È	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A74	s:É	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A75	s:Ê	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A76	s:Ë	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A77	s:Ì	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A78	s:Í	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A79	s:Î	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A80	s:Ï	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A81	s:Ð	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A82	s:Ñ	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A83	s:Ò	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A84	s:Ó	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A85	s:Ô	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A86	s:Õ	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A87	s:Ö	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A88	s:×	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A89	s:Ø	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A90	s:Ù	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A91	s:Ú	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A92	s:Û	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A93	s:Ü	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A94	s:Ý	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A95	s:Þ	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A96	s:ß	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A97	s:à	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A98	s:á	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A99	s:â	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A100	s:ã	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A101	s:ä	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A102	s:å	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A103	s:æ	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A104	s:ç	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A105	s:è	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A106	s:é	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A107	s:ê	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A108	s:ë	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A109	s:ì	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A110	s:í	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A111	s:î	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A112	s:ï	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A113	s:ð	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A114	s:ñ	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A115	s:ò	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A116	s:ó	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A117	s:ô	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A118	s:õ	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A119	s:ö	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A120	s:÷	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A121	s:ø	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A122	s:ù	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A123	s:ú	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A124	s:û	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A125	s:ü	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A126	s:ý	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A127	s:þ	builtin 0	Aptos Narrow 11
+bytes 80-ff	opened		bytes_80_ff	A128	s:ÿ	builtin 0	Aptos Narrow 11
+words no mark	opened		words_none	A1	s:cafÃ©	builtin 0	Aptos Narrow 11
+words no mark	opened		words_none	A2	s:naÃ¯ve	builtin 0	Aptos Narrow 11
+words no mark	opened		words_none	A3	s:â‚¬	builtin 0	Aptos Narrow 11
+words no mark	opened		words_none	A4	s:æ—¥æœ¬	builtin 0	Aptos Narrow 11
+words no mark	opened		words_none	A5	s:ÃœnÃ¯cÃ¶dÃ©	builtin 0	Aptos Narrow 11
+words utf-8 mark	opened		words_utf8	A1	s:café	builtin 0	Aptos Narrow 11
+words utf-8 mark	opened		words_utf8	A2	s:naïve	builtin 0	Aptos Narrow 11
+words utf-8 mark	opened		words_utf8	A3	s:€	builtin 0	Aptos Narrow 11
+words utf-8 mark	opened		words_utf8	A4	s:日本	builtin 0	Aptos Narrow 11
+words utf-8 mark	opened		words_utf8	A5	s:Ünïcödé	builtin 0	Aptos Narrow 11
+words utf-16-le mark	opened		words_utf16le	A1	s:café	builtin 0	Aptos Narrow 11
+words utf-16-le mark	opened		words_utf16le	A2	s:naïve	builtin 0	Aptos Narrow 11
+words utf-16-le mark	opened		words_utf16le	A3	s:€	builtin 0	Aptos Narrow 11
+words utf-16-le mark	opened		words_utf16le	A4	s:日本	builtin 0	Aptos Narrow 11
+words utf-16-le mark	opened		words_utf16le	A5	s:Ünïcödé	builtin 0	Aptos Narrow 11
+words utf-16-be mark	opened		words_utf16be	A1	s:þÿ"café"	builtin 0	Aptos Narrow 11
+words utf-16-be mark	opened		words_utf16be	A2	s:naïve	builtin 0	Aptos Narrow 11
+words utf-16-be mark	opened		words_utf16be	A3	s: ¬	builtin 0	Aptos Narrow 11
+words utf-16-be mark	opened		words_utf16be	A4	s:eåg,	builtin 0	Aptos Narrow 11
+words utf-16-be mark	opened		words_utf16be	A5	s:Ünïcödé	builtin 0	Aptos Narrow 11
+currency windows-1252	opened		currency_1252	A1	n:5	[$€-2]\ #,##0;[Red]\-[$€-2]\ #,##0	Aptos Narrow 11
+currency windows-1252	opened		currency_1252	A2	s:£5	builtin 0	Aptos Narrow 11
+currency windows-1252	opened		currency_1252	A3	n:5	#,##0\ [$€-1];[Red]\-#,##0\ [$€-1]	Aptos Narrow 11
+currency windows-1252	opened		currency_1252	A4	s:¥5	builtin 0	Aptos Narrow 11
+currency windows-1252	opened		currency_1252	A5	n:5	"$"#,##0_);[Red]\("$"#,##0\)	Aptos Narrow 11
+currency utf-8 mark	opened		currency_utf8	A1	n:5	[$€-2]\ #,##0;[Red]\-[$€-2]\ #,##0	Aptos Narrow 11
+currency utf-8 mark	opened		currency_utf8	A2	s:£5	builtin 0	Aptos Narrow 11
+currency utf-8 mark	opened		currency_utf8	A3	n:5	#,##0\ [$€-1];[Red]\-#,##0\ [$€-1]	Aptos Narrow 11
+currency utf-8 mark	opened		currency_utf8	A4	s:¥5	builtin 0	Aptos Narrow 11
+currency utf-8 mark	opened		currency_utf8	A5	n:5	"$"#,##0_);[Red]\("$"#,##0\)	Aptos Narrow 11
+name 31 characters	opened		nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn	A1	n:1	builtin 0	Aptos Narrow 11
+name 32 characters	opened		nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn	A1	n:1	builtin 0	Aptos Narrow 11
+name 40 characters	opened		abcdefghijabcdefghijabcdefghija	A1	n:1	builtin 0	Aptos Narrow 11
+name bracket	opened		a(b)c	A1	n:1	builtin 0	Aptos Narrow 11
+name History	opened		History	A1	n:1	builtin 0	Aptos Narrow 11
+name apostrophe first	opened		'ab	A1	n:1	builtin 0	Aptos Narrow 11
+name bracket first	opened		(ab)	A1	n:1	builtin 0	Aptos Narrow 11
+name closing bracket	opened		a)b	A1	n:1	builtin 0	Aptos Narrow 11
+years	opened		xlio_years	A1	n:36527	builtin 14	Aptos Narrow 11
+years	opened		xlio_years	A2	n:47120	builtin 14	Aptos Narrow 11
+years	opened		xlio_years	A3	n:47485	builtin 14	Aptos Narrow 11
+years	opened		xlio_years	A4	n:54425	builtin 14	Aptos Narrow 11
+years	opened		xlio_years	A5	n:18265	builtin 14	Aptos Narrow 11
+years	opened		xlio_years	A6	n:36162	builtin 14	Aptos Narrow 11
+years	opened		xlio_years	A7	n:47120	builtin 15	Aptos Narrow 11
+years	opened		xlio_years	A8	n:47485	builtin 15	Aptos Narrow 11
+years	opened		xlio_years	A9	n:47120	builtin 14	Aptos Narrow 11
+years	opened		xlio_years	A10	n:10960	builtin 14	Aptos Narrow 11
+forms	opened		xlio_forms	A1	s:=1+	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A2	s:=SUM(	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A3	s:=1)	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A4	e:=foo bar -> #NAME?	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A5	s:=A1:	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A6	s:+	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A7	s:-	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A8	s:@	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A9	n:=1+1 -> 2	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A10	e:#VALUE!	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A11	e:#VALUE!	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A12	e:#VALUE!	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A13	e:#VALUE!	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A14	e:#N/A	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A15	e:#VALUE!	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A16	e:#VALUE!	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A17	e:#VALUE!	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A18	e:#VALUE!	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A19	s:#EXTERNAL!	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A20	e:#VALUE!	builtin 0	Aptos Narrow 11
+forms	opened		xlio_forms	A21	n:1.5	builtin 12	Aptos Narrow 11
+forms	opened		xlio_forms	A22	n:1.3333333333333333	builtin 12	Aptos Narrow 11
+forms	opened		xlio_forms	A23	n:1.1875	builtin 13	Aptos Narrow 11
+forms	opened		xlio_forms	A24	n:1.625	builtin 13	Aptos Narrow 11
+forms	opened		xlio_forms	A25	n:0.03	builtin 13	Aptos Narrow 11
+forms	opened		xlio_forms	A26	n:-1.5	builtin 12	Aptos Narrow 11
+limits field 32767	opened		xlio_limits_0	summary	2 1 2 32759		Aptos Narrow 11
+limits field 32768	opened		xlio_limits_1	summary	2 1 2 32759		Aptos Narrow 11
+limits field 40000	opened		xlio_limits_2	summary	2 1 2 32759		Aptos Narrow 11
+limits rows 1048577	opened		xlio_limits_3	summary	1048576 1 1048576 -		Aptos Narrow 11
+limits columns 16385	opened		xlio_limits_4	summary	1 16384 16384 -		Aptos Narrow 11

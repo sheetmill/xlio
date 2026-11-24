@@ -1,0 +1,314 @@
+{
+  "schema": 1,
+  "job_id": "xlio-20261124-153012-csv-open",
+  "package": "xlio",
+  "purpose": "csv_open: open each .csv file through the object model, save an .xlsx copy",
+  "requires": {
+    "excel_build_min": {
+      "windows": "16.0.20527.0"
+    },
+    "edition": "Microsoft 365"
+  },
+  "limits": {
+    "job_seconds": 3600,
+    "step_seconds": 600
+  },
+  "on_refused_open": "record",
+  "control": "control.csv",
+  "audit": false,
+  "workbooks": [
+    {
+      "file": "bytes_80_ff.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "app",
+          "get": [
+            "standard_font",
+            "standard_font_size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "case00.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "words_none.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case01.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "words_utf8.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case02.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "words_utf16le.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case03.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "words_utf16be.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case04.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "currency_1252.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case05.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "currency_utf8.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case06.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case07.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case08.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "abcdefghijabcdefghijabcdefghijabcdefghij.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case09.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "a[b]c.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case10.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "History.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case11.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "'ab.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case12.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "[ab].csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case13.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "a]b.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case14.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "xlio_years.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case15.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "xlio_forms.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case16.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "xlio_limits_0.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case17.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "xlio_limits_1.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case18.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "xlio_limits_2.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case19.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "xlio_limits_3.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case20.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "xlio_limits_4.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "save_as",
+          "name": "case21.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    }
+  ]
+}

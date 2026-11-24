@@ -68,3 +68,39 @@ def test_the_bracket_names_are_the_ones_not_read():
     assert {r[0] for r in MAC if r[1] == "not read"} == {
         "name bracket", "name bracket first", "name closing bracket",
     }  # fmt: skip
+
+
+WINDOWS = rows("windows/csv_open.tsv")
+
+
+def by_case(table: list[list[str]]) -> dict[str, list[list[str]]]:
+    out: dict[str, list[list[str]]] = {}
+    for r in table:
+        out.setdefault(r[0], []).append(r[1:7])
+    return out
+
+
+def test_windows_reads_as_the_mac_but_for_the_code_page():
+    # The cases whose bytes Windows-1252 and Mac Roman read differently differ, and the three
+    # bracket names, which the Mac twin could not read; everything else is the same row.
+    mac, win = by_case(MAC), by_case(WINDOWS)
+    assert set(mac) == set(win)
+    differ = {case for case in win if win[case] != mac[case]}
+    assert differ == {
+        "bytes 80-ff", "words no mark", "words utf-16-be mark", "currency windows-1252",
+        "name bracket", "name bracket first", "name closing bracket",
+    }  # fmt: skip
+
+
+def test_windows_opens_a_bracketed_name_with_parentheses():
+    names = {r[0]: r[3] for r in WINDOWS if r[0].startswith("name bracket") or "closing" in r[0]}
+    assert names == {
+        "name bracket": "a(b)c",
+        "name bracket first": "(ab)",
+        "name closing bracket": "a)b",
+    }
+
+
+def test_the_workbook_excel_makes_has_the_platform_standard_font():
+    assert {r[7] for r in MAC} - {""} == {"Aptos Narrow 12"}
+    assert {r[7] for r in WINDOWS} == {"Aptos Narrow 11"}
