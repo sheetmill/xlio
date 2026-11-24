@@ -104,3 +104,58 @@ def test_windows_opens_a_bracketed_name_with_parentheses():
 def test_the_workbook_excel_makes_has_the_platform_standard_font():
     assert {r[7] for r in MAC} - {""} == {"Aptos Narrow 12"}
     assert {r[7] for r in WINDOWS} == {"Aptos Narrow 11"}
+
+
+def _want(table: list[list[str]], case: str) -> tuple[str, dict[str, tuple[str, str]], str]:
+    """The sheet's name, cell -> (type:value, format), and the font, as captured."""
+    import re
+
+    found = [r for r in table if r[0] == case and r[1] == "opened"]
+    cells = {
+        r[4]: (re.sub(r"\\u([0-9a-f]{4})", lambda m: chr(int(m[1], 16)), r[5]), r[6].strip())
+        for r in found
+    }
+    return found[0][3], cells, found[0][7]
+
+
+@pytest.mark.parametrize("platform", ["mac", "windows"])
+def test_read_csv_reads_every_case_as_excel_on_the_platform(tmp_path, platform):
+    from capture.csv_job import cases
+
+    import xlio
+    from tests.test_text import got, same
+
+    table = MAC if platform == "mac" else WINDOWS
+    failed = {}
+    for case, (name, data) in cases().items():
+        if case.startswith("limits ") or not any(r[0] == case and r[1] == "opened" for r in table):
+            continue  # limits: test_text; the Mac's renamed bracket names: text_extra
+        path = tmp_path / name
+        path.write_bytes(data)
+        sheet, cells, font = _want(table, case)
+        with xlio.read_csv(path, platform=platform) as wb:
+            have = got(wb)
+            first = wb.styles.fonts[0]
+            title = wb.sheets[0].name
+        wrong = {r: (cells.get(r), have.get(r)) for r in set(cells) | set(have)
+                 if r not in cells or r not in have or not same(cells[r], have[r])}  # fmt: skip
+        if wrong or title != sheet or f"{first.name} {first.size:g}" != font:
+            failed[case] = (wrong, title, sheet, first.size, font)
+    assert failed == {}
+
+
+def test_a_platform_is_a_name_or_an_object_with_one():
+    import io
+
+    import xlio
+
+    class Named:
+        name = "windows"
+
+    with xlio.read_csv(io.BytesIO(b"\x80\n"), platform=Named()) as wb:
+        assert next(wb.sheets[0].cells()).value == "€"
+    with pytest.raises(ValueError, match="platform"):
+        xlio.read_csv(io.BytesIO(b"1\n"), platform="linux")
+    options = xlio.CsvOptions(fallback_encoding="latin-1")
+    with xlio.read_csv(io.BytesIO(b"\x80\n"), options, platform="windows") as wb:
+        assert next(wb.sheets[0].cells()).value == "\x80"  # the caller's encoding wins

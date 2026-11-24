@@ -1,7 +1,8 @@
-"""Text formats: a CSV file read as Excel for Mac opens it (File > Open, en_US).
+"""Text formats: a CSV file read as Excel opens it (File > Open, en_US), on the Mac or Windows.
 
-Every rule here is one the captures ``text``, ``text_launch_*``, ``text_extra``, ``text_forms``
-and ``text_limits`` show (``tests/captures/``), unless its comment says it is not captured. The file
+Every rule here is one the captures ``text``, ``text_launch_*``, ``text_extra``, ``text_forms``,
+``text_limits`` and ``csv_open`` (with its Windows twin, ``tests/captures/windows/``) show,
+unless its comment says it is not captured. The file
 becomes a one-sheet workbook package built by xlio (in memory, or in a temporary file past
 8 MiB) and read by :func:`xlio.open`, so a text file and an xlsx file give the same
 :class:`~xlio.Workbook`.
@@ -10,6 +11,7 @@ becomes a one-sheet workbook package built by xlio (in memory, or in a temporary
 from __future__ import annotations
 
 import calendar
+import codecs
 import dataclasses
 import datetime
 import itertools
@@ -40,11 +42,14 @@ class TextOptions:
     """How a text file is read; every default is what Excel for Mac does with File > Open.
 
     Attributes:
-        encoding: The file's encoding. ``None`` is Excel for Mac's detection: a UTF-8 or a
-            UTF-16 little-endian byte order mark, else ``fallback_encoding`` (so a UTF-8 file
-            without a mark reads as Mac Roman, as Excel shows it).
+        encoding: The file's encoding. ``None`` is Excel's detection: a UTF-8 or a UTF-16
+            little-endian byte order mark, else ``fallback_encoding`` (so a UTF-8 file without
+            a mark reads as Mac Roman on the Mac and as Windows-1252 on Windows, as Excel shows
+            it).
         fallback_encoding: The encoding of a file without a byte order mark, when ``encoding``
-            is ``None``: ``"mac_roman"``, as Excel for Mac reads it.
+            is ``None``; ``None`` is the platform's code page, as Excel reads it: Mac Roman on
+            the Mac, Windows-1252 on Windows (whose five undefined bytes read as the code
+            points of the same value; captures ``text`` and ``csv_open``).
         conversions: ``"excel"``, Excel's conversions (numbers, dates, times, percentages,
             currency, booleans, errors); ``"keep"``, the conversions Excel makes when its notice
             of default conversions is answered "Don't Convert" (exponent forms, leading zeros,
@@ -62,7 +67,7 @@ class TextOptions:
     """
 
     encoding: str | None = None
-    fallback_encoding: str = "mac_roman"
+    fallback_encoding: str | None = None
     conversions: Conversions = "excel"
     formulas: Formulas = "formula"
     today: datetime.date | None = None
@@ -92,8 +97,19 @@ _SPOOL = 8 << 20  # a built package larger than this goes to a temporary file
 _LINE = 32_759  # a longer line continues on the next row (capture text_limits)
 
 
-def _decode(data: bytes, options: TextOptions) -> str:
-    """The file's text, as Excel for Mac decodes it (capture ``text``)."""
+def _same_code_point(error: UnicodeError) -> tuple[str, int]:
+    """Windows-1252's undefined bytes as the code points of the same value (capture csv_open)."""
+    assert isinstance(error, UnicodeDecodeError)
+    return error.object[error.start : error.end].decode("latin-1"), error.end
+
+
+codecs.register_error("xlio-same-code-point", _same_code_point)
+_Platform = Literal["mac", "windows"]
+_CODE_PAGES = {"mac": "mac_roman", "windows": "cp1252"}
+
+
+def _decode(data: bytes, options: TextOptions, platform: _Platform = "mac") -> str:
+    """The file's text, as Excel decodes it (captures ``text`` and ``csv_open``)."""
     if options.encoding is not None:
         text = data.decode(options.encoding, errors="replace")
         return text[1:] if text[:1] == "﻿" else text
@@ -103,7 +119,11 @@ def _decode(data: bytes, options: TextOptions) -> str:
         return data[2:].decode("utf-16-le", errors="replace")
     # A UTF-16 big-endian mark is not taken: its bytes read as the fallback encoding, and the
     # NUL characters dropped (capture text, case "encoding utf-16-be with BOM").
-    return data.decode(options.fallback_encoding, errors="replace").replace("\x00", "")
+    if options.fallback_encoding is not None:
+        text = data.decode(options.fallback_encoding, errors="replace")
+    else:
+        text = data.decode(_CODE_PAGES[platform], errors="xlio-same-code-point")
+    return text.replace("\x00", "")
 
 
 def _records(text: str, delimiter: str, quote: str) -> Iterator[list[str]]:
@@ -157,6 +177,12 @@ def _records(text: str, delimiter: str, quote: str) -> Iterator[list[str]]:
 
 # Conversions --------------------------------------------------------------------------------
 
+_FONT_SIZES = {"mac": 12, "windows": 11}
+_EUROS = re.compile(r"€(\d+)|(\d+)€")
+_EURO_BEFORE = "[$€-2]\\ #,##0;[Red]\\-[$€-2]\\ #,##0"
+_EURO_AFTER = "#,##0\\ [$€-1];[Red]\\-#,##0\\ [$€-1]"
+"""The euro's formats, sign before and after (capture csv_open, on both platforms)."""
+"""The size of the font of the workbook Excel makes of a text file (capture csv_open)."""
 _CURRENCY = '"$"#,##0_);[Red]\\("$"#,##0\\)'
 _CURRENCY_CENTS = '"$"#,##0.00_);[Red]\\("$"#,##0.00\\)'
 _PLAIN = re.compile(r"[+-]?(?:\d+\.?\d*|\.\d+)")
@@ -219,6 +245,9 @@ def _number(s: str, keep: bool) -> Value | None:
     if m and bool(m[1]) == bool(m[3]):
         value = _fifteen(m[2].replace(",", ""))
         return "n", -value if m[1] else value, _CURRENCY_CENTS if "." in m[2] else _CURRENCY
+    m = _EUROS.fullmatch(s)
+    if m:  # the sign before or after a whole number (other forms not yet in a capture)
+        return "n", _fifteen(m[1] or m[2]), _EURO_BEFORE if m[1] else _EURO_AFTER
     m = _PARENTHESES.fullmatch(s)
     if m:
         return "n", -_fifteen(m[1].replace(",", "")), 3 if "," in m[1] else 0
@@ -416,7 +445,11 @@ def _text_xml(text: str) -> str:
 
 
 def _package(
-    rows: Iterator[list[str]], name: str, options: TextOptions, today: datetime.date
+    rows: Iterator[list[str]],
+    name: str,
+    options: TextOptions,
+    today: datetime.date,
+    platform: _Platform = "mac",
 ) -> BinaryIO:
     """The workbook package, its sheet written row by row as the rows come.
 
@@ -472,7 +505,8 @@ def _package(
     styles = (
         f'<styleSheet xmlns="{_MAIN}">'
         + (f'<numFmts count="{len(custom)}">{num_fmts}</numFmts>' if custom else "")
-        + '<fonts count="1"><font><sz val="12"/><name val="Aptos Narrow"/></font></fonts>'
+        + f'<fonts count="1"><font><sz val="{_FONT_SIZES[platform]}"/><name val="Aptos Narrow"/>'
+        "</font></fonts>"
         '<fills count="2"><fill><patternFill patternType="none"/></fill>'
         '<fill><patternFill patternType="gray125"/></fill></fills>'
         '<borders count="1"><border/></borders>'
@@ -556,14 +590,20 @@ def read_csv(
     options: CsvOptions | None = None,
     *,
     limits: ReadLimits | None = None,
+    platform: object = "mac",
 ) -> Workbook:
-    """Read a delimited text file as Excel for Mac opens it: a one-sheet :class:`Workbook`.
+    """Read a delimited text file as Excel opens it: a one-sheet :class:`Workbook`.
 
     Args:
         source: A path, or a binary file open for reading.
         options: How to read it (:class:`CsvOptions`); Excel's defaults when ``None``.
         limits: What reading may cost: the file's size is bounded by ``max_text_bytes``, and the
             workbook built from it by the other limits.
+        platform: Which Excel opens it: ``"mac"`` (the default) or ``"windows"``, or an object
+            whose ``name`` is one of them (such as ``xlformat.Platform.WINDOWS``). It decides
+            the code page of a file without a byte order mark (unless
+            ``TextOptions.fallback_encoding`` names one) and the size of the workbook's font,
+            Aptos Narrow 12 on the Mac and 11 on Windows (capture ``csv_open``).
 
     Returns:
         The workbook, one sheet built by xlio (in memory, or in a temporary file past 8 MiB,
@@ -574,8 +614,18 @@ def read_csv(
 
     Raises:
         LimitError: The file is larger than ``limits.max_text_bytes``.
+        ValueError: ``platform`` is neither ``"mac"`` nor ``"windows"``, nor has such a name.
     """
     from xlio._workbook import open as open_workbook
+
+    named = platform if isinstance(platform, str) else getattr(platform, "name", None)
+    which: _Platform
+    if named == "mac":
+        which = "mac"
+    elif named == "windows":
+        which = "windows"
+    else:
+        raise ValueError(f"platform must be 'mac', 'windows' or an object so named: {platform!r}")
 
     options = options or CsvOptions()
     limits = limits or ReadLimits()
@@ -586,9 +636,9 @@ def read_csv(
     else:
         name = options.sheet_name or "Sheet1"
         data = _read_bounded(source, limits.max_text_bytes)
-    text = _decode(data, options)
+    text = _decode(data, options, which)
     del data
     today = options.today or datetime.date.today()
-    package = _package(_lines(text, options), name, options, today)
+    package = _package(_lines(text, options), name, options, today, which)
     del text
     return open_workbook(package, limits=limits)

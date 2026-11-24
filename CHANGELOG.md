@@ -7,7 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+A dependent pinned to `xlio==0.4.*` moves to `xlio==0.5.*`. A caller that passes no `platform`
+reads every file as before; one that reads `TextOptions().fallback_encoding` back gets `None`.
+
+### Added
+- `read_csv(..., platform="mac")` reads a text file as Excel for Mac or Excel for Windows opens
+  it: `"mac"`, `"windows"`, or an object whose `name` is one of them (such as
+  `xlformat.Platform.WINDOWS`). On Windows a file without a byte order mark reads as
+  Windows-1252, its five undefined bytes (0x81, 0x8D, 0x8F, 0x90, 0x9D) as the code points of
+  the same value, and the workbook's font is Aptos Narrow 11 (12 on the Mac). Everything else
+  reads the same on both, as the new capture `csv_open` and its Windows twin show.
+
+### Changed
+- `TextOptions.fallback_encoding` defaults to `None`, the platform's code page (Mac Roman on the
+  Mac, Windows-1252 on Windows); a codec given still wins.
+
 ### Fixed
+- A field of a whole number of euros, the sign before or after it (`€5`, `5€`), is now a number
+  with Excel's euro format (`[$€-2]\ #,##0` and `#,##0\ [$€-1]`, each with its red negative
+  section), as Excel reads it on both platforms; xlio left it text. Other euro forms are not
+  captured and stay text.
 - `Sheet.formulas()` on a file openpyxl wrote: its formula cells, whose empty value is written
   `<v />`, are read the quick way, as an Excel-written file's are, and no longer slower than
   `Sheet.cells()`. The items are the same.
