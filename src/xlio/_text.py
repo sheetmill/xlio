@@ -39,7 +39,7 @@ Formulas = Literal["formula", "text"]
 
 @dataclass(frozen=True, kw_only=True)
 class TextOptions:
-    """How a text file is read; every default is what Excel for Mac does with File > Open.
+    """How a text file is read; every default is what Excel does with File > Open.
 
     Attributes:
         encoding: The file's encoding. ``None`` is Excel's detection: a UTF-8 or a UTF-16
