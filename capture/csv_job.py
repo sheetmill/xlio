@@ -203,7 +203,12 @@ def mac() -> Path:
             src.write_bytes(data)
             copy.unlink(missing_ok=True)
             error = _open_on_the_mac(src, copy)
-            lines += rows(case, None, error) if error else rows(case, copy)
+            if error and ("[" in name or "]" in name):
+                # Excel for Mac renames such a workbook (a[b]c.csv opens as a(b)c.csv), which
+                # AppleScript cannot address: text_extra records the reading, made by hand.
+                lines.append("\t".join([case, "not read", "renamed by Excel", "", "", "", "", ""]))
+            else:
+                lines += rows(case, None, error) if error else rows(case, copy)
         finally:
             src.unlink(missing_ok=True)
             copy.unlink(missing_ok=True)
