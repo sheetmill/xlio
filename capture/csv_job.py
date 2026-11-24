@@ -186,7 +186,8 @@ def _open_on_the_mac(src: Path, copy: Path) -> str:
     if result.returncode == 0:
         return ""
     found = re.search(r"\((-?\d+)\)", result.stderr)
-    message = " ".join(result.stderr.split())[:160]
+    said = re.search(r"error: (.*)", result.stderr)  # Excel's words, not the script's path
+    message = " ".join((said.group(1) if said else "").split())[:160]
     return f"{found.group(1)} {message}" if found else message
 
 

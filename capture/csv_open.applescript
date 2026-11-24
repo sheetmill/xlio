@@ -6,13 +6,23 @@ on run argv
 	set xlPath to item 1 of argv
 	set xlCopy to item 2 of argv
 	set xlCopyName to do shell script "basename " & quoted form of xlCopy
+	set xlName to do shell script "basename " & quoted form of xlPath
 	tell application "Microsoft Excel"
 		if exists workbook xlCopyName then error "already open in Excel, close it first: " & xlCopyName
 		set priorNames to name of every workbook
 		set display alerts to false
 		try
 			open workbook workbook file name xlPath
-			set opened to my newNames(priorNames)
+			set opened to {}
+			repeat 20 times
+				if exists workbook xlName then
+					set opened to {xlName}
+				else
+					set opened to my newNames(priorNames)
+				end if
+				if (count of opened) > 0 then exit repeat
+				delay 0.25
+			end repeat
 			if (count of opened) is 0 then error "no workbook" number -50
 			set xlWb to workbook (item 1 of opened)
 			save workbook as xlWb filename xlCopy file format workbook normal file format
