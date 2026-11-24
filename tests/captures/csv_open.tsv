@@ -1,0 +1,211 @@
+# suite: csv_open (capture/csv_job.py mac); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-24; method: the job's files opened with alerts off (csv_open.applescript) and saved as an .xlsx copy, read as capture/text_probe.py reads it (control characters written \uXXXX)
+case	outcome	error	sheet	cell	value	format	font
+bytes 80-ff	opened		bytes_80_ff	A1	s:Ä	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A2	s:Å	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A3	s:Ç	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A4	s:É	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A5	s:Ñ	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A6	s:Ö	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A7	s:Ü	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A8	s:á	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A9	s:à	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A10	s:â	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A11	s:ä	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A12	s:ã	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A13	s:å	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A14	s:ç	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A15	s:é	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A16	s:è	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A17	s:ê	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A18	s:ë	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A19	s:í	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A20	s:ì	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A21	s:î	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A22	s:ï	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A23	s:ñ	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A24	s:ó	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A25	s:ò	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A26	s:ô	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A27	s:ö	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A28	s:õ	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A29	s:ú	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A30	s:ù	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A31	s:û	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A32	s:ü	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A33	s:†	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A34	s:°	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A35	s:¢	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A36	s:£	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A37	s:§	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A38	s:•	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A39	s:¶	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A40	s:ß	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A41	s:®	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A42	s:©	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A43	s:™	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A44	s:´	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A45	s:¨	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A46	s:≠	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A47	s:Æ	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A48	s:Ø	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A49	s:∞	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A50	s:±	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A51	s:≤	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A52	s:≥	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A53	s:¥	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A54	s:µ	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A55	s:∂	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A56	s:∑	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A57	s:∏	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A58	s:π	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A59	s:∫	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A60	s:ª	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A61	s:º	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A62	s:Ω	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A63	s:æ	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A64	s:ø	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A65	s:¿	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A66	s:¡	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A67	s:¬	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A68	s:√	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A69	s:ƒ	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A70	s:≈	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A71	s:∆	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A72	s:«	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A73	s:»	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A74	s:…	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A75	s: 	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A76	s:À	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A77	s:Ã	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A78	s:Õ	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A79	s:Œ	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A80	s:œ	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A81	s:–	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A82	s:—	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A83	s:“	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A84	s:”	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A85	s:‘	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A86	s:’	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A87	s:÷	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A88	s:◊	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A89	s:ÿ	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A90	s:Ÿ	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A91	s:⁄	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A92	s:€	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A93	s:‹	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A94	s:›	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A95	s:ﬁ	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A96	s:ﬂ	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A97	s:‡	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A98	s:·	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A99	s:‚	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A100	s:„	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A101	s:‰	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A102	s:Â	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A103	s:Ê	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A104	s:Á	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A105	s:Ë	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A106	s:È	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A107	s:Í	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A108	s:Î	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A109	s:Ï	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A110	s:Ì	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A111	s:Ó	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A112	s:Ô	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A113	s:	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A114	s:Ò	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A115	s:Ú	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A116	s:Û	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A117	s:Ù	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A118	s:ı	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A119	s:ˆ	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A120	s:˜	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A121	s:¯	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A122	s:˘	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A123	s:˙	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A124	s:˚	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A125	s:¸	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A126	s:˝	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A127	s:˛	builtin 0	Aptos Narrow 12
+bytes 80-ff	opened		bytes_80_ff	A128	s:ˇ	builtin 0	Aptos Narrow 12
+words no mark	opened		words_none	A1	s:caf√©	builtin 0	Aptos Narrow 12
+words no mark	opened		words_none	A2	s:na√Øve	builtin 0	Aptos Narrow 12
+words no mark	opened		words_none	A3	s:‚Ç¨	builtin 0	Aptos Narrow 12
+words no mark	opened		words_none	A4	s:Êó•Êú¨	builtin 0	Aptos Narrow 12
+words no mark	opened		words_none	A5	s:√ún√Øc√∂d√©	builtin 0	Aptos Narrow 12
+words utf-8 mark	opened		words_utf8	A1	s:café	builtin 0	Aptos Narrow 12
+words utf-8 mark	opened		words_utf8	A2	s:naïve	builtin 0	Aptos Narrow 12
+words utf-8 mark	opened		words_utf8	A3	s:€	builtin 0	Aptos Narrow 12
+words utf-8 mark	opened		words_utf8	A4	s:日本	builtin 0	Aptos Narrow 12
+words utf-8 mark	opened		words_utf8	A5	s:Ünïcödé	builtin 0	Aptos Narrow 12
+words utf-16-le mark	opened		words_utf16le	A1	s:café	builtin 0	Aptos Narrow 12
+words utf-16-le mark	opened		words_utf16le	A2	s:naïve	builtin 0	Aptos Narrow 12
+words utf-16-le mark	opened		words_utf16le	A3	s:€	builtin 0	Aptos Narrow 12
+words utf-16-le mark	opened		words_utf16le	A4	s:日本	builtin 0	Aptos Narrow 12
+words utf-16-le mark	opened		words_utf16le	A5	s:Ünïcödé	builtin 0	Aptos Narrow 12
+words utf-16-be mark	opened		words_utf16be	A1	s:˛ˇ"cafÈ"	builtin 0	Aptos Narrow 12
+words utf-16-be mark	opened		words_utf16be	A2	s:naÔve	builtin 0	Aptos Narrow 12
+words utf-16-be mark	opened		words_utf16be	A3	s: ¨	builtin 0	Aptos Narrow 12
+words utf-16-be mark	opened		words_utf16be	A4	s:eÂg,	builtin 0	Aptos Narrow 12
+words utf-16-be mark	opened		words_utf16be	A5	s:‹nÔcˆdÈ	builtin 0	Aptos Narrow 12
+currency windows-1252	opened		currency_1252	A1	s:Ä5	builtin 0	Aptos Narrow 12
+currency windows-1252	opened		currency_1252	A2	s:£5	builtin 0	Aptos Narrow 12
+currency windows-1252	opened		currency_1252	A3	s:5Ä	builtin 0	Aptos Narrow 12
+currency windows-1252	opened		currency_1252	A4	s:•5	builtin 0	Aptos Narrow 12
+currency windows-1252	opened		currency_1252	A5	n:5	"$"#,##0_);[Red]\("$"#,##0\)	Aptos Narrow 12
+currency utf-8 mark	opened		currency_utf8	A1	n:5	[$€-2]\ #,##0;[Red]\-[$€-2]\ #,##0	Aptos Narrow 12
+currency utf-8 mark	opened		currency_utf8	A2	s:£5	builtin 0	Aptos Narrow 12
+currency utf-8 mark	opened		currency_utf8	A3	n:5	#,##0\ [$€-1];[Red]\-#,##0\ [$€-1]	Aptos Narrow 12
+currency utf-8 mark	opened		currency_utf8	A4	s:¥5	builtin 0	Aptos Narrow 12
+currency utf-8 mark	opened		currency_utf8	A5	n:5	"$"#,##0_);[Red]\("$"#,##0\)	Aptos Narrow 12
+name 31 characters	opened		nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn	A1	n:1	builtin 0	Aptos Narrow 12
+name 32 characters	opened		nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn	A1	n:1	builtin 0	Aptos Narrow 12
+name 40 characters	opened		abcdefghijabcdefghijabcdefghija	A1	n:1	builtin 0	Aptos Narrow 12
+name bracket	not read	renamed by Excel					
+name History	opened		History	A1	n:1	builtin 0	Aptos Narrow 12
+name apostrophe first	opened		'ab	A1	n:1	builtin 0	Aptos Narrow 12
+name bracket first	not read	renamed by Excel					
+name closing bracket	not read	renamed by Excel					
+years	opened		xlio_years	A1	n:36527	builtin 14	Aptos Narrow 12
+years	opened		xlio_years	A2	n:47120	builtin 14	Aptos Narrow 12
+years	opened		xlio_years	A3	n:47485	builtin 14	Aptos Narrow 12
+years	opened		xlio_years	A4	n:54425	builtin 14	Aptos Narrow 12
+years	opened		xlio_years	A5	n:18265	builtin 14	Aptos Narrow 12
+years	opened		xlio_years	A6	n:36162	builtin 14	Aptos Narrow 12
+years	opened		xlio_years	A7	n:47120	builtin 15	Aptos Narrow 12
+years	opened		xlio_years	A8	n:47485	builtin 15	Aptos Narrow 12
+years	opened		xlio_years	A9	n:47120	builtin 14	Aptos Narrow 12
+years	opened		xlio_years	A10	n:10960	builtin 14	Aptos Narrow 12
+forms	opened		xlio_forms	A1	s:=1+	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A2	s:=SUM(	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A3	s:=1)	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A4	e:=foo bar -> #NAME?	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A5	s:=A1:	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A6	s:+	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A7	s:-	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A8	s:@	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A9	n:=1+1 -> 2	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A10	e:#VALUE!	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A11	e:#VALUE!	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A12	e:#VALUE!	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A13	e:#VALUE!	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A14	e:#N/A	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A15	e:#VALUE!	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A16	e:#VALUE!	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A17	e:#VALUE!	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A18	e:#VALUE!	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A19	s:#EXTERNAL!	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A20	e:#VALUE!	builtin 0	Aptos Narrow 12
+forms	opened		xlio_forms	A21	n:1.5	builtin 12	Aptos Narrow 12
+forms	opened		xlio_forms	A22	n:1.3333333333333333	builtin 12	Aptos Narrow 12
+forms	opened		xlio_forms	A23	n:1.1875	builtin 13	Aptos Narrow 12
+forms	opened		xlio_forms	A24	n:1.625	builtin 13	Aptos Narrow 12
+forms	opened		xlio_forms	A25	n:0.03	builtin 13	Aptos Narrow 12
+forms	opened		xlio_forms	A26	n:-1.5	builtin 12	Aptos Narrow 12
+limits field 32767	opened		xlio_limits_0	summary	2 1 2 32759		Aptos Narrow 12
+limits field 32768	opened		xlio_limits_1	summary	2 1 2 32759		Aptos Narrow 12
+limits field 40000	opened		xlio_limits_2	summary	2 1 2 32759		Aptos Narrow 12
+limits rows 1048577	opened		xlio_limits_3	summary	1048576 1 1048576 -		Aptos Narrow 12
+limits columns 16385	opened		xlio_limits_4	summary	1 16384 16384 -		Aptos Narrow 12
