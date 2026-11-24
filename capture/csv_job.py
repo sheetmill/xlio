@@ -186,7 +186,8 @@ def _open_on_the_mac(src: Path, copy: Path) -> str:
     if result.returncode == 0:
         return ""
     found = re.search(r"\((-?\d+)\)", result.stderr)
-    return found.group(1) if found else result.stderr.strip()[:80]
+    message = " ".join(result.stderr.split())[:160]
+    return f"{found.group(1)} {message}" if found else message
 
 
 def mac() -> Path:
