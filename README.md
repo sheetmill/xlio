@@ -18,6 +18,12 @@ xlio is part of the [sheetmill](https://github.com/sheetmill) project, with
 [xlrecalc](https://github.com/sheetmill/xlrecalc), which recalculates workbooks, and
 [sheetpeek](https://github.com/sheetmill/sheetpeek), which shows workbooks as Excel does.
 
+## Files from people you do not trust
+
+Open them with `limits=xlio.ReadLimits.UNTRUSTED`, which bounds what reading one may cost (its
+parts, their sizes, its cells, its text). To report a security problem, see
+[`SECURITY.md`](https://github.com/sheetmill/xlio/blob/main/SECURITY.md).
+
 ## Development
 
 `uv sync --group docs` then `uv run pytest`;

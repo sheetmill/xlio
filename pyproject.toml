@@ -70,6 +70,7 @@ include = [
   "CONTRIBUTING.md",
   "LICENSE",
   "NOTICE",
+  "SECURITY.md",
   "pagefind.yml",
 ]
 exclude = ["capture/build", "docs/_build", "**/__pycache__"]
