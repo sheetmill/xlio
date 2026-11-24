@@ -172,11 +172,17 @@ def read(job: Path, result: Path) -> Path:
 
 def _open_on_the_mac(src: Path, copy: Path) -> str:
     """Excel for Mac opens ``src`` and saves ``copy``; '' or the error Excel gave."""
-    result = subprocess.run(
-        ["gtimeout", "-k", "5", TIME_LIMIT, "osascript", str(HERE / "csv_open.applescript"),
-         str(src), str(copy)],
-        capture_output=True, text=True, check=False,
-    )  # fmt: skip
+    script = HERE / "csv_open.applescript"
+    try:  # the time limit kills osascript, which waiting on Excel ignores a terminate signal
+        result = subprocess.run(
+            ["osascript", str(script), str(src), str(copy)],
+            capture_output=True, text=True, check=False, timeout=int(TIME_LIMIT),
+        )  # fmt: skip
+    except subprocess.TimeoutExpired:
+        subprocess.run(
+            ["osascript", str(HERE / "restore_alerts.applescript")], check=False, timeout=20
+        )
+        return "time limit"
     if result.returncode == 0:
         return ""
     found = re.search(r"\((-?\d+)\)", result.stderr)
