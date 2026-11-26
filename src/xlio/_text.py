@@ -195,11 +195,13 @@ _FRACTION = re.compile(r"(-?)(\d+) (\d+)/(\d+)")
 _MONTHS = {m.lower(): i for i, m in enumerate(calendar.month_abbr) if m}
 _MONTHS.update({m.lower(): i for i, m in enumerate(calendar.month_name) if m})
 _ERRORS = {"#NULL!", "#DIV/0!", "#VALUE!", "#REF!", "#NAME?", "#NUM!", "#N/A"}
-# Newer errors as Excel reads them in a CSV file (capture text_forms); #EXTERNAL! stays text.
-_NEWER_ERRORS = {"#SPILL!": "#VALUE!", "#CALC!": "#VALUE!", "#FIELD!": "#VALUE!",
-                 "#BLOCKED!": "#VALUE!", "#CONNECT!": "#VALUE!", "#BUSY!": "#VALUE!",
-                 "#UNKNOWN!": "#VALUE!", "#PYTHON!": "#VALUE!", "#TIMEOUT!": "#VALUE!",
-                 "#GETTING_DATA": "#N/A"}  # fmt: skip
+# The newer errors and #GETTING_DATA, each held as itself while the workbook is open (capture
+# csv_errors, on both platforms; Excel saves the newer ones as #VALUE! with a rich value, and
+# #GETTING_DATA as #N/A). #EXTERNAL! stays text.
+_NEWER_ERRORS = frozenset({"#SPILL!", "#CALC!", "#FIELD!", "#BLOCKED!", "#CONNECT!", "#BUSY!",
+                           "#UNKNOWN!", "#PYTHON!", "#TIMEOUT!", "#GETTING_DATA"})  # fmt: skip
+_ERROR_TEXTS = frozenset(_ERRORS | _NEWER_ERRORS)
+"""Every code a cell of the workbook ``read_csv`` builds may hold as text."""
 
 Value = tuple[str, object, "int | str"]  # (kind, value, number format: a built-in id or a code)
 
@@ -392,7 +394,7 @@ def convert(field: str, options: TextOptions, today: datetime.date) -> Value | N
     if upper in _ERRORS and s == field:
         return "e", upper, 0
     if upper in _NEWER_ERRORS and s == field:
-        return "e", _NEWER_ERRORS[upper], 0
+        return "e", upper, 0
     keep = options.conversions == "keep"
     number = _number(s, keep) if s else None
     if number is not None:
@@ -644,4 +646,6 @@ def read_csv(
     today = options.today or datetime.date.today()
     package = _package(_lines(text, options), name, options, today, which)
     del text
-    return open_workbook(package, limits=limits)
+    workbook = open_workbook(package, limits=limits)
+    workbook._plain_errors = _ERROR_TEXTS  # its own package: every code as text
+    return workbook

@@ -30,6 +30,11 @@ packages; `xlio.open` and `xlio.check` read every file as before.
   Mac, Windows-1252 on Windows); a codec given still wins.
 
 ### Fixed
+- `read_csv` reads a field holding one of the newer error codes (`#SPILL!`, `#CALC!`,
+  `#FIELD!`, `#BLOCKED!`, `#CONNECT!`, `#BUSY!`, `#UNKNOWN!`, `#PYTHON!`, `#TIMEOUT!`) as that
+  error, and `#GETTING_DATA` as `#GETTING_DATA`, as Excel shows them while the workbook is open,
+  on both platforms (capture `csv_errors` and its Windows twin). It read them as `#VALUE!` and
+  `#N/A`, which is what Excel writes when it saves the file.
 - A cell holding an error rich value of `errorType` 14 now reads as `ErrorCode.CALC` (`#CALC!`),
   as Excel shows it while the workbook is open (capture `errors_shown`); it read as 0, which is
   what Excel writes when it saves the file. Excel's `ERROR.TYPE` gives 15 for it, against 14 for

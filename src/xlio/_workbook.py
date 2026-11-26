@@ -16,7 +16,7 @@ from typing import BinaryIO, Literal
 
 from xlio import ns
 from xlio._book import Book, CalcProperties, DefinedName, SheetInfo
-from xlio._cells import Cell
+from xlio._cells import _PLAIN_ERRORS, Cell
 from xlio._comments import (
     Comment,
     Person,
@@ -110,7 +110,9 @@ class ErrorCode(StrEnum):
     NUM = "#NUM!"
     NA = "#N/A"
     GETTING_DATA = "#GETTING_DATA"
-    """Excel reads it from a file as written; it writes it back as ``#N/A``."""
+    """Excel reads it as written, in a cell's ``<v>`` or as a CSV field, and shows it while the
+    workbook is open (``ERROR.TYPE`` 8; captures ``errors`` and ``csv_errors``). When Excel saves
+    the file it writes it as ``#N/A``."""
     SPILL = "#SPILL!"
     """Rich value ``errorType`` 8."""
     CONNECT = "#CONNECT!"
@@ -741,6 +743,7 @@ class Sheet:
             errors=_ERRORS,
             value_errors=book.value_errors,
             bounds=(styles or _MAX_ROW * _MAX_COL, cms, vms),
+            plain_errors=self._workbook._plain_errors,
         )
         if self._row_formats is None:
             self._row_formats = formats
@@ -777,6 +780,8 @@ class Workbook:
     def __init__(self, book: Book) -> None:
         self._book = book
         self._closed = False
+        # The error codes a cell may hold as text: Excel's, or every one for read_csv's workbook
+        self._plain_errors = _PLAIN_ERRORS
         self.parts: Parts = Parts(book.package)
         """Every part of the package, raw."""
         self.sheets: tuple[Sheet, ...] = tuple(

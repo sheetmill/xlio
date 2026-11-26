@@ -260,6 +260,7 @@ def read_cells(
     errors: Mapping[str, str] | None = None,
     value_errors: Mapping[int, str] | None = None,
     bounds: tuple[int, int, int] | None = None,
+    plain_errors: frozenset[str] = _PLAIN_ERRORS,
 ) -> Iterator[Cell]:
     """The cells of a worksheet part, in file order.
 
@@ -277,6 +278,8 @@ def read_cells(
         bounds: The number of cell formats, cell-metadata and value-metadata entries: a cell
             whose ``s``, ``cm`` or ``vm`` is past its table is refused, as Excel refuses it
             (capture ``attributes``).
+        plain_errors: The error codes a ``<v>`` may hold as text: Excel's (capture ``errors``);
+            the workbook :func:`xlio.read_csv` builds holds every code Excel shows as text.
 
     The element handlers are the hot path of a load: expat runs without namespace processing
     (names are matched by their local part, so a prefixed file reads the same), and the state
@@ -400,7 +403,10 @@ def read_cells(
                 inline_rich = rich(builder.close())
                 builder = None
         if code == 2:
-            cell = _cell(row, col, attrs_c, v, v_preserve, f_text, f_attrs, inline, strings, bounds)
+            cell = _cell(
+                row, col, attrs_c, v, v_preserve, f_text, f_attrs, inline, strings, bounds,
+                plain_errors,
+            )  # fmt: skip
             if (
                 rich_strings is not None
                 or inline_rich is not None
@@ -458,6 +464,7 @@ def _cell(
     inline: list[str] | None,
     strings: list[str],
     bounds: tuple[int, int, int] | None = None,
+    plain_errors: frozenset[str] = _PLAIN_ERRORS,
 ) -> Cell:
     t = attrs.get("t", "n")
     value: float | str | bool | None
@@ -484,7 +491,7 @@ def _cell(
     elif t == "b":
         value = v in ("1", "true")
     elif t == "e":
-        if v not in _PLAIN_ERRORS:
+        if v not in plain_errors:
             raise PackageError(f"row {row}, column {col}: an error Excel refuses: {v[:40]!r}")
         value = v
     else:  # "d"

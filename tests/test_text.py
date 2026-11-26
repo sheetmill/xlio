@@ -50,6 +50,17 @@ def expected(suite: str) -> dict[str, dict[str, tuple[str, str]]]:
     return out
 
 
+SAVED_AS = {
+    **dict.fromkeys(
+        ("#SPILL!", "#CALC!", "#FIELD!", "#BLOCKED!", "#CONNECT!", "#BUSY!", "#UNKNOWN!",
+         "#PYTHON!", "#TIMEOUT!"),
+        "#VALUE!",
+    ),
+    "#GETTING_DATA": "#N/A",
+}  # fmt: skip
+"""What Excel's saver writes for an error a CSV field holds (capture ``csv_errors``)."""
+
+
 def got(wb: xlio.Workbook) -> dict[str, tuple[str, str]]:
     formats = wb.styles.cell_formats
     out = {}
@@ -67,6 +78,10 @@ def got(wb: xlio.Workbook) -> dict[str, tuple[str, str]]:
             out[ref] = (f"s:{cell.value}", shown)
         elif cell.type == "b":
             out[ref] = (f"b:{int(bool(cell.value))}", shown)
+        elif cell.type == "e":
+            # The captures read Excel's saved copy, whose saver writes a newer error as #VALUE!
+            # (with a rich value) and #GETTING_DATA as #N/A (capture csv_errors): compare so.
+            out[ref] = (f"e:{SAVED_AS.get(str(cell.value), str(cell.value))}", shown)
         else:
             out[ref] = (f"{cell.type}:{cell.value}", shown)
     return out
