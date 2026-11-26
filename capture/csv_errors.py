@@ -67,7 +67,7 @@ def manifest(job_id: str) -> dict[str, object]:
     for k, (name, _) in enumerate(FILES.values()):
         steps: list[dict[str, object]] = [
             {"op": "open"},
-            {"op": "set_size", "columns": "A1", "width": 30},
+            {"op": "set_size", "columns": "A:A", "width": 30},
             {"op": "read", "range": f"A1:A{N}", "props": ["text", "value2"]},
             {"op": "save_as", "name": _saved(k), "format": "xlsx"},
             {"op": "write", "range": f"B1:C{N}", "formulas": formulas},
