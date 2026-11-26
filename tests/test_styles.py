@@ -93,12 +93,14 @@ def test_a_font_size_is_its_magnitude(text, size):
     assert (wb.styles.fonts[0].size, wb.styles.fonts[0].raw_size) == (size, text)
 
 
-@pytest.mark.parametrize("text", ["409.5", "-409.5", "409.55", "409.59"])
-def test_a_font_size_past_409_opens(text):
-    # Excel opens sizes below 409.6, kept in twentieths of a point; 409.6 is refused (capture
-    # edges).
+@pytest.mark.parametrize(
+    ("text", "size"), [("409.5", 409.5), ("-409.5", 409.5), ("409.55", 409.55), ("409.59", 409.55)]
+)
+def test_a_font_size_past_409_opens(text, size):
+    # Excel opens sizes below 409.6, kept in twentieths of a point, cut down; 409.6 is refused
+    # (capture edges; tests/captures/windows/font_sizes.tsv).
     wb = with_styles(f'<fonts><font><sz val="{text}"/></font></fonts>')
-    assert wb.styles.fonts[0].size == abs(float(text))
+    assert (wb.styles.fonts[0].size, wb.styles.fonts[0].raw_size) == (size, text)
     with pytest.raises(xlio.PackageError, match=r"font size of '409\.6'"):
         xlio.check(
             io.BytesIO(package(extra_parts=_parts('<fonts><font><sz val="409.6"/></font></fonts>')))

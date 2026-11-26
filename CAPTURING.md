@@ -38,10 +38,14 @@ These readings still rest on the saved copy alone:
   (`macrosheet`).
 - Drawing anchors and conditional formats after a repair (`repair`).
 - Borders written with `start` and `end`, read as `left` and `right` (`edges`).
-- Font sizes in twentieths of a point: the saved copies keep a size cut to twentieths (409.54
-  as 409.5) and the largest run or differential size as 409.55 (`edges`, `attributes`). Excel's
-  AppleScript dictionary gives a font size as a whole number, so `live_reads` confirms only the
-  whole points.
+- Rich-text run and differential (conditional format) font sizes in twentieths of a point: the
+  saved copies keep the largest as 409.55 (`attributes`). Excel's AppleScript dictionary gives a
+  font size as a whole number, so `live_reads` confirms only the whole points.
+
+A cell font's size is read cut down to twentieths of a point (12.34 as 12.3, 409.56 as 409.55)
+from a Windows capture: `font_sizes` (`capture/font_job.py`), which read each cell's `Font.Size`
+through the object model while the workbook was open. It is not yet verified on the Mac, where
+AppleScript gives only the whole points; the Mac's saved copies (`edges`) agree with it.
 
 ## Steps that need a person
 
@@ -130,7 +134,8 @@ sheetmill's capture-job format, version 1:
 https://github.com/sheetmill/sheetmill/blob/e3a5207/docs/capture-jobs.md), its header copied
 from the job's result. `csv_open` is the first: the job `capture/csv_job.py write` makes, run on
 Windows, with its Mac twin (`capture/csv_job.py mac`) in `tests/captures/csv_open.tsv`, paired row
-by row in `tests/test_csv_open.py`. Where Windows is not captured, the reader follows the Mac.
+by row in `tests/test_csv_open.py`. `csv_errors` has the same pair; `font_sizes` is from Windows
+alone (`tests/test_font_sizes.py`). Where Windows is not captured, the reader follows the Mac.
 
 ## Test workbooks
 

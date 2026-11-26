@@ -30,6 +30,10 @@ packages; `xlio.open` and `xlio.check` read every file as before.
   Mac, Windows-1252 on Windows); a codec given still wins.
 
 ### Fixed
+- A cell font's size (`Font.size` of the styles' fonts) is now cut down to twentieths of a
+  point, as Excel holds it while the workbook is open: 12.34 reads 12.3, 409.56 reads 409.55
+  (a Windows capture, `font_sizes`, not yet verified on the Mac). It read as written; the text
+  stays in `Font.raw_size`. Run and differential format sizes are unchanged.
 - A row with a custom height of 0 (`ht="0"`, or an empty `ht`) and a column range with a custom
   width of 0 (a width that does not parse included) now read as hidden (`RowFormat.hidden`,
   `ColumnRange.hidden`), as Excel shows them while the workbook is open (capture `live_reads`);

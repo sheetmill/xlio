@@ -15,6 +15,7 @@ import xml.etree.ElementTree as ET
 import xml.parsers.expat
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
+from decimal import Decimal
 from typing import BinaryIO, Literal, TypeVar
 
 from xlio._package import PackageError
@@ -43,7 +44,7 @@ __all__ = [
 
 _RGB = re.compile(r"[0-9A-Fa-f]{8}")
 # Excel keeps a font size in twentieths of a point, cut down, up to 8,191 (409.55): 409.56 is
-# kept as 409.55 and 409.6 is refused (capture edges).
+# kept as 409.55 and 409.6 is refused (capture edges; tests/captures/windows/font_sizes.tsv).
 _SMALLEST, _TOO_LARGE = 1.0, 409.6
 _T = TypeVar("_T")
 
@@ -77,10 +78,13 @@ _VERTICALS: tuple[Vertical, ...] = Vertical.__args__  # type: ignore[attr-define
 def font_size(text: str) -> float:
     """A font size as Excel takes it: its magnitude, from 1 to below 409.6.
 
-    Captures ``package`` and ``edges``.
+    Captures ``package`` and ``edges``, and Excel for Windows' ``font_sizes``
+    (``tests/captures/windows/font_sizes.tsv``).
 
-    Excel keeps the size in twentieths of a point, cut down (409.54 is 409.5, capture
-    ``edges``); the size is returned as written, since that cut is known only there.
+    Excel keeps the size in twentieths of a point, cut down: 12.34 is 12.3, 409.54 is 409.5,
+    409.56 is 409.55, as Excel for Windows gives a cell's ``Font.Size`` while the workbook is
+    open (``tests/captures/windows/font_sizes.tsv``; the Mac's saved copies agree, capture
+    ``edges``).
 
     Raises:
         PackageError: Any other size (0, 0.5, 409.6, NaN, infinity), which makes Excel refuse
@@ -92,7 +96,8 @@ def font_size(text: str) -> float:
         points = math.nan
     if not _SMALLEST <= points < _TOO_LARGE:  # NaN compares false
         raise PackageError(f"a font size of {text[:40]!r}, which Excel refuses")
-    return points
+    # cut from the decimal text, so that 12.35 is 247 twentieths and not 246.99...
+    return math.floor(Decimal(text.strip()).copy_abs() * 20) / 20
 
 
 _RUN_LARGEST = 409.55
@@ -176,7 +181,8 @@ class Font:
     Attributes:
         name: The typeface (``name``, ``rFont`` in a run), or ``None``.
         size: The size in points as Excel takes it, or ``None`` when absent: in the styles'
-            fonts, 1 to below 409.6 (another size is refused); in a run, its magnitude
+            fonts, 1 to below 409.6, cut down to twentieths of a point (another size is
+            refused); in a run, its magnitude
             clamped to 1 to 409.55; in a differential format, its magnitude up to 409.55 (0, or
             a size past it, is refused; captures ``package``, ``attributes`` and ``edges``).
         bold: Bold.
