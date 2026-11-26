@@ -108,7 +108,7 @@ _Platform = Literal["mac", "windows"]
 _CODE_PAGES = {"mac": "mac_roman", "windows": "cp1252"}
 
 
-def _decode(data: bytes, options: TextOptions, platform: _Platform = "mac") -> str:
+def _decode(data: bytes, options: TextOptions, platform: _Platform) -> str:
     """The file's text, as Excel decodes it (captures ``text`` and ``csv_open``)."""
     if options.encoding is not None:
         text = data.decode(options.encoding, errors="replace")
@@ -449,7 +449,7 @@ def _package(
     name: str,
     options: TextOptions,
     today: datetime.date,
-    platform: _Platform = "mac",
+    platform: _Platform,
 ) -> BinaryIO:
     """The workbook package, its sheet written row by row as the rows come.
 
@@ -590,7 +590,7 @@ def read_csv(
     options: CsvOptions | None = None,
     *,
     limits: ReadLimits | None = None,
-    platform: object = "mac",
+    platform: object = None,
 ) -> Workbook:
     """Read a delimited text file as Excel opens it: a one-sheet :class:`Workbook`.
 
@@ -599,8 +599,9 @@ def read_csv(
         options: How to read it (:class:`CsvOptions`); Excel's defaults when ``None``.
         limits: What reading may cost: the file's size is bounded by ``max_text_bytes``, and the
             workbook built from it by the other limits.
-        platform: Which Excel opens it: ``"mac"`` (the default) or ``"windows"``, or an object
-            whose ``name`` is one of them (such as ``xlformat.Platform.WINDOWS``). It decides
+        platform: Which Excel opens it: ``"windows"``, ``"mac"``, or an object whose ``name`` is
+            one of them (such as ``xlformat.Platform.MAC``); ``None`` (the default) is
+            ``"windows"``, Excel for Windows, as across the sheetmill packages. It decides
             the code page of a file without a byte order mark (unless
             ``TextOptions.fallback_encoding`` names one) and the size of the workbook's font,
             Aptos Narrow 12 on the Mac and 11 on Windows (capture ``csv_open``).
@@ -614,10 +615,12 @@ def read_csv(
 
     Raises:
         LimitError: The file is larger than ``limits.max_text_bytes``.
-        ValueError: ``platform`` is neither ``"mac"`` nor ``"windows"``, nor has such a name.
+        ValueError: ``platform`` is not ``None``, ``"mac"`` or ``"windows"``, nor has such a name.
     """
     from xlio._workbook import open as open_workbook
 
+    if platform is None:
+        platform = "windows"
     named = platform if isinstance(platform, str) else getattr(platform, "name", None)
     which: _Platform
     if named == "mac":

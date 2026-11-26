@@ -88,7 +88,7 @@ def compare(suite: str, cases: dict[str, bytes], options: xlio.CsvOptions) -> No
     want = expected(suite)
     failed = {}
     for case, data in cases.items():
-        with xlio.read_csv(io.BytesIO(data), options) as wb:
+        with xlio.read_csv(io.BytesIO(data), options, platform="mac") as wb:
             have = got(wb)
         cells = want.get(case, {})
         wrong = {r: (cells.get(r), have.get(r)) for r in set(cells) | set(have)
@@ -114,7 +114,8 @@ def test_the_notice_answered(answer, conversions):
 
 def test_two_digit_years_and_sheet_names():
     want = expected("text_extra")
-    with xlio.read_csv(io.BytesIO(extra_files()["years"][1]), xlio.CsvOptions(today=TODAY)) as wb:
+    options = xlio.CsvOptions(today=TODAY)
+    with xlio.read_csv(io.BytesIO(extra_files()["years"][1]), options, platform="mac") as wb:
         have = got(wb)
     assert len(have) == len(YEARS)
     assert all(same(want["years"][r], have[r]) for r in want["years"])
@@ -129,7 +130,7 @@ def test_a_long_line_continues_on_the_next_row():
         r[0]: tuple(r[1:]) for r in rows("text_limits") if r[0].startswith("field")
     }.items():
         size = int(case.split()[1])
-        with xlio.read_csv(io.BytesIO(b"x" * size + b"\n")) as wb:
+        with xlio.read_csv(io.BytesIO(b"x" * size + b"\n"), platform="mac") as wb:
             have = list(wb.sheets[0].cells())
         assert (len(have), len(have[0].value)) == (int(cells), int(length)), case
         assert max(c.row for c in have) == int(rows_)
@@ -151,7 +152,7 @@ def test_formulas_as_text():
 def test_columns_past_the_grid_are_dropped():
     case = next(r for r in rows("text_limits") if r[0] == "columns 16385")
     data = (",".join(str(n) for n in range(1, 16386)) + "\n").encode()
-    with xlio.read_csv(io.BytesIO(data)) as wb:
+    with xlio.read_csv(io.BytesIO(data), platform="mac") as wb:
         cells = list(wb.sheets[0].cells())
     assert (len(cells), cells[-1].column) == (int(case[5]), int(case[4]))
 

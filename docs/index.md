@@ -11,6 +11,11 @@ minor version (for example `xlio==0.4.*`).
 It is written in pure Python with the standard library only; this documentation covers its
 public names.
 
+Which Excel it follows: `read_csv` reads a CSV file as Excel for Windows opens it, unless it is
+given `platform="mac"`, which reads it as Excel for Mac does; both readings rest on results
+captured from Excel under Microsoft 365. The readings of xlsx files (`open`, `check`) take no
+platform: they were captured from Excel 16 for Mac and are not yet verified on Windows.
+
 Python 3.11 or later. The source is at <https://github.com/sheetmill/xlio>.
 
 xlio is part of the [sheetmill](https://github.com/sheetmill) project, with

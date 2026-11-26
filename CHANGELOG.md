@@ -7,18 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-A dependent pinned to `xlio==0.4.*` moves to `xlio==0.5.*`. A caller that passes no `platform`
-reads every file as before; one that reads `TextOptions().fallback_encoding` back gets `None`.
+A dependent pinned to `xlio==0.4.*` moves to `xlio==0.5.*`. `read_csv` now reads a file as
+Excel for Windows opens it unless given `platform="mac"`, the default across the sheetmill
+packages; `xlio.open` and `xlio.check` read every file as before.
 
 ### Added
-- `read_csv(..., platform="mac")` reads a text file as Excel for Mac or Excel for Windows opens
-  it: `"mac"`, `"windows"`, or an object whose `name` is one of them (such as
-  `xlformat.Platform.WINDOWS`). On Windows a file without a byte order mark reads as
-  Windows-1252, its five undefined bytes (0x81, 0x8D, 0x8F, 0x90, 0x9D) as the code points of
-  the same value, and the workbook's font is Aptos Narrow 11 (12 on the Mac). Everything else
-  reads the same on both, as the new capture `csv_open` and its Windows twin show.
+- `read_csv(..., platform=None)` reads a text file as Excel for Windows or Excel for Mac opens
+  it: `"windows"`, `"mac"`, or an object whose `name` is one of them (such as
+  `xlformat.Platform.MAC`); `None` is `"windows"`. On Windows a file without a byte order mark
+  reads as Windows-1252, its five undefined bytes (0x81, 0x8D, 0x8F, 0x90, 0x9D) as the code
+  points of the same value, and the workbook's font is Aptos Narrow 11 (12 on the Mac).
+  Everything else reads the same on both, as the new capture `csv_open` and its Windows twin
+  show.
 
 ### Changed
+- `read_csv` follows Excel for Windows by default. A caller that passes no `platform` now reads
+  a file without a byte order mark as Windows-1252 where it read Mac Roman (a byte from 0x80 up
+  reads as another character: 0x80 is `€`, not `Ä`), and gets a workbook whose font is Aptos
+  Narrow 11 where it was 12. Every other reading is the same on both platforms. To keep the
+  earlier reading, pass `platform="mac"`.
 - `TextOptions.fallback_encoding` defaults to `None`, the platform's code page (Mac Roman on the
   Mac, Windows-1252 on Windows); a codec given still wins.
 

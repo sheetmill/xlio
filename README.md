@@ -13,6 +13,11 @@ it parses anything (part count and sizes, compression methods, encryption, names
 DTD in any part) and refuses what Excel refuses; the writer copies every part it does not change
 byte for byte and rewrites only the cells it is given.
 
+Which Excel it follows: `read_csv` reads a CSV file as Excel for Windows opens it, unless it is
+given `platform="mac"`, which reads it as Excel for Mac does; both readings rest on results
+captured from Excel under Microsoft 365. The readings of xlsx files (`open`, `check`) take no
+platform: they were captured from Excel 16 for Mac and are not yet verified on Windows.
+
 xlio is part of the [sheetmill](https://github.com/sheetmill) project, with
 [xlformat](https://github.com/sheetmill/xlformat), which applies Excel number formats,
 [xlrecalc](https://github.com/sheetmill/xlrecalc), which recalculates workbooks, and

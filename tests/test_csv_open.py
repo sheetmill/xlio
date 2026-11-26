@@ -156,6 +156,12 @@ def test_a_platform_is_a_name_or_an_object_with_one():
         assert next(wb.sheets[0].cells()).value == "€"
     with pytest.raises(ValueError, match="platform"):
         xlio.read_csv(io.BytesIO(b"1\n"), platform="linux")
+    for platform, value, size in (("mac", "Ä", 12), (None, "€", 11)):  # None: Windows
+        with xlio.read_csv(io.BytesIO(b"\x80\n"), platform=platform) as wb:
+            assert next(wb.sheets[0].cells()).value == value
+            assert wb.styles.fonts[0].size == size
+    with xlio.read_csv(io.BytesIO(b"\x80\n")) as wb:
+        assert next(wb.sheets[0].cells()).value == "€"  # the default is Windows
     options = xlio.CsvOptions(fallback_encoding="latin-1")
     with xlio.read_csv(io.BytesIO(b"\x80\n"), options, platform="windows") as wb:
         assert next(wb.sheets[0].cells()).value == "\x80"  # the caller's encoding wins
