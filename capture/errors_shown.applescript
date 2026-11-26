@@ -7,6 +7,7 @@ on run argv
 	set xlName to do shell script "basename " & quoted form of xlPath
 	set xlCopy to ""
 	if (count of argv) > 1 then set xlCopy to item 2 of argv
+	set tb to tab -- the separator, taken before the tell block
 	tell application "Microsoft Excel"
 		if exists workbook xlName then error "already open in Excel, close it first: " & xlName
 		set display alerts to false
@@ -27,7 +28,7 @@ on run argv
 				on error
 					set k to "?"
 				end try
-				set end of shown to t & tab & k
+				set end of shown to t & tb & k
 			end repeat
 			if xlCopy is not "" then
 				set xlCopyName to do shell script "basename " & quoted form of xlCopy

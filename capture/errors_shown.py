@@ -72,6 +72,8 @@ def _shown(src: Path, copy: Path | None) -> tuple[list[str], str]:
         message = " ".join((said.group(1) if said else "").split())[:160]
         return [], f"{found.group(1)} {message}" if found else message
     fields = result.stdout.rstrip("\n").split("\t")
+    if len(fields) != 2 * len(REFS):  # a string value and a class for each cell
+        raise SystemExit(f"unexpected output from errors_shown.applescript: {result.stdout!r}")
     return fields[0::2] + fields[1::2], ""
 
 
