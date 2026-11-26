@@ -1,0 +1,8 @@
+# suite: errors_shown (capture/errors_shown.py); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-25; method: capture/errors_probe.py's cases opened with alerts off (errors_shown.applescript): A1:E1's string values and value classes read while open, saved as a copy (its A1 as type:value), the copy opened again and read
+case	outcome	error	A1 shown	B1 shown	C1 shown	D1 shown	E1 shown	A1 class	B1 class	C1 class	D1 class	E1 class	copy A1	reopened A1 shown	reopened B1 shown	reopened C1 shown	reopened D1 shown	reopened E1 shown
+control	opened		1	1	#N/A	FALSE	1	real	real	missing value	boolean	Unicode text	n:1	1	1	#N/A	FALSE	1
+rich 8	opened		#SPILL!	#SPILL!	9	TRUE	#SPILL!	missing value	missing value	real	boolean	Unicode text	e:#VALUE!	#SPILL!	#SPILL!	9	TRUE	#SPILL!
+rich 13	opened		#CALC!	#CALC!	14	TRUE	#CALC!	missing value	missing value	real	boolean	Unicode text	e:#VALUE!	#CALC!	#CALC!	14	TRUE	#CALC!
+rich 14	opened		#CALC!	#CALC!	15	TRUE	#CALC!	missing value	missing value	real	boolean	Unicode text	n:0	0	0	15	TRUE	#CALC!

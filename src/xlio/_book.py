@@ -35,9 +35,10 @@ _RICH_ERRORS = {
     "15": "#BUSY!", "18": "#UNKNOWN!", "19": "#TIMEOUT!",
 }  # fmt: skip
 _REFUSED_ERROR_TYPES = frozenset({"7", "17"})
-# errorType 14: Excel saves the cell as the number 0 (its rich value dropped) and a formula
-# referring to it caches 0, so it is read as 0; at load-time calculation ERROR.TYPE gave 15 and
-# VALUETOTEXT "#CALC!", so what Excel shows in the cell itself is still to be captured.
+# errorType 14: while the workbook is open the cell shows #CALC! (ERROR.TYPE 15, VALUETOTEXT
+# "#CALC!"), but Excel saves it as the number 0 (its rich value dropped), a formula referring to
+# it caches 0, and the saved file shows 0 (captures errors and errors_shown). xlio reads the
+# stored value, 0.
 _RICH_NUMBERS = {"14": 0.0}
 
 

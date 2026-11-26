@@ -104,3 +104,37 @@ def test_an_error_rich_value_wins_over_the_cached_value(name):
     cell = f'<c r="A1"{t}{vm}><f>{STALE_FORMULA}</f><v>{value}</v></c>'
     case = Case(name, ((SHEET, A1, cell), *rich.edits[1:]), rich.parts)
     assert a1(build(CONTROL, case)) == shown["E1 =VALUETOTEXT(A1)"].removeprefix("str:")
+
+
+# Capture ``errors_shown`` (``capture/errors_shown.py``): what A1:E1 show while the workbook is
+# open, what Excel saves in A1, and what its saved copy shows. For errorType 14 the cell shows
+# #CALC! while Excel saves the number 0; xlio reads the value the file stores (0), as the copy
+# then shows it, and the cases whose error Excel keeps read as that error.
+SHOWN_CAPTURE = Path(__file__).with_name("captures") / "errors_shown.tsv"
+SHOWN_LINES = SHOWN_CAPTURE.read_text(encoding="utf-8").splitlines()
+SHOWN_HEADER = next(line.split("\t") for line in SHOWN_LINES if line.startswith("case\t"))
+SHOWN_ROWS = {
+    row["case"]: row
+    for row in (
+        dict(zip(SHOWN_HEADER, line.split("\t"), strict=True))
+        for line in SHOWN_LINES
+        if line.strip() and not line.startswith(("# ", "case\t"))
+    )
+}
+
+
+def test_what_excel_shows_and_saves_for_each_rich_error():
+    assert set(SHOWN_ROWS) == {"control", "rich 8", "rich 13", "rich 14"}
+    for name, row in SHOWN_ROWS.items():
+        value = a1(build(CONTROL, BUILT[name]))
+        if name == "rich 14":
+            assert (row["A1 shown"], row["copy A1"], row["reopened A1 shown"]) == (
+                "#CALC!",
+                "n:0",
+                "0",
+            )
+            assert value == 0.0  # the stored value; the cell shows #CALC! until Excel saves it
+        elif name == "control":
+            assert value == float(row["A1 shown"]) == 1.0
+        else:
+            assert value == row["A1 shown"] == row["reopened A1 shown"]
