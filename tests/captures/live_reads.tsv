@@ -1,0 +1,216 @@
+# suite: live_reads (capture/live_reads.py); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-25; method: cases of the edges, attributes, outline and value_forms probes opened with alerts off (live_reads.applescript) and read through AppleScript while open, each answer as class:value; nothing saved
+case	outcome	error	read	value
+cell font size 12	opened		A1 font size	integer:12
+cell font size 12	opened		A1 GET.CELL(19) by evaluate	error: Microsoft Excel got an error: Can’t continue evaluate.
+cell font size 12	opened		A1 GET.CELL(19) by run XLM Macro	error: Microsoft Excel got an error: Parameter error.
+cell font size 12	opened		row 1 height	real:16.0
+cell font size 12.3	opened		A1 font size	integer:12
+cell font size 12.3	opened		A1 GET.CELL(19) by evaluate	error: Microsoft Excel got an error: Can’t continue evaluate.
+cell font size 12.3	opened		A1 GET.CELL(19) by run XLM Macro	error: Microsoft Excel got an error: Parameter error.
+cell font size 12.3	opened		row 1 height	real:16.0
+cell font size 12.34	opened		A1 font size	integer:12
+cell font size 12.34	opened		A1 GET.CELL(19) by evaluate	error: Microsoft Excel got an error: Can’t continue evaluate.
+cell font size 12.34	opened		A1 GET.CELL(19) by run XLM Macro	error: Microsoft Excel got an error: Parameter error.
+cell font size 12.34	opened		row 1 height	real:16.0
+cell font size 12.35	opened		A1 font size	integer:12
+cell font size 12.35	opened		A1 GET.CELL(19) by evaluate	error: Microsoft Excel got an error: Can’t continue evaluate.
+cell font size 12.35	opened		A1 GET.CELL(19) by run XLM Macro	error: Microsoft Excel got an error: Parameter error.
+cell font size 12.35	opened		row 1 height	real:16.0
+cell font size 12.36	opened		A1 font size	integer:12
+cell font size 12.36	opened		A1 GET.CELL(19) by evaluate	error: Microsoft Excel got an error: Can’t continue evaluate.
+cell font size 12.36	opened		A1 GET.CELL(19) by run XLM Macro	error: Microsoft Excel got an error: Parameter error.
+cell font size 12.36	opened		row 1 height	real:16.0
+cell font size 12.4	opened		A1 font size	integer:12
+cell font size 12.4	opened		A1 GET.CELL(19) by evaluate	error: Microsoft Excel got an error: Can’t continue evaluate.
+cell font size 12.4	opened		A1 GET.CELL(19) by run XLM Macro	error: Microsoft Excel got an error: Parameter error.
+cell font size 12.4	opened		row 1 height	real:16.0
+cell font size 12.5	opened		A1 font size	integer:12
+cell font size 12.5	opened		A1 GET.CELL(19) by evaluate	error: Microsoft Excel got an error: Can’t continue evaluate.
+cell font size 12.5	opened		A1 GET.CELL(19) by run XLM Macro	error: Microsoft Excel got an error: Parameter error.
+cell font size 12.5	opened		row 1 height	real:17.0
+cell font size 12.6	opened		A1 font size	integer:12
+cell font size 12.6	opened		A1 GET.CELL(19) by evaluate	error: Microsoft Excel got an error: Can’t continue evaluate.
+cell font size 12.6	opened		A1 GET.CELL(19) by run XLM Macro	error: Microsoft Excel got an error: Parameter error.
+cell font size 12.6	opened		row 1 height	real:17.0
+cell font size 13	opened		A1 font size	integer:13
+cell font size 13	opened		A1 GET.CELL(19) by evaluate	error: Microsoft Excel got an error: Can’t continue evaluate.
+cell font size 13	opened		A1 GET.CELL(19) by run XLM Macro	error: Microsoft Excel got an error: Parameter error.
+cell font size 13	opened		row 1 height	real:17.0
+cell font size 409	opened		A1 font size	integer:409
+cell font size 409	opened		A1 GET.CELL(19) by evaluate	error: Microsoft Excel got an error: Can’t continue evaluate.
+cell font size 409	opened		A1 GET.CELL(19) by run XLM Macro	error: Microsoft Excel got an error: Parameter error.
+cell font size 409	opened		row 1 height	real:409.5
+cell font size 409.5	opened		A1 font size	integer:409
+cell font size 409.5	opened		A1 GET.CELL(19) by evaluate	error: Microsoft Excel got an error: Can’t continue evaluate.
+cell font size 409.5	opened		A1 GET.CELL(19) by run XLM Macro	error: Microsoft Excel got an error: Parameter error.
+cell font size 409.5	opened		row 1 height	real:409.5
+cell font size 409.54	opened		A1 font size	integer:409
+cell font size 409.54	opened		A1 GET.CELL(19) by evaluate	error: Microsoft Excel got an error: Can’t continue evaluate.
+cell font size 409.54	opened		A1 GET.CELL(19) by run XLM Macro	error: Microsoft Excel got an error: Parameter error.
+cell font size 409.54	opened		row 1 height	real:409.5
+cell font size 409.55	opened		A1 font size	integer:409
+cell font size 409.55	opened		A1 GET.CELL(19) by evaluate	error: Microsoft Excel got an error: Can’t continue evaluate.
+cell font size 409.55	opened		A1 GET.CELL(19) by run XLM Macro	error: Microsoft Excel got an error: Parameter error.
+cell font size 409.55	opened		row 1 height	real:409.5
+cell font size 409.56	opened		A1 font size	integer:409
+cell font size 409.56	opened		A1 GET.CELL(19) by evaluate	error: Microsoft Excel got an error: Can’t continue evaluate.
+cell font size 409.56	opened		A1 GET.CELL(19) by run XLM Macro	error: Microsoft Excel got an error: Parameter error.
+cell font size 409.56	opened		row 1 height	real:409.5
+attributes control	opened		A2 character 1 font size	integer:14
+attributes control	opened		A2 character 5 font size	integer:11
+attributes control	opened		A3 condition 1 font size	integer:12
+attributes control	opened		row 1 height	real:30.0
+attributes control	opened		row 1 hidden	boolean:false
+attributes control	opened		column B width	real:19.17
+attributes control	opened		column B hidden	boolean:false
+attributes run sz 409.5	opened		A2 character 1 font size	integer:409
+attributes run sz 409.5	opened		A2 character 5 font size	integer:11
+attributes run sz 409.55	opened		A2 character 1 font size	integer:409
+attributes run sz 409.55	opened		A2 character 5 font size	integer:11
+attributes run sz 410	opened		A2 character 1 font size	integer:409
+attributes run sz 410	opened		A2 character 5 font size	integer:11
+attributes run sz 0	opened		A2 character 1 font size	integer:1
+attributes run sz 0	opened		A2 character 5 font size	integer:11
+attributes run sz -1	opened		A2 character 1 font size	integer:1
+attributes run sz -1	opened		A2 character 5 font size	integer:11
+attributes run sz -2	opened		A2 character 1 font size	integer:2
+attributes run sz -2	opened		A2 character 5 font size	integer:11
+attributes run sz 1e400	opened		A2 character 1 font size	integer:1
+attributes run sz 1e400	opened		A2 character 5 font size	integer:11
+attributes dxf sz 409.55	opened		A3 condition 1 font size	integer:409
+attributes dxf sz -1	opened		A3 condition 1 font size	integer:1
+attributes dxf sz -2	opened		A3 condition 1 font size	integer:2
+attributes row hidden='yes'	opened		row 1 height	real:30.0
+attributes row hidden='yes'	opened		row 1 hidden	boolean:false
+attributes row hidden='yes'	opened		column B width	real:19.17
+attributes row hidden='yes'	opened		column B hidden	boolean:false
+attributes row hidden='2'	opened		row 1 height	real:30.0
+attributes row hidden='2'	opened		row 1 hidden	boolean:false
+attributes row hidden='2'	opened		column B width	real:19.17
+attributes row hidden='2'	opened		column B hidden	boolean:false
+attributes row hidden='TRUE'	opened		row 1 height	real:30.0
+attributes row hidden='TRUE'	opened		row 1 hidden	boolean:false
+attributes row hidden='TRUE'	opened		column B width	real:19.17
+attributes row hidden='TRUE'	opened		column B hidden	boolean:false
+attributes row hidden='on'	opened		row 1 height	real:30.0
+attributes row hidden='on'	opened		row 1 hidden	boolean:false
+attributes row hidden='on'	opened		column B width	real:19.17
+attributes row hidden='on'	opened		column B hidden	boolean:false
+attributes row hidden=''	opened		row 1 height	real:30.0
+attributes row hidden=''	opened		row 1 hidden	boolean:false
+attributes row hidden=''	opened		column B width	real:19.17
+attributes row hidden=''	opened		column B hidden	boolean:false
+attributes row customHeight='2'	opened		row 1 height	real:20.0
+attributes row customHeight='2'	opened		row 1 hidden	boolean:false
+attributes row customHeight='2'	opened		column B width	real:19.17
+attributes row customHeight='2'	opened		column B hidden	boolean:false
+attributes row customHeight='yes'	opened		row 1 height	real:20.0
+attributes row customHeight='yes'	opened		row 1 hidden	boolean:false
+attributes row customHeight='yes'	opened		column B width	real:19.17
+attributes row customHeight='yes'	opened		column B hidden	boolean:false
+attributes row customHeight='0'	opened		row 1 height	real:20.0
+attributes row customHeight='0'	opened		row 1 hidden	boolean:false
+attributes row customHeight='0'	opened		column B width	real:19.17
+attributes row customHeight='0'	opened		column B hidden	boolean:false
+attributes row ht=''	opened		row 1 height	real:0.0
+attributes row ht=''	opened		row 1 hidden	boolean:true
+attributes row ht=''	opened		column B width	real:19.17
+attributes row ht=''	opened		column B hidden	boolean:false
+attributes row ht='abc'	opened		row 1 height	real:15.0
+attributes row ht='abc'	opened		row 1 hidden	boolean:false
+attributes row ht='abc'	opened		column B width	real:19.17
+attributes row ht='abc'	opened		column B hidden	boolean:false
+attributes row ht='30pt'	opened		row 1 height	real:15.0
+attributes row ht='30pt'	opened		row 1 hidden	boolean:false
+attributes row ht='30pt'	opened		column B width	real:19.17
+attributes row ht='30pt'	opened		column B hidden	boolean:false
+attributes row ht=' 30'	opened		row 1 height	real:15.0
+attributes row ht=' 30'	opened		row 1 hidden	boolean:false
+attributes row ht=' 30'	opened		column B width	real:19.17
+attributes row ht=' 30'	opened		column B hidden	boolean:false
+attributes row ht='0x1E'	opened		row 1 height	real:15.0
+attributes row ht='0x1E'	opened		row 1 hidden	boolean:false
+attributes row ht='0x1E'	opened		column B width	real:19.17
+attributes row ht='0x1E'	opened		column B hidden	boolean:false
+attributes col width='abc'	opened		row 1 height	real:30.0
+attributes col width='abc'	opened		row 1 hidden	boolean:false
+attributes col width='abc'	opened		column B width	real:0.0
+attributes col width='abc'	opened		column B hidden	boolean:true
+attributes col width=''	opened		row 1 height	real:30.0
+attributes col width=''	opened		row 1 hidden	boolean:false
+attributes col width=''	opened		column B width	real:0.0
+attributes col width=''	opened		column B hidden	boolean:true
+attributes col width='20pt'	opened		row 1 height	real:30.0
+attributes col width='20pt'	opened		row 1 hidden	boolean:false
+attributes col width='20pt'	opened		column B width	real:0.0
+attributes col width='20pt'	opened		column B hidden	boolean:true
+attributes col hidden='yes'	opened		row 1 height	real:30.0
+attributes col hidden='yes'	opened		row 1 hidden	boolean:false
+attributes col hidden='yes'	opened		column B width	real:19.17
+attributes col hidden='yes'	opened		column B hidden	boolean:false
+attributes row ht='0'	opened		row 1 height	real:0.0
+attributes row ht='0'	opened		row 1 hidden	boolean:true
+attributes row ht='0'	opened		column B width	real:19.17
+attributes row ht='0'	opened		column B hidden	boolean:false
+attributes col width='0'	opened		row 1 height	real:30.0
+attributes col width='0'	opened		row 1 hidden	boolean:false
+attributes col width='0'	opened		column B width	real:0.0
+attributes col width='0'	opened		column B hidden	boolean:true
+outline row 7	opened		row 2 outline level	integer:8
+outline row 7	opened		column B outline level	integer:1
+outline col 7	opened		row 2 outline level	integer:1
+outline col 7	opened		column B outline level	integer:8
+outline row 8	opened		row 2 outline level	integer:1
+outline row 8	opened		column B outline level	integer:1
+outline col 8	opened		row 2 outline level	integer:1
+outline col 8	opened		column B outline level	integer:1
+outline row 9	opened		row 2 outline level	integer:2
+outline row 9	opened		column B outline level	integer:1
+outline col 9	opened		row 2 outline level	integer:1
+outline col 9	opened		column B outline level	integer:2
+outline row 15	opened		row 2 outline level	integer:8
+outline row 15	opened		column B outline level	integer:1
+outline col 15	opened		row 2 outline level	integer:1
+outline col 15	opened		column B outline level	integer:8
+outline row 255	opened		row 2 outline level	integer:8
+outline row 255	opened		column B outline level	integer:1
+outline col 255	opened		row 2 outline level	integer:1
+outline col 255	opened		column B outline level	integer:8
+outline row 256	opened		row 2 outline level	integer:1
+outline row 256	opened		column B outline level	integer:1
+outline col 256	opened		row 2 outline level	integer:1
+outline col 256	opened		column B outline level	integer:1
+value 111	opened		A1 value	real:111.0
+value 111	opened		A1 string value	text:111
+value 111	opened		B1 value	real:222.0
+value 111	opened		B1 string value	text:222
+value 111	opened		C1 value	boolean:true
+value 111	opened		C1 string value	text:TRUE
+value 111	opened		D1 value	real:1.11E+302
+value 111	opened		D1 string value	text:1.1E+302
+value 4.9e-324	opened		A1 value	real:0.0
+value 4.9e-324	opened		A1 string value	text:0
+value 4.9e-324	opened		B1 value	real:0.0
+value 4.9e-324	opened		B1 string value	text:0
+value 4.9e-324	opened		C1 value	boolean:false
+value 4.9e-324	opened		C1 string value	text:FALSE
+value 4.9e-324	opened		D1 value	real:0.0
+value 4.9e-324	opened		D1 string value	text:0
+value 1e-310	opened		A1 value	real:0.0
+value 1e-310	opened		A1 string value	text:0
+value 1e-310	opened		B1 value	real:0.0
+value 1e-310	opened		B1 string value	text:0
+value 1e-310	opened		C1 value	boolean:false
+value 1e-310	opened		C1 string value	text:FALSE
+value 1e-310	opened		D1 value	real:0.0
+value 1e-310	opened		D1 string value	text:0
+value 2.2250738585072014e-308	opened		A1 value	real:2.225073858507E-308
+value 2.2250738585072014e-308	opened		A1 string value	text:2.2E-308
+value 2.2250738585072014e-308	opened		B1 value	real:4.450147717014E-308
+value 2.2250738585072014e-308	opened		B1 string value	text:4.5E-308
+value 2.2250738585072014e-308	opened		C1 value	boolean:true
+value 2.2250738585072014e-308	opened		C1 string value	text:TRUE
+value 2.2250738585072014e-308	opened		D1 value	real:2.225073858507E-8
+value 2.2250738585072014e-308	opened		D1 string value	text:2.23E-08
