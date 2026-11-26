@@ -480,7 +480,8 @@ class ColumnRange:
             that is not a number are 0, a hidden column), or ``None`` when absent. ``raw_width``
             is the value stored.
         style: The index of the columns' cell format.
-        hidden: The columns are hidden.
+        hidden: The columns are hidden: written so, or given a custom width of 0 (a width that
+            does not parse included), which Excel shows hidden (capture ``live_reads``).
         best_fit: The width was set to fit the contents.
         custom_width: The width was set by hand.
         phonetic: Phonetic guides shown.
@@ -512,7 +513,8 @@ class RowFormat:
         height: The height in points as Excel takes it (its magnitude, wrapped and capped at
             409.5), or ``None`` when absent or ignored (NaN, infinity).
         custom_height: The height was set by hand.
-        hidden: The row is hidden.
+        hidden: The row is hidden: written so, or given a custom height of 0 (``ht=""``
+            included), which Excel shows hidden (capture ``live_reads``).
         style: The row's cell format index (``s``), applied with ``custom_format``; ``None``
             when absent.
         custom_format: The row's format applies to its empty cells.
@@ -541,10 +543,13 @@ def row_format(attrs: Mapping[str, str]) -> RowFormat:
     """A ``<row>``'s format, from its attributes."""
     ht = attrs.get("ht")
     s = attrs.get("s")
+    height = row_height(ht) if ht is not None else None
+    custom = flag(attrs.get("customHeight"), False)
     return RowFormat(
-        row_height(ht) if ht is not None else None,
-        flag(attrs.get("customHeight"), False),
-        flag(attrs.get("hidden"), False),
+        height,
+        custom,
+        # a custom height of 0 shows the row hidden (capture live_reads, ht="0" and ht="")
+        flag(attrs.get("hidden"), False) or (custom and height == 0),
         unsigned(s, 0) if s is not None else None,
         flag(attrs.get("customFormat"), False),
         outline_level(attrs.get("outlineLevel")),
@@ -768,15 +773,18 @@ def _records(
                         "which Excel refuses"
                     )
                 width_text = col.get("width")
+                width = column_width(width_text) if width_text is not None else None
+                custom = flag(col.get("customWidth"), False)
                 columns.append(
                     ColumnRange(
                         first,
                         last,
-                        column_width(width_text) if width_text is not None else None,
+                        width,
                         unsigned(col.get("style"), 0),
-                        flag(col.get("hidden"), False),
+                        # a custom width of 0 shows the columns hidden (capture live_reads)
+                        flag(col.get("hidden"), False) or (custom and width == 0),
                         flag(col.get("bestFit"), False),
-                        flag(col.get("customWidth"), False),
+                        custom,
                         flag(col.get("phonetic"), False),
                         outline_level(col.get("outlineLevel")),
                         flag(col.get("collapsed"), False),

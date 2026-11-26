@@ -30,6 +30,10 @@ packages; `xlio.open` and `xlio.check` read every file as before.
   Mac, Windows-1252 on Windows); a codec given still wins.
 
 ### Fixed
+- A row with a custom height of 0 (`ht="0"`, or an empty `ht`) and a column range with a custom
+  width of 0 (a width that does not parse included) now read as hidden (`RowFormat.hidden`,
+  `ColumnRange.hidden`), as Excel shows them while the workbook is open (capture `live_reads`);
+  they read as not hidden unless written so.
 - `read_csv` reads a field holding one of the newer error codes (`#SPILL!`, `#CALC!`,
   `#FIELD!`, `#BLOCKED!`, `#CONNECT!`, `#BUSY!`, `#UNKNOWN!`, `#PYTHON!`, `#TIMEOUT!`) as that
   error, and `#GETTING_DATA` as `#GETTING_DATA`, as Excel shows them while the workbook is open,

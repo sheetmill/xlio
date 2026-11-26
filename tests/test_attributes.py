@@ -73,12 +73,14 @@ def test_read_as_excel_reads_it(row):
         # Excel writes an ignored height as the default (15); an empty one is 0, hidden.
         saved = float(attribute(row["row 1"], "ht") or "nan")
         assert sheet.rows[1].height == (None if saved == 15 else saved)
+        # a custom height of 0 is hidden, as the open workbook shows it (capture live_reads)
+        assert sheet.rows[1].hidden == (attribute(row["row 1"], "hidden") == "1")
     elif case.startswith("col"):
         (column,) = sheet.columns
         saved = row["cols"]
         assert column.width == float(attribute(saved, "width") or "nan")
-        # Excel writes a zero width as hidden too; xlio keeps hidden as written.
-        assert column.hidden is False
+        # a custom width of 0 is hidden, as the open workbook shows it (capture live_reads)
+        assert column.hidden == (attribute(saved, "hidden") == "1")
     elif case.startswith("cell"):
         (a1,) = (c for c in sheet.cells() if (c.row, c.column) == (1, 1))
         assert (a1.style, a1.cm, a1.vm) == (0, None, None)
