@@ -16,6 +16,33 @@ program's output. Captured data lives in `tests/captures/`, the scripts that pro
    TSV with a header naming the suite, the Excel build, the edition and update channel, the
    locale, the date and the method.
 
+### What a saved copy can and cannot show
+
+A copy shows what Excel writes when it saves, which is not always what it holds while the
+workbook is open: Excel saves a newer error as `#VALUE!` with a rich value, `#GETTING_DATA` as
+`#N/A`, and an error rich value of `errorType` 14 as the number 0, though the open cells show
+the errors (`errors_shown`, `csv_errors`). Where a reading could differ, cells are read while
+the workbook is open, through AppleScript or the object model (`errors_shown`, `csv_errors`,
+`live_reads`), and the copy is kept for the record.
+
+These readings still rest on the saved copy alone:
+
+- What Excel draws for attribute values it keeps as written: `textRotation` 181 to 254,
+  `zoomScale` outside 10 to 400, theme colors 12 to 98, colors with a tint, an RGB value or an
+  index past the palette, `pageSetup` values, print names, a `patternFill` without a type, and
+  `defaultColWidth` (`attributes`, `views`, `theme_bound`).
+- Sheet views: the active cell set to the selection's first cell when it is not a reference in
+  the selection, `activeTab` out of range read as the first sheet, sheet states Excel does not
+  write read as visible (`views`).
+- A macro sheet whose root is in SpreadsheetML's namespace, read without its columns and cells
+  (`macrosheet`).
+- Drawing anchors and conditional formats after a repair (`repair`).
+- Borders written with `start` and `end`, read as `left` and `right` (`edges`).
+- Font sizes in twentieths of a point: the saved copies keep a size cut to twentieths (409.54
+  as 409.5) and the largest run or differential size as 409.55 (`edges`, `attributes`). Excel's
+  AppleScript dictionary gives a font size as a whole number, so `live_reads` confirms only the
+  whole points.
+
 ## Steps that need a person
 
 Some behavior shows only to a person: Excel's repair dialog, its notice about macros, and its
