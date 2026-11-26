@@ -1,0 +1,326 @@
+# suite: csv_errors
+# generator: capture/csv_errors.py
+# method: the job beside this file (csv_errors.job.json) opens each .csv file through the
+#   object model, widens column A to 30, reads A1:A15 (Text, Value2) while it is open,
+#   saves an .xlsx copy,
+#   writes =ERROR.TYPE and =ISERROR beside each cell and reads their Text; the copy's
+#   cells are read with the error their rich value holds
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "font_smoothing": {
+#      "expected": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "found": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "ok": true
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "fonts_missing": [],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "control.csv": {
+#      "bytes": 2,
+#      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+#     },
+#     "xlio_errors_bare.csv": {
+#      "bytes": 138,
+#      "sha256": "0a27cdb7404a7002ef82e59dade1de2be235549f5955b957349b9e863136728e"
+#     },
+#     "xlio_errors_quoted.csv": {
+#      "bytes": 168,
+#      "sha256": "6c7083d11a7497a9c2b5868959362a47d43e1315249332e750501cdbe6ef8724"
+#     }
+#    },
+#    "job_id": "xlio-20261125-170537-csv-errors",
+#    "manifest_sha256": "9dd6a931b52f33ad685150d35c1096386480c83e1c15aed1dbee5f3094ddb0df",
+#    "runner_version": "0.1.28"
+#   }
+file	field	outcome	error	shown	value	ERROR.TYPE	ISERROR	copy	copy rich value
+quoted	#SPILL!	opened		#SPILL!	error:#SPILL!	9	TRUE	e:#VALUE!	_error errorType=8 subType=0
+quoted	#CALC!	opened		#CALC!	error:#CALC!	14	TRUE	e:#VALUE!	_error errorType=13 subType=0
+quoted	#FIELD!	opened		#FIELD!	error:#FIELD!	13	TRUE	e:#VALUE!	_error errorType=12 subType=0
+quoted	#BLOCKED!	opened		#BLOCKED!	error:#BLOCKED!	11	TRUE	e:#VALUE!	_error errorType=10 subType=-1
+quoted	#CONNECT!	opened		#CONNECT!	error:#CONNECT!	10	TRUE	e:#VALUE!	_error errorType=9 subType=0
+quoted	#BUSY!	opened		#BUSY!	error:#ERROR2052	16	TRUE	e:#VALUE!	_error errorType=15 subType=0
+quoted	#UNKNOWN!	opened		#UNKNOWN!	error:#UNKNOWN!	12	TRUE	e:#VALUE!	_error errorType=11
+quoted	#PYTHON!	opened		#PYTHON!	error:#ERROR2055	19	TRUE	e:#VALUE!	_error correlationId=None errorMessage=None errorName=None errorType=18 subType=1
+quoted	#TIMEOUT!	opened		#TIMEOUT!	error:#ERROR2056	20	TRUE	e:#VALUE!	_error errorType=19 subType=0
+quoted	#GETTING_DATA	opened		#GETTING_DATA	error:#GETTING_DATA	8	TRUE	e:#N/A	-
+quoted	#EXTERNAL!	opened		#EXTERNAL!	text:#EXTERNAL!	#N/A	FALSE	s:0	-
+quoted	#calc!	opened		#CALC!	error:#CALC!	14	TRUE	e:#VALUE!	_error errorType=13 subType=0
+quoted	#getting_data	opened		#GETTING_DATA	error:#GETTING_DATA	8	TRUE	e:#N/A	-
+quoted	#N/A	opened		#N/A	error:#N/A	7	TRUE	e:#N/A	-
+quoted	#DIV/0!	opened		#DIV/0!	error:#DIV/0!	2	TRUE	e:#DIV/0!	-
+bare	#SPILL!	opened		#SPILL!	error:#SPILL!	9	TRUE	e:#VALUE!	_error errorType=8 subType=0
+bare	#CALC!	opened		#CALC!	error:#CALC!	14	TRUE	e:#VALUE!	_error errorType=13 subType=0
+bare	#FIELD!	opened		#FIELD!	error:#FIELD!	13	TRUE	e:#VALUE!	_error errorType=12 subType=0
+bare	#BLOCKED!	opened		#BLOCKED!	error:#BLOCKED!	11	TRUE	e:#VALUE!	_error errorType=10 subType=-1
+bare	#CONNECT!	opened		#CONNECT!	error:#CONNECT!	10	TRUE	e:#VALUE!	_error errorType=9 subType=0
+bare	#BUSY!	opened		#BUSY!	error:#ERROR2052	16	TRUE	e:#VALUE!	_error errorType=15 subType=0
+bare	#UNKNOWN!	opened		#UNKNOWN!	error:#UNKNOWN!	12	TRUE	e:#VALUE!	_error errorType=11
+bare	#PYTHON!	opened		#PYTHON!	error:#ERROR2055	19	TRUE	e:#VALUE!	_error correlationId=None errorMessage=None errorName=None errorType=18 subType=1
+bare	#TIMEOUT!	opened		#TIMEOUT!	error:#ERROR2056	20	TRUE	e:#VALUE!	_error errorType=19 subType=0
+bare	#GETTING_DATA	opened		#GETTING_DATA	error:#GETTING_DATA	8	TRUE	e:#N/A	-
+bare	#EXTERNAL!	opened		#EXTERNAL!	text:#EXTERNAL!	#N/A	FALSE	s:0	-
+bare	#calc!	opened		#CALC!	error:#CALC!	14	TRUE	e:#VALUE!	_error errorType=13 subType=0
+bare	#getting_data	opened		#GETTING_DATA	error:#GETTING_DATA	8	TRUE	e:#N/A	-
+bare	#N/A	opened		#N/A	error:#N/A	7	TRUE	e:#N/A	-
+bare	#DIV/0!	opened		#DIV/0!	error:#DIV/0!	2	TRUE	e:#DIV/0!	-

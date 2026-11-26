@@ -1,0 +1,227 @@
+{
+  "schema": 1,
+  "job_id": "xlio-20261125-170537-csv-errors",
+  "package": "xlio",
+  "purpose": "csv_errors: open .csv files of error codes, read the cells while open, save an .xlsx copy, read ERROR.TYPE and ISERROR of each",
+  "requires": {
+    "excel_build_min": {
+      "windows": "16.0.20527.0"
+    },
+    "edition": "Microsoft 365"
+  },
+  "limits": {
+    "job_seconds": 1800,
+    "step_seconds": 300
+  },
+  "on_refused_open": "record",
+  "control": "control.csv",
+  "audit": false,
+  "workbooks": [
+    {
+      "file": "xlio_errors_quoted.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "set_size",
+          "columns": "A:A",
+          "width": 30
+        },
+        {
+          "op": "read",
+          "range": "A1:A15",
+          "props": [
+            "text",
+            "value2"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "case00.saved.xlsx",
+          "format": "xlsx"
+        },
+        {
+          "op": "write",
+          "range": "B1:C15",
+          "formulas": [
+            [
+              "=ERROR.TYPE(A1)",
+              "=ISERROR(A1)"
+            ],
+            [
+              "=ERROR.TYPE(A2)",
+              "=ISERROR(A2)"
+            ],
+            [
+              "=ERROR.TYPE(A3)",
+              "=ISERROR(A3)"
+            ],
+            [
+              "=ERROR.TYPE(A4)",
+              "=ISERROR(A4)"
+            ],
+            [
+              "=ERROR.TYPE(A5)",
+              "=ISERROR(A5)"
+            ],
+            [
+              "=ERROR.TYPE(A6)",
+              "=ISERROR(A6)"
+            ],
+            [
+              "=ERROR.TYPE(A7)",
+              "=ISERROR(A7)"
+            ],
+            [
+              "=ERROR.TYPE(A8)",
+              "=ISERROR(A8)"
+            ],
+            [
+              "=ERROR.TYPE(A9)",
+              "=ISERROR(A9)"
+            ],
+            [
+              "=ERROR.TYPE(A10)",
+              "=ISERROR(A10)"
+            ],
+            [
+              "=ERROR.TYPE(A11)",
+              "=ISERROR(A11)"
+            ],
+            [
+              "=ERROR.TYPE(A12)",
+              "=ISERROR(A12)"
+            ],
+            [
+              "=ERROR.TYPE(A13)",
+              "=ISERROR(A13)"
+            ],
+            [
+              "=ERROR.TYPE(A14)",
+              "=ISERROR(A14)"
+            ],
+            [
+              "=ERROR.TYPE(A15)",
+              "=ISERROR(A15)"
+            ]
+          ]
+        },
+        {
+          "op": "calculate",
+          "kind": "full"
+        },
+        {
+          "op": "read",
+          "range": "B1:C15",
+          "props": [
+            "text"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "xlio_errors_bare.csv",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "set_size",
+          "columns": "A:A",
+          "width": 30
+        },
+        {
+          "op": "read",
+          "range": "A1:A15",
+          "props": [
+            "text",
+            "value2"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "case01.saved.xlsx",
+          "format": "xlsx"
+        },
+        {
+          "op": "write",
+          "range": "B1:C15",
+          "formulas": [
+            [
+              "=ERROR.TYPE(A1)",
+              "=ISERROR(A1)"
+            ],
+            [
+              "=ERROR.TYPE(A2)",
+              "=ISERROR(A2)"
+            ],
+            [
+              "=ERROR.TYPE(A3)",
+              "=ISERROR(A3)"
+            ],
+            [
+              "=ERROR.TYPE(A4)",
+              "=ISERROR(A4)"
+            ],
+            [
+              "=ERROR.TYPE(A5)",
+              "=ISERROR(A5)"
+            ],
+            [
+              "=ERROR.TYPE(A6)",
+              "=ISERROR(A6)"
+            ],
+            [
+              "=ERROR.TYPE(A7)",
+              "=ISERROR(A7)"
+            ],
+            [
+              "=ERROR.TYPE(A8)",
+              "=ISERROR(A8)"
+            ],
+            [
+              "=ERROR.TYPE(A9)",
+              "=ISERROR(A9)"
+            ],
+            [
+              "=ERROR.TYPE(A10)",
+              "=ISERROR(A10)"
+            ],
+            [
+              "=ERROR.TYPE(A11)",
+              "=ISERROR(A11)"
+            ],
+            [
+              "=ERROR.TYPE(A12)",
+              "=ISERROR(A12)"
+            ],
+            [
+              "=ERROR.TYPE(A13)",
+              "=ISERROR(A13)"
+            ],
+            [
+              "=ERROR.TYPE(A14)",
+              "=ISERROR(A14)"
+            ],
+            [
+              "=ERROR.TYPE(A15)",
+              "=ISERROR(A15)"
+            ]
+          ]
+        },
+        {
+          "op": "calculate",
+          "kind": "full"
+        },
+        {
+          "op": "read",
+          "range": "B1:C15",
+          "props": [
+            "text"
+          ]
+        }
+      ]
+    }
+  ]
+}
