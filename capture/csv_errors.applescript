@@ -1,9 +1,10 @@
--- Open a text file (argument 1) in Excel for Mac and read cells A1:A<n> (argument 3, n) while it
--- is open: each cell's string value (the text Excel draws) and the class of its value. Then save
--- the workbook as an .xlsx copy (argument 2), write =ERROR.TYPE(An) and =ISERROR(An) beside each
--- cell, calculate, read their string values, and close without saving. Returns one line per row:
--- shown, class, ERROR.TYPE, ISERROR, tab-separated. Non-interactive: alerts are off while it runs
--- and restored on every exit path. Touches no other open workbook.
+-- Open a text file (argument 1) in Excel for Mac, widen column A to 30 and read cells A1:A<n>
+-- (argument 3, n) while it is open: each cell's string value (the text Excel draws) and the
+-- class of its value. Then save the workbook as an .xlsx copy (argument 2), write
+-- =ERROR.TYPE(An) and =ISERROR(An) beside each cell, calculate, read their string values, and
+-- close without saving. Returns one line per row: shown, class, ERROR.TYPE, ISERROR,
+-- tab-separated. Non-interactive: alerts are off while it runs and restored on every exit path.
+-- Touches no other open workbook.
 on run argv
 	set xlPath to item 1 of argv
 	set xlCopy to item 2 of argv
@@ -24,6 +25,7 @@ on run argv
 				delay 0.25
 			end repeat
 			set xlSheet to worksheet 1 of workbook xlName
+			set column width of range "A:A" of xlSheet to 30 -- so that no text is cut to #
 			set shown to {}
 			repeat with r from 1 to n
 				set xlCell to range ("A" & r) of xlSheet

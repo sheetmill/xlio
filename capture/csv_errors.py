@@ -7,7 +7,8 @@
 
 The ``text_forms`` and ``csv_open`` captures read the newer errors (``#SPILL!``, ``#CALC!`` ...)
 and ``#GETTING_DATA`` from the copy Excel saves, whose ``<v>`` holds ``#VALUE!`` or ``#N/A``; a
-copy cannot say what the open cell showed. Here each field is read while the workbook is open:
+copy cannot say what the open cell showed. Here each field is read while the workbook is open,
+column A widened to 30 characters first so that no text is cut to ``#``:
 the text the cell shows, its value (on Windows ``Value2``, typed; on the Mac the class of the
 value AppleScript gives), and ``ERROR.TYPE`` and ``ISERROR`` of it, written beside the cells
 after the copy is saved. The saved copy's cell, with the error its rich value stands for, is
@@ -66,6 +67,7 @@ def manifest(job_id: str) -> dict[str, object]:
     for k, (name, _) in enumerate(FILES.values()):
         steps: list[dict[str, object]] = [
             {"op": "open"},
+            {"op": "set_size", "columns": "A1", "width": 30},
             {"op": "read", "range": f"A1:A{N}", "props": ["text", "value2"]},
             {"op": "save_as", "name": _saved(k), "format": "xlsx"},
             {"op": "write", "range": f"B1:C{N}", "formulas": formulas},
@@ -151,7 +153,7 @@ def read(job: Path, result: Path) -> Path:
             error = str(steps[0].get("result") or steps[0]["status"])[:200]
             lines += ["\t".join([case, f, "refused", error, *[""] * 6]) for f in FIELDS]
             continue
-        cells, after = steps[1]["result"], steps[5]["result"]
+        cells, after = steps[2]["result"], steps[6]["result"]
         saved = copy_cells(result / "artifacts" / _saved(k))
         for r, field in enumerate(FIELDS):
             lines.append("\t".join([
@@ -164,7 +166,8 @@ def read(job: Path, result: Path) -> Path:
         f"# suite: {SUITE}",
         "# generator: capture/csv_errors.py",
         f"# method: the job beside this file ({SUITE}.job.json) opens each .csv file through the",
-        "#   object model, reads A1:A15 (Text, Value2) while it is open, saves an .xlsx copy,",
+        "#   object model, widens column A to 30, reads A1:A15 (Text, Value2) while it is open,",
+        "#   saves an .xlsx copy,",
         "#   writes =ERROR.TYPE and =ISERROR beside each cell and reads their Text; the copy's",
         "#   cells are read with the error their rich value holds",
         "# header (the job's result, copied whole):",
@@ -228,9 +231,10 @@ def mac() -> Path:
         f"# suite: {SUITE} (capture/csv_errors.py mac); Excel {version} for Mac, en_US",
         edition_line(),
         f"# captured: {datetime.date.today()}; method: the job's files opened with alerts off "
-        "(csv_errors.applescript); A1:A15 read while open (string value, the class of the "
-        "value), saved as an .xlsx copy, =ERROR.TYPE and =ISERROR written beside each cell and "
-        "read; the copy's cells read with the error their rich value holds",
+        "(csv_errors.applescript); column A widened to 30, A1:A15 read while open (string "
+        "value, the class of the value), saved as an .xlsx copy, =ERROR.TYPE and =ISERROR "
+        "written beside each cell and read; the copy's cells read with the error their rich "
+        "value holds",
         "\t".join(COLUMNS),
     ]
     out = CAPTURES / f"{SUITE}.tsv"
