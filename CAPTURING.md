@@ -104,7 +104,8 @@ stripped of paths and people.
 Microsoft 365 (Excel 16.115, Current Channel).
 
 `xlio.read_csv` follows the `text`, `text_launch_*`, `text_extra`, `text_forms` and
-`text_limits` captures, and `tests/test_text.py` replays them.
+`text_limits` captures, and `tests/test_text.py` replays them; error codes in a field follow
+`csv_errors` (`tests/test_csv_errors.py`).
 
 ## Captures kept elsewhere
 
