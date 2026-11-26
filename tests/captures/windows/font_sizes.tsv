@@ -1,0 +1,429 @@
+# suite: font_sizes
+# generator: capture/font_job.py
+# method: the job beside this file (font_sizes.job.json) opens each workbook through the
+#   object model, reads A1's Font.Size while it is open (read_format) and saves an
+#   .xlsx copy, whose first font's size is read
+# header (the job's result, copied whole):
+#   {
+#    "environment": {
+#     "audit": false,
+#     "checks": {
+#      "dde_server_launch_disabled": true,
+#      "dde_server_lookup_disabled": true,
+#      "vba_warnings": 4
+#     },
+#     "display": {
+#      "screen_px": [
+#       2560,
+#       1440
+#      ],
+#      "system_dpi": 96
+#     },
+#     "edition": {
+#      "found": "Microsoft 365",
+#      "source": "office products"
+#     },
+#     "excel": {
+#      "build": "16.0.20527.20196",
+#      "build_number": 20527.0,
+#      "calculation_version": 191029,
+#      "decimal_separator": ".",
+#      "international": {
+#       "country": 1.0,
+#       "decimal": ".",
+#       "list": ","
+#      },
+#      "operating_system": "Windows (64-bit ARM) NT 10.00",
+#      "process": {
+#       "native_machine": "0xaa64",
+#       "process_machine": "0x8664"
+#      },
+#      "standard_font": "Aptos Narrow",
+#      "standard_font_size": 11.0,
+#      "thousands_separator": ",",
+#      "use_system_separators": true,
+#      "version": "16.0"
+#     },
+#     "font_smoothing": {
+#      "expected": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "found": {
+#       "contrast": 1200,
+#       "directwrite": {},
+#       "enabled": true,
+#       "orientation": "rgb",
+#       "type": "cleartype"
+#      },
+#      "ok": true
+#     },
+#     "fonts": [
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Display",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Bold Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Italic",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": true,
+#       "family": "Aptos Narrow",
+#       "head_revision": 2.00999,
+#       "style": "Regular",
+#       "version": "Version 2.01;O365"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Bold Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Italic",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Calibri",
+#       "head_revision": 6.27,
+#       "style": "Regular",
+#       "version": "Version 6.27"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Bold Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.98,
+#       "style": "Italic",
+#       "version": "Version 6.98"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Cambria",
+#       "head_revision": 6.99001,
+#       "style": "Regular",
+#       "version": "Version 6.99"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Bold Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Italic",
+#       "version": "Version 5.72"
+#      },
+#      {
+#       "cloud": false,
+#       "family": "Segoe UI",
+#       "head_revision": 5.72,
+#       "style": "Regular",
+#       "version": "Version 5.72"
+#      }
+#     ],
+#     "fonts_missing": [],
+#     "geometry": {
+#      "expected": {
+#       "excel_window_px": [
+#        -8,
+#        -8,
+#        2568,
+#        1400
+#       ],
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "found": {
+#       "excel_window_px": "not shown",
+#       "screen_px": [
+#        2560,
+#        1440
+#       ],
+#       "system_dpi": 96
+#      },
+#      "ok": true
+#     },
+#     "locale": {
+#      "ansi_code_page": 1252,
+#      "decimal": ".",
+#      "list": ",",
+#      "long_date": "dddd, MMMM d, yyyy",
+#      "name": "en-US",
+#      "oem_code_page": 437,
+#      "short_date": "M/d/yyyy",
+#      "sort_locale": "en-US",
+#      "sort_version": {
+#       "custom": "01000000ee575c1e00b4d0000bb1e11e",
+#       "defined": 394498,
+#       "nls": 394498
+#      },
+#      "time": "h:mm:ss tt",
+#      "two_digit_year_max": 2049,
+#      "two_digit_year_max_setting": null
+#     },
+#     "office": {
+#      "channel": "Current Channel",
+#      "platform": "x64",
+#      "products": "O365HomePremRetail",
+#      "version": "16.0.20527.20196"
+#     },
+#     "printer": {
+#      "orientation": "portrait",
+#      "paper": "A4",
+#      "paper_mm": [
+#       215.9,
+#       279.4
+#      ]
+#     },
+#     "theme": {
+#      "office_ui_theme": 6,
+#      "windows_apps_light": 1,
+#      "windows_system_light": 1
+#     },
+#     "windows": {
+#      "architecture": "ARM64",
+#      "build": "26300.9974",
+#      "display_version": "26H2",
+#      "edition": "Core"
+#     }
+#    },
+#    "format": 1,
+#    "inputs": {
+#     "control.xlsx": {
+#      "bytes": 4902,
+#      "sha256": "734b27a54ec5248803316744df9c91797e877a9cd7854a4a4dd77a1e0ff6882c"
+#     },
+#     "size00.xlsx": {
+#      "bytes": 4902,
+#      "sha256": "edbdca43dbd9a8cdbf7acca3b1a5acad9f6d72bf993dd3cc5a386aa39e2ab47c"
+#     },
+#     "size01.xlsx": {
+#      "bytes": 4906,
+#      "sha256": "f6c6e2a093924736f021b42b79ab19ed3465578e879d0c1c876242ce23021939"
+#     },
+#     "size02.xlsx": {
+#      "bytes": 4906,
+#      "sha256": "4eb4262ed241531f3f74971bb1a2144a0ba6f2781e12410c13674467ff58ea90"
+#     },
+#     "size03.xlsx": {
+#      "bytes": 4907,
+#      "sha256": "40a8f8e2f3bd23f330d1eb989cbeeac593a7fddc124477045afc3d6d8f456ce8"
+#     },
+#     "size04.xlsx": {
+#      "bytes": 4905,
+#      "sha256": "b277a2b4c702eb502b214ce12d722f5a87b5e5eb696bb9587b509993c03e8946"
+#     },
+#     "size05.xlsx": {
+#      "bytes": 4902,
+#      "sha256": "5bd2ffe2540a91aff54058e9310daf1c4d837c16ef0827212aba5b754ee83181"
+#     },
+#     "size06.xlsx": {
+#      "bytes": 4905,
+#      "sha256": "c23d740513ed592d357dcea09ab470a08561bdef07531820ea0304c2ffbc8365"
+#     },
+#     "size07.xlsx": {
+#      "bytes": 4906,
+#      "sha256": "634bc295bb2bb7275253c31b5f06f88b7f29c8b9ec6eda3918ce4419c5e8f282"
+#     },
+#     "size08.xlsx": {
+#      "bytes": 4906,
+#      "sha256": "3160fd1ee1b2b84ce62585932c3059c038e03c5ddcad2156b4538ce5bece6c01"
+#     },
+#     "size09.xlsx": {
+#      "bytes": 4905,
+#      "sha256": "95bb04fe0bdd759219896bb23ac6864999f042811f322621f90e8724ae17019c"
+#     },
+#     "size10.xlsx": {
+#      "bytes": 4905,
+#      "sha256": "19e5b547c6eedcf8b96981f41edb219189732def6ef00119b5e8cabc87c0bc80"
+#     },
+#     "size11.xlsx": {
+#      "bytes": 4905,
+#      "sha256": "5a1351ea0391a7f228324271589b15712b40f6f697e524bb80a9364d5dfec114"
+#     },
+#     "size12.xlsx": {
+#      "bytes": 4905,
+#      "sha256": "39d4374543dde07d0d858787b02042002c957846d7bf8764fbf01f36251dbd38"
+#     },
+#     "size13.xlsx": {
+#      "bytes": 4903,
+#      "sha256": "1971d9f013ffb639d3035358a09b692354f06b5026e5be4e7d0c209531fcac90"
+#     },
+#     "size14.xlsx": {
+#      "bytes": 4904,
+#      "sha256": "704f2ce5dd4185b6b1d4bf16f231cd869e88e03fd5830d0e5e50585d57f13abd"
+#     },
+#     "size15.xlsx": {
+#      "bytes": 4907,
+#      "sha256": "d0043807b75ad0c7db907d53fc694ca84e4e94c3b6df9fdd2efcf1b610aa8542"
+#     },
+#     "size16.xlsx": {
+#      "bytes": 4907,
+#      "sha256": "df273185e7203ccf3ca3bcb3116a3932331ee85a6c3daffc18d2b89b795888ee"
+#     },
+#     "size17.xlsx": {
+#      "bytes": 4908,
+#      "sha256": "7fcac43d28c451cffa507b4d77128246396468cfb1c33ef21080a34b381c77aa"
+#     },
+#     "size18.xlsx": {
+#      "bytes": 4907,
+#      "sha256": "8e2a38a182df5c88a2207538983d66e359255e675c214a77ccbaee1cabd45f76"
+#     },
+#     "size19.xlsx": {
+#      "bytes": 4907,
+#      "sha256": "1c2da42281cf7d98cc557581312d52f85d02fbd807905dcad3564ca8296b8f09"
+#     },
+#     "size20.xlsx": {
+#      "bytes": 4906,
+#      "sha256": "b1795f9829fda34c88b080f1fa5734e9f456b1b3902560b0ee312daedfffa936"
+#     },
+#     "size21.xlsx": {
+#      "bytes": 4906,
+#      "sha256": "3a73809c9638a9bb13e07a8798c29a313505b67919f37794b1fb672b34ad1fc2"
+#     },
+#     "size22.xlsx": {
+#      "bytes": 4904,
+#      "sha256": "cc6297a14af5289ed2817e8e7b589db84b0a1634bbb9779156b5260ff3d348e6"
+#     }
+#    },
+#    "job_id": "xlio-20261125-172406-font-sizes",
+#    "manifest_sha256": "f832b49291573dd118602fe6ab9736211647c5e6437c226382b888535e7e912a",
+#    "runner_version": "0.1.28"
+#   }
+case	outcome	error	A1 Font.Size	copy font 0 size
+font size 10	opened		10.0	10
+font size 10.03	opened		10.0	10
+font size 10.05	opened		10.05	10.050000000000001
+font size 10.07	opened		10.05	10.050000000000001
+font size 11.11	opened		11.1	11.1
+font size 12	opened		12.0	12
+font size 12.3	opened		12.3	12.3
+font size 12.34	opened		12.3	12.3
+font size 12.35	opened		12.35	12.35
+font size 12.36	opened		12.35	12.35
+font size 12.4	opened		12.4	12.4
+font size 12.5	opened		12.5	12.5
+font size 12.6	opened		12.6	12.6
+font size 13	opened		13.0	13
+font size 409	opened		409.0	409
+font size 409.5	opened		409.5	409.5
+font size 409.51	opened		409.5	409.5
+font size 409.54	opened		409.5	409.5
+font size 409.55	opened		409.55	409.55
+font size 409.56	opened		409.55	409.55
+font size 409.6	refused	refused		
+font size 409.9	refused	refused		
+font size 410	refused	refused		

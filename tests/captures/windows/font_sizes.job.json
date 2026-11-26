@@ -1,0 +1,481 @@
+{
+  "schema": 1,
+  "job_id": "xlio-20261125-172406-font-sizes",
+  "package": "xlio",
+  "purpose": "font_sizes: open workbooks whose font has a fractional size, read A1's Font.Size while open, save an .xlsx copy",
+  "requires": {
+    "excel_build_min": {
+      "windows": "16.0.20527.0"
+    },
+    "edition": "Microsoft 365"
+  },
+  "limits": {
+    "job_seconds": 1800,
+    "step_seconds": 300
+  },
+  "on_refused_open": "record",
+  "control": "control.xlsx",
+  "audit": false,
+  "workbooks": [
+    {
+      "file": "size00.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size00.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size01.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size01.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size02.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size02.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size03.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size03.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size04.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size04.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size05.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size05.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size06.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size06.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size07.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size07.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size08.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size08.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size09.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size09.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size10.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size10.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size11.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size11.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size12.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size12.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size13.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size13.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size14.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size14.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size15.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size15.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size16.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size16.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size17.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size17.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size18.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size18.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size19.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size19.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size20.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size20.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size21.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size21.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    },
+    {
+      "file": "size22.xlsx",
+      "steps": [
+        {
+          "op": "open"
+        },
+        {
+          "op": "read_format",
+          "range": "A1",
+          "props": [
+            "font.size"
+          ]
+        },
+        {
+          "op": "save_as",
+          "name": "size22.saved.xlsx",
+          "format": "xlsx"
+        }
+      ]
+    }
+  ]
+}
