@@ -1,0 +1,19 @@
+# suite: errors_saved (capture/errors_saved.py); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-25; method: csv_errors' quoted file opened with alerts off and saved as an .xlsx copy (csv_errors.applescript); that copy opened, column A widened to 30, A1:A15 read while open (string value, the class of the value), =ERROR.TYPE and =ISERROR written beside each cell and read
+field	outcome	error	copy	copy rich value	shown	value	ERROR.TYPE	ISERROR
+#SPILL!	opened		e:#VALUE!	_error errorType=8 subType=0	#SPILL!	missing value	9	TRUE
+#CALC!	opened		e:#VALUE!	_error errorType=13 subType=0	#CALC!	missing value	14	TRUE
+#FIELD!	opened		e:#VALUE!	_error errorType=12 subType=0	#FIELD!	missing value	13	TRUE
+#BLOCKED!	opened		e:#VALUE!	_error errorType=10 subType=-1	#BLOCKED!	missing value	11	TRUE
+#CONNECT!	opened		e:#VALUE!	_error errorType=9 subType=0	#CONNECT!	missing value	10	TRUE
+#BUSY!	opened		e:#VALUE!	_error errorType=15 subType=0	#BUSY!	missing value	16	TRUE
+#UNKNOWN!	opened		e:#VALUE!	_error errorType=11	#UNKNOWN!	missing value	12	TRUE
+#PYTHON!	opened		e:#VALUE!	_error correlationId=None errorMessage=None errorName=None errorType=18 subType=1	#PYTHON!	missing value	19	TRUE
+#TIMEOUT!	opened		e:#VALUE!	_error errorType=19 subType=0	#TIMEOUT!	missing value	20	TRUE
+#GETTING_DATA	opened		e:#N/A	-	#N/A	missing value	7	TRUE
+#EXTERNAL!	opened		s:0	-	#EXTERNAL!	Unicode text	#N/A	FALSE
+#calc!	opened		e:#VALUE!	_error errorType=13 subType=0	#CALC!	missing value	14	TRUE
+#getting_data	opened		e:#N/A	-	#N/A	missing value	7	TRUE
+#N/A	opened		e:#N/A	-	#N/A	missing value	7	TRUE
+#DIV/0!	opened		e:#DIV/0!	-	#DIV/0!	missing value	2	TRUE
