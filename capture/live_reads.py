@@ -11,8 +11,8 @@ apart from Excel's own rounding:
 
 - font sizes in twentieths of a point (``edges``' cell font, ``attributes``' rich-text run), with
   12.5 as a control of AppleScript's rounding, and a second read of the cell's size that is
-  text, not a number AppleScript converts: ``GET.CELL(19, A1)`` through a defined name, shown in
-  C1 (cases named ``..., GET.CELL``);
+  not rounded to a whole number: ``GET.CELL(19)`` through ``execute excel 4 macro`` (not through a
+  defined name), and row 1's height;
 - run and differential (conditional format) font sizes out of range (``attributes``);
 - outline levels past 7 (``outline``);
 - rows and columns with attribute values Excel never writes (``attributes``);
@@ -68,11 +68,16 @@ def _r(ref: str) -> str:
 
 
 CELL_SIZE = (("A1 font size", f"font size of font object of {_r('A1')}"),)
-GET_CELL = (("C1 GET.CELL(19)", f"string value of {_r('C1')}"),)
+XLM = 'execute excel 4 macro "GET.CELL(19,!R1C1)"'
+CELL_SIZE_XLM = (
+    ("A1 GET.CELL(19) by execute excel 4 macro", XLM),
+    ("row 1 height", f"row height of {_r('A1')}"),
+)
 _FONT = "font size of font object of"
 RUN_SIZE = (
-    ("A2 run 1 font size", f"{_FONT} (characters of {_r('A2')} start 1 length 3)"),
-    ("A2 run 2 font size", f"{_FONT} (characters of {_r('A2')} start 5 length 3)"),
+    ("A2 run 1 font size", f"{_FONT} characters start 1 length 3 of {_r('A2')}"),
+    ("A2 run 2 font size", f"{_FONT} characters start 5 length 3 of {_r('A2')}"),
+    ("A2 character 1 font size", f"{_FONT} character 1 of {_r('A2')}"),
 )
 DXF_SIZE = (("A3 condition 1 font size", f"{_FONT} format condition 1 of {_r('A3')}"),)
 ROW_COL = (
@@ -91,9 +96,8 @@ VALUE = tuple(
     for what in ("value", "string value")
 )
 
-CELL_SIZES = ("12.5", "12.34", "12.35", "12.36", "409", "409.5", "409.54", "409.55", "409.56")
-NAME = '<definedNames><definedName name="fs">GET.CELL(19,Sheet!$A$1)</definedName></definedNames>'
-A1_EDGES = '<c r="A1" s="1" t="n"><v>1</v></c>'
+CELL_SIZES = ("12", "12.3", "12.34", "12.35", "12.36", "12.4", "12.5", "12.6", "13", "409",
+              "409.5", "409.54", "409.55", "409.56")  # fmt: skip
 RUN_CASES = ("control", "run sz 409.5", "run sz 409.55", "run sz 410", "run sz 0", "run sz -1",
              "run sz -2", "run sz 1e400")  # fmt: skip
 DXF_CASES = ("control", "dxf sz 409.55", "dxf sz -1", "dxf sz -2")
@@ -112,14 +116,8 @@ def _edges_cases() -> list[Live]:
     out = []
     for size in CELL_SIZES:
         sized = (edges_probe.STYLES, edges_probe.SIZE, f'<sz val="{size}" />')
-        out.append(Live(f"cell font size {size}", build(control, Case("", (sized,))), CELL_SIZE))
-        named = (
-            sized,
-            ("xl/workbook.xml", "<definedNames />", NAME),
-            (SHEET, A1_EDGES, A1_EDGES + '<c r="C1"><f>fs</f></c>'),
-        )
-        out.append(Live(f"cell font size {size}, GET.CELL", build(control, Case("", named)),
-                        CELL_SIZE + GET_CELL))  # fmt: skip
+        out.append(Live(f"cell font size {size}", build(control, Case("", (sized,))),
+                        CELL_SIZE + CELL_SIZE_XLM))  # fmt: skip
     return out
 
 
@@ -134,6 +132,14 @@ def _attributes_cases() -> list[Live]:
             + (ROW_COL if name in ROW_COL_CASES else ())
         )
         out.append(Live(f"attributes {name}", build(control, by_name[name]), reads))
+    zero_row = (SHEET, attributes_probe.ROW1, '<row r="1" ht="0" customHeight="1">')
+    zero_col = (
+        SHEET,
+        attributes_probe.COL,
+        attributes_probe.COL.replace('width="20"', 'width="0"'),
+    )
+    for name, edit in (("row ht='0'", zero_row), ("col width='0'", zero_col)):
+        out.append(Live(f"attributes {name}", build(control, Case(name, (edit,))), ROW_COL))
     return out
 
 
