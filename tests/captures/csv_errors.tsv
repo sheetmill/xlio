@@ -1,0 +1,34 @@
+# suite: csv_errors (capture/csv_errors.py mac); Excel 16.115 for Mac, en_US
+# edition: Microsoft 365 Subscription, update channel Current
+# captured: 2026-11-25; method: the job's files opened with alerts off (csv_errors.applescript); column A widened to 30, A1:A15 read while open (string value, the class of the value), saved as an .xlsx copy, =ERROR.TYPE and =ISERROR written beside each cell and read; the copy's cells read with the error their rich value holds
+file	field	outcome	error	shown	value	ERROR.TYPE	ISERROR	copy	copy rich value
+quoted	#SPILL!	opened		#SPILL!	missing value	9	TRUE	e:#VALUE!	_error errorType=8 subType=0
+quoted	#CALC!	opened		#CALC!	missing value	14	TRUE	e:#VALUE!	_error errorType=13 subType=0
+quoted	#FIELD!	opened		#FIELD!	missing value	13	TRUE	e:#VALUE!	_error errorType=12 subType=0
+quoted	#BLOCKED!	opened		#BLOCKED!	missing value	11	TRUE	e:#VALUE!	_error errorType=10 subType=-1
+quoted	#CONNECT!	opened		#CONNECT!	missing value	10	TRUE	e:#VALUE!	_error errorType=9 subType=0
+quoted	#BUSY!	opened		#BUSY!	missing value	16	TRUE	e:#VALUE!	_error errorType=15 subType=0
+quoted	#UNKNOWN!	opened		#UNKNOWN!	missing value	12	TRUE	e:#VALUE!	_error errorType=11
+quoted	#PYTHON!	opened		#PYTHON!	missing value	19	TRUE	e:#VALUE!	_error correlationId=None errorMessage=None errorName=None errorType=18 subType=1
+quoted	#TIMEOUT!	opened		#TIMEOUT!	missing value	20	TRUE	e:#VALUE!	_error errorType=19 subType=0
+quoted	#GETTING_DATA	opened		#GETTING_DATA	missing value	8	TRUE	e:#N/A	-
+quoted	#EXTERNAL!	opened		#EXTERNAL!	Unicode text	#N/A	FALSE	s:0	-
+quoted	#calc!	opened		#CALC!	missing value	14	TRUE	e:#VALUE!	_error errorType=13 subType=0
+quoted	#getting_data	opened		#GETTING_DATA	missing value	8	TRUE	e:#N/A	-
+quoted	#N/A	opened		#N/A	missing value	7	TRUE	e:#N/A	-
+quoted	#DIV/0!	opened		#DIV/0!	missing value	2	TRUE	e:#DIV/0!	-
+bare	#SPILL!	opened		#SPILL!	missing value	9	TRUE	e:#VALUE!	_error errorType=8 subType=0
+bare	#CALC!	opened		#CALC!	missing value	14	TRUE	e:#VALUE!	_error errorType=13 subType=0
+bare	#FIELD!	opened		#FIELD!	missing value	13	TRUE	e:#VALUE!	_error errorType=12 subType=0
+bare	#BLOCKED!	opened		#BLOCKED!	missing value	11	TRUE	e:#VALUE!	_error errorType=10 subType=-1
+bare	#CONNECT!	opened		#CONNECT!	missing value	10	TRUE	e:#VALUE!	_error errorType=9 subType=0
+bare	#BUSY!	opened		#BUSY!	missing value	16	TRUE	e:#VALUE!	_error errorType=15 subType=0
+bare	#UNKNOWN!	opened		#UNKNOWN!	missing value	12	TRUE	e:#VALUE!	_error errorType=11
+bare	#PYTHON!	opened		#PYTHON!	missing value	19	TRUE	e:#VALUE!	_error correlationId=None errorMessage=None errorName=None errorType=18 subType=1
+bare	#TIMEOUT!	opened		#TIMEOUT!	missing value	20	TRUE	e:#VALUE!	_error errorType=19 subType=0
+bare	#GETTING_DATA	opened		#GETTING_DATA	missing value	8	TRUE	e:#N/A	-
+bare	#EXTERNAL!	opened		#EXTERNAL!	Unicode text	#N/A	FALSE	s:0	-
+bare	#calc!	opened		#CALC!	missing value	14	TRUE	e:#VALUE!	_error errorType=13 subType=0
+bare	#getting_data	opened		#GETTING_DATA	missing value	8	TRUE	e:#N/A	-
+bare	#N/A	opened		#N/A	missing value	7	TRUE	e:#N/A	-
+bare	#DIV/0!	opened		#DIV/0!	missing value	2	TRUE	e:#DIV/0!	-
