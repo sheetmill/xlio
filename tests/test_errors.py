@@ -131,3 +131,49 @@ def test_each_rich_error_reads_as_the_open_cell_shows_it():
     rich_14 = SHOWN_ROWS["rich 14"]
     assert (rich_14["A1 shown"], rich_14["C1 shown"]) == ("#CALC!", "15")  # 13's ERROR.TYPE: 14
     assert (rich_14["copy A1"], rich_14["reopened A1 shown"]) == ("n:0", "0")  # the saver's
+
+
+# Capture ``errors_saved`` (``capture/errors_saved.py``): Excel's own .xlsx copy of csv_errors'
+# error codes, opened again and read while open. Each rich value the copy holds is rebuilt here
+# with its keys (errorType 18 with subType 1 is #PYTHON!) and must read as the error shown.
+SAVED_LINES = (
+    (Path(__file__).with_name("captures") / "errors_saved.tsv")
+    .read_text(encoding="utf-8")
+    .splitlines()
+)
+SAVED_HEADER = next(line.split("\t") for line in SAVED_LINES if line.startswith("field\t"))
+SAVED_ROWS = [
+    dict(zip(SAVED_HEADER, line.split("\t"), strict=True))
+    for line in SAVED_LINES
+    if line.strip() and not line.startswith(("# ", "field\t"))  # a field starts with "#"
+]
+
+
+def rich_case(keys: dict[str, str]) -> Case:
+    from capture.errors_probe import STRUCTURES, VALUES
+
+    rich = BUILT["rich 13"]
+    names = "".join(f'<k n="{k}" t="i"/>' for k in keys)
+    values = "".join(f"<v>{v}</v>" for v in keys.values())
+    parts = dict(rich.parts)
+    parts["xl/richData/rdrichvaluestructure.xml"] = STRUCTURES.replace(
+        '<k n="errorType" t="i"/><k n="subType" t="i"/>', names
+    )
+    parts["xl/richData/rdrichvalue.xml"] = VALUES.replace("<v>{n}</v><v>0</v>", values)
+    return Case("rebuilt", rich.edits, parts)
+
+
+SAVED_RICH = [r for r in SAVED_ROWS if r["copy rich value"].startswith("_error")]
+
+
+@pytest.mark.parametrize("row", SAVED_RICH, ids=[r["field"] for r in SAVED_RICH])
+def test_an_error_excel_saved_reads_as_it_shows_on_opening(row):
+    assert row["outcome"] == "opened"
+    keys = dict(p.split("=") for p in row["copy rich value"].split()[1:])
+    keys = {k: v for k, v in keys.items() if k in ("errorType", "subType")}
+    assert a1(build(CONTROL, rich_case(keys))) == row["shown"]
+
+
+def test_error_type_18_reads_by_its_sub_type():
+    assert a1(build(CONTROL, rich_case({"errorType": "18", "subType": "1"}))) == "#PYTHON!"
+    assert a1(build(CONTROL, rich_case({"errorType": "18", "subType": "0"}))) == "#UNKNOWN!"

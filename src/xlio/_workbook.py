@@ -98,8 +98,8 @@ class ErrorCode(StrEnum):
     A file stores the first seven, ``GETTING_DATA`` and ``BUSY`` as their text; Excel refuses a
     file with any other code written that way. It caches the others as ``#VALUE!`` with a rich
     value behind the cell's ``vm`` whose ``errorType`` names the error, and xlio reads them
-    through it. ``EXTERNAL`` and ``PYTHON`` are errors Excel defines but has not been seen to
-    show (Excel 16.115 for Mac): no ``errorType`` is known to stand for them.
+    through it. ``EXTERNAL`` is an error Excel defines but has not been seen to show (Excel 16.115
+    for Mac): no ``errorType`` is known to stand for it.
     """
 
     NULL = "#NULL!"
@@ -120,7 +120,8 @@ class ErrorCode(StrEnum):
     BLOCKED = "#BLOCKED!"
     """Rich value ``errorType`` 10."""
     UNKNOWN = "#UNKNOWN!"
-    """Rich value ``errorType`` 11 (and 18, which Excel shows as this)."""
+    """Rich value ``errorType`` 11 (and 18 with a ``subType`` other than 1, which Excel shows
+    as this)."""
     FIELD = "#FIELD!"
     """Rich value ``errorType`` 12."""
     CALC = "#CALC!"
@@ -131,7 +132,7 @@ class ErrorCode(StrEnum):
     EXTERNAL = "#EXTERNAL!"
     """Not seen in a file, and no ``errorType`` is known to stand for it."""
     PYTHON = "#PYTHON!"
-    """Not seen in a file, and no ``errorType`` is known to stand for it."""
+    """Rich value ``errorType`` 18 with ``subType`` 1 (capture ``errors_saved``)."""
     TIMEOUT = "#TIMEOUT!"
     """Rich value ``errorType`` 19."""
 

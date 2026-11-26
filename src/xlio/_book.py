@@ -35,6 +35,9 @@ _RICH_ERRORS = {
     "15": "#BUSY!", "18": "#UNKNOWN!", "19": "#TIMEOUT!",
 }  # fmt: skip
 _REFUSED_ERROR_TYPES = frozenset({"7", "17"})
+# errorType 18 with subType 1 is how Excel saves #PYTHON!, and shows it so when it opens the file
+# (capture errors_saved); errorType 18 with subType 0 shows #UNKNOWN! (capture errors).
+_PYTHON = ("18", "1")
 # errorType 14: Excel reads it as an error it shows as #CALC! (=A1 shows #CALC!, ISERROR is
 # TRUE), so it is read as #CALC! (capture errors_shown, read while the workbook is open). Excel's
 # ERROR.TYPE tells it from errorType 13 (15 against 14); the reading keeps only the text, so a
@@ -292,6 +295,8 @@ class Book:
                 raise PackageError(f"{values_part}: a rich value of errorType {error_type}, "
                                    "which Excel refuses")  # fmt: skip
             code = _RICH_ERRORS.get(error_type)
+            if (error_type, (fields.get("subType") or "").strip()) == _PYTHON:
+                code = "#PYTHON!"
             if code is not None:
                 out[i] = code
         return out

@@ -30,6 +30,9 @@ packages; `xlio.open` and `xlio.check` read every file as before.
   Mac, Windows-1252 on Windows); a codec given still wins.
 
 ### Fixed
+- A cell holding an error rich value of `errorType` 18 with `subType` 1, as Excel saves
+  `#PYTHON!`, now reads as `ErrorCode.PYTHON`, as Excel shows it when it opens the file (capture
+  `errors_saved`); it read as `#UNKNOWN!`, which `errorType` 18 with `subType` 0 still reads as.
 - A cell font's size (`Font.size` of the styles' fonts) is now cut down to twentieths of a
   point, as Excel holds it while the workbook is open: 12.34 reads 12.3, 409.56 reads 409.55
   (a Windows capture, `font_sizes`, not yet verified on the Mac). It read as written; the text
