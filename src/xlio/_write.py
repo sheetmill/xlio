@@ -314,7 +314,7 @@ def patch_cells(
     translate: Translate | None = None,
     cm: str | None = None,
     fills: Sequence[Fill] = (),
-    value_errors: Mapping[int, str | float] | None = None,
+    value_errors: Mapping[int, str] | None = None,
 ) -> int:
     """Copy a worksheet part, replacing the cached values of formula cells that changed.
 
@@ -495,7 +495,7 @@ def patch_cells(
                     # with a vm, the value shown is the rich value's: unchanged only while it
                     # is the same error, else rewritten without the vm
                     stands = value_errors.get(_int_or_none(vm) or 0)  # vm counts from 1
-                    if isinstance(stands, str) and new == ("e", stands):
+                    if stands is not None and new == ("e", stands):
                         new = None
             if new is not None or new_f is not None:
                 patches.append((c_start, c_end, _patched(new, new_f, c_end)))

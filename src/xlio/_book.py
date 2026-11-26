@@ -31,15 +31,15 @@ _TRUE = ("1", "true")
 # shown as the #VALUE! the cell caches; 7 and 17 are refused.
 _RICH_ERRORS = {
     "3": "#REF!", "4": "#NAME?", "6": "#N/A", "8": "#SPILL!", "9": "#CONNECT!",
-    "10": "#BLOCKED!", "11": "#UNKNOWN!", "12": "#FIELD!", "13": "#CALC!",
+    "10": "#BLOCKED!", "11": "#UNKNOWN!", "12": "#FIELD!", "13": "#CALC!", "14": "#CALC!",
     "15": "#BUSY!", "18": "#UNKNOWN!", "19": "#TIMEOUT!",
 }  # fmt: skip
 _REFUSED_ERROR_TYPES = frozenset({"7", "17"})
-# errorType 14: while the workbook is open the cell shows #CALC! (ERROR.TYPE 15, VALUETOTEXT
-# "#CALC!"), but Excel saves it as the number 0 (its rich value dropped), a formula referring to
-# it caches 0, and the saved file shows 0 (captures errors and errors_shown). xlio reads the
-# stored value, 0.
-_RICH_NUMBERS = {"14": 0.0}
+# errorType 14: Excel reads it as an error it shows as #CALC! (=A1 shows #CALC!, ISERROR is
+# TRUE), so it is read as #CALC! (capture errors_shown, read while the workbook is open). Excel's
+# ERROR.TYPE tells it from errorType 13 (15 against 14); the reading keeps only the text, so a
+# consumer computing ERROR.TYPE cannot tell the two apart from it. When Excel saves the file it
+# writes the cell as the number 0, its rich value dropped (capture errors reads such a copy).
 
 
 CELL_KINDS = frozenset({"worksheet", "xlMacrosheet", "xlIntlMacrosheet"})
@@ -208,9 +208,9 @@ class Book:
         """The ``cm`` values that mark a dynamic-array formula (metadata type ``XLDAPR``)."""
         self.metadata_counts = (0, 0)  # the cellMetadata and valueMetadata entries
         self.value_rich: dict[int, int] = {}  # vm -> the rich value's index (XLRICHVALUE)
-        self.value_errors: dict[int, str | float] = {}
+        self.value_errors: dict[int, str] = {}
         """``vm`` value -> what a rich value stands for, for a cell that caches ``#VALUE!``: an
-        error (``#SPILL!``), or a number (errorType 14)."""
+        error (``#SPILL!``)."""
         meta = next(
             (t for typ, t, ext in rels.values() if typ.endswith("/sheetMetadata") and not ext),
             None,
@@ -268,7 +268,7 @@ class Book:
                     if error is not None:
                         self.value_errors[k] = error
 
-    def _rich_errors(self, rels: dict[str, tuple[str, str, bool]]) -> dict[int, str | float]:
+    def _rich_errors(self, rels: dict[str, tuple[str, str, bool]]) -> dict[int, str]:
         """Rich value index -> the error Excel shows for it, for the error types captured."""
         parts = {typ.rsplit("/", 1)[-1].lower(): t for typ, t, ext in rels.values() if not ext}
         values_part = parts.get("rdrichvalue")
@@ -291,7 +291,7 @@ class Book:
             if error_type in _REFUSED_ERROR_TYPES:
                 raise PackageError(f"{values_part}: a rich value of errorType {error_type}, "
                                    "which Excel refuses")  # fmt: skip
-            code: str | float | None = _RICH_ERRORS.get(error_type, _RICH_NUMBERS.get(error_type))
+            code = _RICH_ERRORS.get(error_type)
             if code is not None:
                 out[i] = code
         return out

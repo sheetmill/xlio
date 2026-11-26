@@ -3,8 +3,8 @@
 Capture ``errors`` (``capture/errors_probe.py``): each case is the probe's workbook with A1
 rewritten. Excel either refused it (error -50) or opened it; for an opened one, the TSV holds the
 error's text as Excel shows it (``VALUETOTEXT(A1)``). Here a refused case must be a
-``PackageError``, and an opened one must read A1 as the error Excel shows, or as the number
-Excel saves for it (``errorType`` 14).
+``PackageError``, and an opened one must read A1 as the error Excel shows (``errorType`` 14
+included, which Excel's saved copy holds as the number 0).
 """
 
 from __future__ import annotations
@@ -57,11 +57,8 @@ def test_read_as_excel_reads_it(row):
     if row["case"] == "control":
         assert value == 1.0
         return
-    saved = row["A1"]
-    if saved.startswith("n:"):
-        # errorType 14: Excel saves the cell as a number, and =A1 caches it; read so.
-        assert value == float(saved[2:])
-        return
+    # E1 was computed while the workbook was open: the error Excel read (errorType 14 included,
+    # which Excel's saved copy holds as 0).
     assert isinstance(value, xlio.ErrorCode)
     assert value == shown
 
@@ -107,9 +104,8 @@ def test_an_error_rich_value_wins_over_the_cached_value(name):
 
 
 # Capture ``errors_shown`` (``capture/errors_shown.py``): what A1:E1 show while the workbook is
-# open, what Excel saves in A1, and what its saved copy shows. For errorType 14 the cell shows
-# #CALC! while Excel saves the number 0; xlio reads the value the file stores (0), as the copy
-# then shows it, and the cases whose error Excel keeps read as that error.
+# open, what Excel saves in A1, and what its saved copy shows. Each rich error reads as the error
+# the open cell shows; for errorType 14 that is #CALC!, while the copy Excel saves holds 0.
 SHOWN_CAPTURE = Path(__file__).with_name("captures") / "errors_shown.tsv"
 SHOWN_LINES = SHOWN_CAPTURE.read_text(encoding="utf-8").splitlines()
 SHOWN_HEADER = next(line.split("\t") for line in SHOWN_LINES if line.startswith("case\t"))
@@ -123,18 +119,15 @@ SHOWN_ROWS = {
 }
 
 
-def test_what_excel_shows_and_saves_for_each_rich_error():
+def test_each_rich_error_reads_as_the_open_cell_shows_it():
     assert set(SHOWN_ROWS) == {"control", "rich 8", "rich 13", "rich 14"}
     for name, row in SHOWN_ROWS.items():
         value = a1(build(CONTROL, BUILT[name]))
-        if name == "rich 14":
-            assert (row["A1 shown"], row["copy A1"], row["reopened A1 shown"]) == (
-                "#CALC!",
-                "n:0",
-                "0",
-            )
-            assert value == 0.0  # the stored value; the cell shows #CALC! until Excel saves it
-        elif name == "control":
+        if name == "control":
             assert value == float(row["A1 shown"]) == 1.0
         else:
-            assert value == row["A1 shown"] == row["reopened A1 shown"]
+            assert isinstance(value, xlio.ErrorCode)
+            assert value == row["A1 shown"] == row["B1 shown"]
+    rich_14 = SHOWN_ROWS["rich 14"]
+    assert (rich_14["A1 shown"], rich_14["C1 shown"]) == ("#CALC!", "15")  # 13's ERROR.TYPE: 14
+    assert (rich_14["copy A1"], rich_14["reopened A1 shown"]) == ("n:0", "0")  # the saver's

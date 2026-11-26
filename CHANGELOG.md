@@ -30,6 +30,10 @@ packages; `xlio.open` and `xlio.check` read every file as before.
   Mac, Windows-1252 on Windows); a codec given still wins.
 
 ### Fixed
+- A cell holding an error rich value of `errorType` 14 now reads as `ErrorCode.CALC` (`#CALC!`),
+  as Excel shows it while the workbook is open (capture `errors_shown`); it read as 0, which is
+  what Excel writes when it saves the file. Excel's `ERROR.TYPE` gives 15 for it, against 14 for
+  `errorType` 13; the reading keeps only the text, so the two read the same.
 - A field of a whole number of euros, the sign before or after it (`€5`, `5€`), is now a number
   with Excel's euro format (`[$€-2]\ #,##0` and `#,##0\ [$€-1]`, each with its red negative
   section), as Excel reads it on both platforms; xlio left it text. Other euro forms are not

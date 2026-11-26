@@ -258,7 +258,7 @@ def read_cells(
     *,
     on_row: Callable[[int, dict[str, str]], None] | None = None,
     errors: Mapping[str, str] | None = None,
-    value_errors: Mapping[int, str | float] | None = None,
+    value_errors: Mapping[int, str] | None = None,
     bounds: tuple[int, int, int] | None = None,
 ) -> Iterator[Cell]:
     """The cells of a worksheet part, in file order.
@@ -273,7 +273,7 @@ def read_cells(
             gathered in the same pass.
         errors: Error texts mapped to the values given (a text not in it is given as written).
         value_errors: Value-metadata indexes mapped to the error a rich value stands for; an
-            error cell with such a ``vm`` is given that error, or that number (a ``float``).
+            error cell with such a ``vm`` is given that error.
         bounds: The number of cell formats, cell-metadata and value-metadata entries: a cell
             whose ``s``, ``cm`` or ``vm`` is past its table is refused, as Excel refuses it
             (capture ``attributes``).
@@ -383,9 +383,7 @@ def read_cells(
         rich_value = None
         if value_errors is not None and cell.vm is not None:
             rich_value = value_errors.get(cell.vm)
-        if isinstance(rich_value, float):
-            cell = cell._replace(value=rich_value, type="n", rich=None)
-        elif rich_value is not None:
+        if rich_value is not None:
             error = errors.get(rich_value, rich_value) if errors is not None else rich_value
             cell = cell._replace(value=error, type="e", rich=None)
         elif cell.type == "e":

@@ -122,7 +122,8 @@ class ErrorCode(StrEnum):
     FIELD = "#FIELD!"
     """Rich value ``errorType`` 12."""
     CALC = "#CALC!"
-    """Rich value ``errorType`` 13."""
+    """Rich value ``errorType`` 13, and 14, which Excel shows as this (its ``ERROR.TYPE`` is 15,
+    not 14: this reading does not tell the two apart; capture ``errors_shown``)."""
     BUSY = "#BUSY!"
     """Rich value ``errorType`` 15, or written as text."""
     EXTERNAL = "#EXTERNAL!"
@@ -790,11 +791,7 @@ class Workbook:
         """The defined names, in file order."""
         self.cell_metadata: CellMetadata = CellMetadata(
             book.dynamic_cm,
-            {
-                k: _ERRORS[v]
-                for k, v in book.value_errors.items()
-                if isinstance(v, str) and v in _ERRORS
-            },
+            {k: _ERRORS[v] for k, v in book.value_errors.items() if v in _ERRORS},
         )
         """Dynamic-array and rich-value metadata."""
         self.workbook_part: str = book.workbook_part
