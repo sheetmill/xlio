@@ -11,8 +11,9 @@ apart from Excel's own rounding:
 
 - font sizes in twentieths of a point (``edges``' cell font, ``attributes``' rich-text run), with
   12.5 as a control of AppleScript's rounding, and a second read of the cell's size that is
-  not rounded to a whole number: ``GET.CELL(19)`` through ``execute excel 4 macro`` (not through a
-  defined name), and row 1's height;
+  not rounded to a whole number (Excel's dictionary types ``font size`` as an integer):
+  ``GET.CELL(19)`` through ``evaluate`` and ``run XLM Macro`` (not through a defined name),
+  and row 1's fitted height;
 - run and differential (conditional format) font sizes out of range (``attributes``);
 - outline levels past 7 (``outline``);
 - rows and columns with attribute values Excel never writes (``attributes``);
@@ -68,16 +69,15 @@ def _r(ref: str) -> str:
 
 
 CELL_SIZE = (("A1 font size", f"font size of font object of {_r('A1')}"),)
-XLM = 'execute excel 4 macro "GET.CELL(19,!R1C1)"'
 CELL_SIZE_XLM = (
-    ("A1 GET.CELL(19) by execute excel 4 macro", XLM),
+    ("A1 GET.CELL(19) by evaluate", 'evaluate name "GET.CELL(19,Sheet!$A$1)"'),
+    ("A1 GET.CELL(19) by run XLM Macro", 'run XLM Macro "GET.CELL(19,!R1C1)"'),
     ("row 1 height", f"row height of {_r('A1')}"),
 )
 _FONT = "font size of font object of"
 RUN_SIZE = (
-    ("A2 run 1 font size", f"{_FONT} characters start 1 length 3 of {_r('A2')}"),
-    ("A2 run 2 font size", f"{_FONT} characters start 5 length 3 of {_r('A2')}"),
     ("A2 character 1 font size", f"{_FONT} character 1 of {_r('A2')}"),
+    ("A2 character 5 font size", f"{_FONT} character 5 of {_r('A2')}"),
 )
 DXF_SIZE = (("A3 condition 1 font size", f"{_FONT} format condition 1 of {_r('A3')}"),)
 ROW_COL = (
