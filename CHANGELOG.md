@@ -7,18 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-A dependent pinned to `xlio==0.4.*` moves to `xlio==0.5.*`. `read_csv` now reads a file as
-Excel for Windows opens it unless given `platform="mac"`; `xlio.open` and `xlio.check` read every
-file as before.
+## [0.5.0] - 2026-11-27
 
-### Added
-- `read_csv(..., platform=None)` reads a text file as Excel for Windows or Excel for Mac opens
-  it: `"windows"`, `"mac"`, or an object whose `name` is one of them (such as
-  `xlformat.Platform.MAC`); `None` is `"windows"`. On Windows a file without a byte order mark
-  reads as Windows-1252, its five undefined bytes (0x81, 0x8D, 0x8F, 0x90, 0x9D) as the code
-  points of the same value, and the workbook's font is Aptos Narrow 11 (12 on the Mac).
-  Everything else reads the same on both, as the new capture `csv_open` and its Windows twin
-  show.
+A dependent pinned to `xlio==0.4.*` moves to `xlio==0.5.*`. `read_csv` now reads a file as
+Excel for Windows opens it unless given `platform="mac"`. Several readings of xlsx files change
+where Excel shows a value other than the one it writes when it saves (Fixed, below); `xlio.open`
+and `xlio.check` take no platform.
 
 ### Changed
 - `read_csv` follows Excel for Windows by default. A caller that passes no `platform` now reads
@@ -29,28 +23,39 @@ file as before.
 - `TextOptions.fallback_encoding` defaults to `None`, the platform's code page (Mac Roman on the
   Mac, Windows-1252 on Windows); a codec given still wins.
 
+### Added
+- `read_csv(..., platform=None)` reads a text file as Excel for Windows or Excel for Mac opens
+  it: `"windows"`, `"mac"`, or an object whose `name` is one of them (such as
+  `xlformat.Platform.MAC`); `None` is `"windows"`. On Windows a file without a byte order mark
+  reads as Windows-1252, its five undefined bytes (0x81, 0x8D, 0x8F, 0x90, 0x9D) as the code
+  points of the same value, and the workbook's font is Aptos Narrow 11 (12 on the Mac).
+  Everything else reads the same on both, as the capture `csv_open` and its Windows twin show.
+- `SECURITY.md`: what a security problem in xlio is (reading xlsx and CSV files, untrusted
+  ones included, and the writer), how to report one privately, where a problem in another
+  sheetmill package goes, and which versions receive fixes; the README links it.
+
 ### Fixed
-- A cell holding an error rich value of `errorType` 18 with `subType` 1, as Excel saves
-  `#PYTHON!`, now reads as `ErrorCode.PYTHON`, as Excel shows it when it opens the file (capture
-  `errors_saved`); it read as `#UNKNOWN!`, which `errorType` 18 with `subType` 0 still reads as.
-- A cell font's size (`Font.size` of the styles' fonts) is now cut down to twentieths of a
-  point, as Excel holds it while the workbook is open: 12.34 reads 12.3, 409.56 reads 409.55
-  (a Windows capture, `font_sizes`, not yet verified on the Mac). It read as written; the text
-  stays in `Font.raw_size`. Run and differential format sizes are unchanged.
-- A row with a custom height of 0 (`ht="0"`, or an empty `ht`) and a column range with a custom
-  width of 0 (a width that does not parse included) now read as hidden (`RowFormat.hidden`,
-  `ColumnRange.hidden`), as Excel shows them while the workbook is open (capture `live_reads`);
-  they read as not hidden unless written so.
+- A cell holding an error rich value of `errorType` 14 reads as `ErrorCode.CALC` (`#CALC!`), as
+  Excel shows it while the workbook is open (capture `errors_shown`); it read as 0, which is what
+  Excel writes when it saves the file. Excel's `ERROR.TYPE` gives 15 for it, against 14 for
+  `errorType` 13; the reading keeps only the text, so the two read the same.
 - `read_csv` reads a field holding one of the newer error codes (`#SPILL!`, `#CALC!`,
   `#FIELD!`, `#BLOCKED!`, `#CONNECT!`, `#BUSY!`, `#UNKNOWN!`, `#PYTHON!`, `#TIMEOUT!`) as that
   error, and `#GETTING_DATA` as `#GETTING_DATA`, as Excel shows them while the workbook is open,
   on both platforms (capture `csv_errors` and its Windows twin). It read them as `#VALUE!` and
   `#N/A`, which is what Excel writes when it saves the file.
-- A cell holding an error rich value of `errorType` 14 now reads as `ErrorCode.CALC` (`#CALC!`),
-  as Excel shows it while the workbook is open (capture `errors_shown`); it read as 0, which is
-  what Excel writes when it saves the file. Excel's `ERROR.TYPE` gives 15 for it, against 14 for
-  `errorType` 13; the reading keeps only the text, so the two read the same.
-- A field of a whole number of euros, the sign before or after it (`€5`, `5€`), is now a number
+- A row with a custom height of 0 (`ht="0"`, or an empty `ht`) and a column range with a custom
+  width of 0 (a width that does not parse included) read as hidden (`RowFormat.hidden`,
+  `ColumnRange.hidden`), as Excel shows them while the workbook is open (capture `live_reads`);
+  they read as not hidden unless written so.
+- A cell font's size (`Font.size` of the styles' fonts) is cut down to twentieths of a point, as
+  Excel holds it while the workbook is open: 12.34 reads 12.3, 409.56 reads 409.55 (a Windows
+  capture, `font_sizes`, not yet verified on the Mac). It read as written; the text stays in
+  `Font.raw_size`. Run and differential format sizes are unchanged.
+- A cell holding an error rich value of `errorType` 18 with `subType` 1, as Excel saves
+  `#PYTHON!`, reads as `ErrorCode.PYTHON`, as Excel shows it when it opens the file (capture
+  `errors_saved`); it read as `#UNKNOWN!`, which `errorType` 18 with `subType` 0 still reads as.
+- A field of a whole number of euros, the sign before or after it (`€5`, `5€`), is a number
   with Excel's euro format (`[$€-2]\ #,##0` and `#,##0\ [$€-1]`, each with its red negative
   section), as Excel reads it on both platforms; xlio left it text. Other euro forms are not
   captured and stay text.
@@ -277,7 +282,8 @@ change is needed.
 - Each rule read from Excel's behavior rests on a capture from Excel for Mac, with its probe
   (`CAPTURING.md`), and the tests read workbooks Excel saved.
 
-[Unreleased]: https://github.com/sheetmill/xlio/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/sheetmill/xlio/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/sheetmill/xlio/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/sheetmill/xlio/compare/v0.3.2...v0.4.0
 [0.3.2]: https://github.com/sheetmill/xlio/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/sheetmill/xlio/compare/v0.3.0...v0.3.1
