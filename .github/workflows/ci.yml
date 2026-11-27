@@ -37,7 +37,7 @@ jobs:
       - run: uv sync --locked --group dev
       - run: uv run pytest --tier slow
 
-  # macOS, Excel's reference platform here.
+  # macOS, where the Mac captures were made.
   test-macos:
     runs-on: macos-latest
     steps:

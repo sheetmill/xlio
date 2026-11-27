@@ -10,10 +10,10 @@ each read given as ``class:value`` so that a whole number AppleScript gives for 
 apart from Excel's own rounding:
 
 - font sizes in twentieths of a point (``edges``' cell font, ``attributes``' rich-text run), with
-  12.5 as a control of AppleScript's rounding, and a second read of the cell's size that is
-  not rounded to a whole number (Excel's dictionary types ``font size`` as an integer):
-  ``GET.CELL(19)`` through ``evaluate`` and ``run XLM Macro`` (not through a defined name),
-  and row 1's fitted height;
+  12.5 as a control of AppleScript's rounding (Excel's dictionary types ``font size`` as an
+  integer), and row 1's fitted height; ``GET.CELL(19)`` through ``evaluate`` and ``run XLM
+  Macro`` is attempted as a second read of the cell's size, and every such read gives an error
+  (the capture's rows record each one);
 - run and differential (conditional format) font sizes out of range (``attributes``);
 - outline levels past 7 (``outline``);
 - rows and columns with attribute values Excel never writes (``attributes``);

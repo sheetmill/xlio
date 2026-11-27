@@ -2,7 +2,8 @@
 
 Standard library only. The reader checks a package before it parses anything and refuses what
 Excel refuses; the writer copies every part it does not change byte for byte. A comment that
-names a capture refers to values captured from Excel for Mac; ``CAPTURING.md`` lists them.
+names a capture refers to values captured from Excel for Mac, or from Excel for Windows for a
+capture in ``tests/captures/windows/``; ``CAPTURING.md`` lists them.
 """
 
 from xlio import ns, presets

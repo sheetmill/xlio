@@ -5,7 +5,7 @@
     uv run python -m capture.csv_job mac                      # tests/captures/csv_open.tsv
 
 The job format is sheetmill's, version 1:
-https://github.com/sheetmill/sheetmill/blob/e3a5207/docs/capture-jobs.md
+https://github.com/sheetmill/sheetmill/blob/3adb865/docs/capture-jobs.md
 
 The cases are ``.csv`` files the job opens, each through Excel's object model (``Workbooks.Open``,
 alerts off), saving an ``.xlsx`` copy, read here as the Mac captures are read:

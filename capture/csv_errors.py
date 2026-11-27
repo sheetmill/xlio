@@ -17,7 +17,7 @@ kept for the record.
 Two files hold the same fields, one per line: quoted (as ``text_forms`` writes them) and bare.
 
 The job format is sheetmill's, version 1:
-https://github.com/sheetmill/sheetmill/blob/e3a5207/docs/capture-jobs.md
+https://github.com/sheetmill/sheetmill/blob/3adb865/docs/capture-jobs.md
 """
 
 from __future__ import annotations

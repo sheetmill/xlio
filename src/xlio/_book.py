@@ -29,6 +29,11 @@ _RELS = (
 _TRUE = ("1", "true")
 # Rich-value error types and the error Excel shows for each (capture errors). Another type is
 # shown as the #VALUE! the cell caches; 7 and 17 are refused.
+# errorType 14: Excel reads it as an error it shows as #CALC! (=A1 shows #CALC!, ISERROR is
+# TRUE), so it is read as #CALC! (capture errors_shown, read while the workbook is open). Excel's
+# ERROR.TYPE tells it from errorType 13 (15 against 14); the reading keeps only the text, so a
+# consumer computing ERROR.TYPE cannot tell the two apart from it. When Excel saves the file it
+# writes the cell as the number 0, its rich value dropped (capture errors reads such a copy).
 _RICH_ERRORS = {
     "3": "#REF!", "4": "#NAME?", "6": "#N/A", "8": "#SPILL!", "9": "#CONNECT!",
     "10": "#BLOCKED!", "11": "#UNKNOWN!", "12": "#FIELD!", "13": "#CALC!", "14": "#CALC!",
@@ -38,11 +43,6 @@ _REFUSED_ERROR_TYPES = frozenset({"7", "17"})
 # errorType 18 with subType 1 is how Excel saves #PYTHON!, and shows it so when it opens the file
 # (capture errors_saved); errorType 18 with subType 0 shows #UNKNOWN! (capture errors).
 _PYTHON = ("18", "1")
-# errorType 14: Excel reads it as an error it shows as #CALC! (=A1 shows #CALC!, ISERROR is
-# TRUE), so it is read as #CALC! (capture errors_shown, read while the workbook is open). Excel's
-# ERROR.TYPE tells it from errorType 13 (15 against 14); the reading keeps only the text, so a
-# consumer computing ERROR.TYPE cannot tell the two apart from it. When Excel saves the file it
-# writes the cell as the number 0, its rich value dropped (capture errors reads such a copy).
 
 
 CELL_KINDS = frozenset({"worksheet", "xlMacrosheet", "xlIntlMacrosheet"})

@@ -8,8 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 A dependent pinned to `xlio==0.4.*` moves to `xlio==0.5.*`. `read_csv` now reads a file as
-Excel for Windows opens it unless given `platform="mac"`, the default across the sheetmill
-packages; `xlio.open` and `xlio.check` read every file as before.
+Excel for Windows opens it unless given `platform="mac"`; `xlio.open` and `xlio.check` read every
+file as before.
 
 ### Added
 - `read_csv(..., platform=None)` reads a text file as Excel for Windows or Excel for Mac opens

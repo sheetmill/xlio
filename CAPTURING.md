@@ -1,8 +1,9 @@
 # Capturing Excel's behavior
 
-What xlio reads, refuses and writes is checked against what Excel 16 for Mac does with the same
-file. Such behavior is captured from Excel, never written from memory or taken from another
-program's output. Captured data lives in `tests/captures/`, the scripts that produce it in
+What xlio reads, refuses and writes is checked against what Excel does with the same file:
+Excel 16 for Mac, or Excel for Windows where a capture from it is named (see Platforms). Such
+behavior is captured from Excel, never written from memory or taken from another program's
+output. Captured data lives in `tests/captures/`, the scripts that produce it in
 `capture/`, and each test that uses a capture names it.
 
 ## Method
@@ -84,7 +85,8 @@ records, without paths.
 | `errors_shown` | `capture/errors_shown.py` | the `errors` suite's control, `errorType` 8, 13 and 14: what A1:E1 show while the workbook is open (string values, value classes), what Excel saves in A1, and what the saved copy shows when opened again |
 | `csv_errors` | `capture/csv_errors.py mac`, and its Windows job (`write`, `read`) | every newer error code, `#GETTING_DATA`, `#EXTERNAL!`, two lowercase forms and two older codes as CSV fields, quoted and bare: what each cell shows while the workbook is open (text, value, `ERROR.TYPE`, `ISERROR`) and what Excel's saved copy holds |
 | `errors_saved` | `capture/errors_saved.py` | `csv_errors`' quoted file saved by Excel as an .xlsx copy, then that copy opened: what each cell shows while open (text, value, `ERROR.TYPE`, `ISERROR`), beside the rich value the copy holds (`#PYTHON!` as `errorType` 18, `subType` 1) |
-| `live_reads` | `capture/live_reads.py` | cases of `edges`, `attributes`, `outline` and `value_forms` read while the workbook is open, through AppleScript: font sizes (cell, run, conditional format; `GET.CELL(19)` as a second read of the cell's), outline levels past 7, rows and columns with attribute values Excel never writes, a subnormal `<v>` |
+| `live_reads` | `capture/live_reads.py` | cases of `edges`, `attributes`, `outline` and `value_forms` read while the workbook is open, through AppleScript: font sizes (cell, run, conditional format; `GET.CELL(19)` attempted as a second read of the cell's, which failed), outline levels past 7, rows and columns with attribute values Excel never writes, a subnormal `<v>` |
+| `font_sizes` (Windows only) | `capture/font_job.py` (`write`, `read`), a job run on Excel for Windows | `edges`' workbook with its font's size rewritten (sizes near 10 and 12 between twentieths of a point, and 409 to 410): A1's `Font.Size` read through the object model while the workbook is open, and the size Excel's saved copy writes |
 | `views` | `capture/views_probe.py` | `activeCell` values Excel does not write, selections for absent panes, zoom, `activeTab` and sheet `state` out of range, head records after `sheetData`: whether Excel opens the file, and the view it saves |
 | `attributes` | `capture/attributes_probe.py` | flags that are not booleans, sizes that are not numbers, indexes past their tables, colors, rotations and font sizes out of range, page setup values, absent margins, print names: whether Excel opens the file, and what it saves |
 | `theme_bound` | `capture/theme_probe.py` | the theme color index past which Excel refuses a file, bisected |
@@ -132,11 +134,16 @@ was first written, and are cited with a link:
 Every capture in `tests/captures/` is from Excel for Mac. `tests/captures/windows/` holds the
 captures from Excel for Windows, each beside the job that made it (`<suite>.job.json`, in
 sheetmill's capture-job format, version 1:
-https://github.com/sheetmill/sheetmill/blob/e3a5207/docs/capture-jobs.md), its header copied
-from the job's result. `csv_open` is the first: the job `capture/csv_job.py write` makes, run on
-Windows, with its Mac twin (`capture/csv_job.py mac`) in `tests/captures/csv_open.tsv`, paired row
-by row in `tests/test_csv_open.py`. `csv_errors` has the same pair; `font_sizes` is from Windows
-alone (`tests/test_font_sizes.py`). Where Windows is not captured, the reader follows the Mac.
+https://github.com/sheetmill/sheetmill/blob/3adb865/docs/capture-jobs.md), its header copied
+from the job's result:
+
+- `csv_open` (`capture/csv_job.py write`, `read`), with its Mac twin `csv_open.tsv`
+  (`capture/csv_job.py mac`), paired row by row in `tests/test_csv_open.py`;
+- `csv_errors` (`capture/csv_errors.py write`, `read`), with its Mac twin `csv_errors.tsv`
+  (`capture/csv_errors.py mac`), both read in `tests/test_csv_errors.py`;
+- `font_sizes` (`capture/font_job.py`), without a Mac twin (`tests/test_font_sizes.py`).
+
+Where Windows is not captured, the reader follows the Mac.
 
 ## Test workbooks
 

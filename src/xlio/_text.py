@@ -178,11 +178,11 @@ def _records(text: str, delimiter: str, quote: str) -> Iterator[list[str]]:
 # Conversions --------------------------------------------------------------------------------
 
 _FONT_SIZES = {"mac": 12, "windows": 11}
+"""The size of the font of the workbook Excel makes of a text file (capture csv_open)."""
 _EUROS = re.compile(r"€(\d+)|(\d+)€")
 _EURO_BEFORE = "[$€-2]\\ #,##0;[Red]\\-[$€-2]\\ #,##0"
 _EURO_AFTER = "#,##0\\ [$€-1];[Red]\\-#,##0\\ [$€-1]"
 """The euro's formats, sign before and after (capture csv_open, on both platforms)."""
-"""The size of the font of the workbook Excel makes of a text file (capture csv_open)."""
 _CURRENCY = '"$"#,##0_);[Red]\\("$"#,##0\\)'
 _CURRENCY_CENTS = '"$"#,##0.00_);[Red]\\("$"#,##0.00\\)'
 _PLAIN = re.compile(r"[+-]?(?:\d+\.?\d*|\.\d+)")
@@ -603,7 +603,7 @@ def read_csv(
             workbook built from it by the other limits.
         platform: Which Excel opens it: ``"windows"``, ``"mac"``, or an object whose ``name`` is
             one of them (such as ``xlformat.Platform.MAC``); ``None`` (the default) is
-            ``"windows"``, Excel for Windows, as across the sheetmill packages. It decides
+            ``"windows"``, Excel for Windows. It decides
             the code page of a file without a byte order mark (unless
             ``TextOptions.fallback_encoding`` names one) and the size of the workbook's font,
             Aptos Narrow 12 on the Mac and 11 on Windows (capture ``csv_open``).

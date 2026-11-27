@@ -56,7 +56,8 @@ regresses fails the test instead of exhausting the machine.
 
 ## Expected results
 
-What the reader accepts, refuses and reads is what Excel 16 for Mac does with the same file.
+What the reader accepts, refuses and reads is what Excel does with the same file: Excel 16 for
+Mac, or Excel for Windows where a capture from it says so (`CAPTURING.md`, Platforms).
 Such behavior is captured from Excel, never written from memory or taken from another program
 (`CAPTURING.md`). Captured files are never edited by hand.
 

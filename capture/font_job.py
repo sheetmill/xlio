@@ -12,7 +12,7 @@ the workbook is open (``read_format``), a number the object model gives with its
 saved copy's size is kept for the record.
 
 The job format is sheetmill's, version 1:
-https://github.com/sheetmill/sheetmill/blob/e3a5207/docs/capture-jobs.md
+https://github.com/sheetmill/sheetmill/blob/3adb865/docs/capture-jobs.md
 """
 
 from __future__ import annotations
